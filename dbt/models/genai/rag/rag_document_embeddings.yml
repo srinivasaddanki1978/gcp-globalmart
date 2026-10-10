@@ -1,0 +1,8 @@
+version: 2
+
+models:
+  - name: rag_document_embeddings
+    description: "Incremental store of text-embedding-005 vectors (768 dims) keyed by hash of the embedded text; only new texts are embedded each build."
+    columns:
+      - name: embed_key
+        data_tests: [unique, not_null]

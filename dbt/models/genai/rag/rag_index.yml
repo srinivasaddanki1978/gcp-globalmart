@@ -1,0 +1,8 @@
+version: 2
+
+models:
+  - name: rag_index
+    description: "Current documents joined to their embeddings: the base table for VECTOR_SEARCH. Every document must have an embedding."
+    data_tests:
+      - dbt_utils.equal_rowcount:
+          arguments: { compare_model: ref('rag_documents') }

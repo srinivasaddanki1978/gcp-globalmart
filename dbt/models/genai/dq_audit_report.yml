@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: dq_audit_report
+    description: "UC1 data quality reporter: one row per failing Silver rule with counts, rejection rate, up to 3 sample records and a Gemini explanation written for business data stewards."
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments: { combination_of_columns: [entity, affected_field, issue_type] }
+    columns:
+      - name: rejection_rate_pct
+        description: "rejected_count / bronze records of the entity x 100."
+      - name: sample_records
+        description: "JSON array of up to 3 rejected records (first 3 in sorted order)."
+      - name: ai_explanation
+        description: "Gemini-written explanation (AI-generated)."
+        data_tests:
+          - not_null:
+              config: { severity: warn }

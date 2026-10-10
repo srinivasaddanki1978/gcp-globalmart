@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: flagged_return_customers
+    description: "UC2 fraud investigator: customers whose last 12 months of returns score >= 40 on 5 weighted rules (P85 thresholds across customers), each with a Gemini investigation brief. About 22% of scored customers are flagged. A score is a reason to review, not proof of fraud. Contains customer_name (PII)."
+    columns:
+      - name: customer_id
+        data_tests: [unique, not_null]
+      - name: anomaly_score
+        description: "0-100: high_return_count 20, high_total_refund 25, high_avg_refund 20, high_approval_rate 15, multiple_reasons 20."
+        data_tests:
+          - dbt_utils.expression_is_true:
+              arguments: { expression: ">= 40" }
+      - name: rules_violated
+        description: "The rules that fired, with their weights."
+      - name: investigation_brief
+        description: "Gemini-written brief (AI-generated; check figures against the row)."
+        data_tests:
+          - not_null:
+              config: { severity: warn }
+      - name: ai_status
+        description: "AI.GENERATE error status; NULL on success."

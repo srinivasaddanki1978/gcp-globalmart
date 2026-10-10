@@ -179,14 +179,16 @@ Each session is about 3 hours. The core build (Phases 0–8) is about **14–16 
 
 ### Phase 5: GenAI layer (sessions 8–9)
 
-- [ ] Grant Vertex AI User to the connection's service account, and confirm the current Gemini Flash model name.
-- [ ] **UC1 DQ reporter:** aggregate the rejected records and explain each issue with `AI.GENERATE` → `gold.dq_audit_report`.
-- [ ] **UC2 fraud investigator:** 5 weighted rules in SQL (`APPROX_QUANTILES` for P85, 12-month window), flag at ≥ 40, write briefs **only for flagged customers** → `gold.flagged_return_customers`.
-- [ ] **UC3 product RAG:** pre-ranked and detail documents in two embedding tables, `VECTOR_SEARCH` with a region filter, then a Gemini answer → `gold.rag_query_history`.
-- [ ] **UC4 executive intel:** pre-computed KPIs go to Gemini → `gold.ai_business_insights`.
-- [ ] Tag all four models `genai`, so `dbt build --select tag:genai` can rerun just this layer.
+- [x] Grant Vertex AI User to the connection's service account, and confirm the current Gemini Flash model name.
+- [x] **UC1 DQ reporter:** aggregate the rejected records and explain each issue with `AI.GENERATE` → `gold.dq_audit_report`.
+- [x] **UC2 fraud investigator:** 5 weighted rules in SQL (`APPROX_QUANTILES` for P85, 12-month window), flag at ≥ 40, write briefs **only for flagged customers** → `gold.flagged_return_customers`.
+- [x] **UC3 product RAG:** pre-ranked and detail documents in two embedding tables, `VECTOR_SEARCH` with a region filter, then a Gemini answer → `gold.rag_query_history`.
+- [x] **UC4 executive intel:** pre-computed KPIs go to Gemini → `gold.ai_business_insights`.
+- [x] Tag all four models `genai`, so `dbt build --select tag:genai` can rerun just this layer.
 
 **Done when:** all 4 tables are populated and the flag rate is about 22%.
+
+**Result (10 Oct 2026):** All 4 tables are built by dbt with `AI.GENERATE` (`gemini-3.5-flash`) and `AI.EMBED` (`text-embedding-005`) through the `us-central1.vertex-ai` connection. UC2 flags **109 of 484 customers (22.52%)**: the same customers, scores and rules as Databricks. UC1's counts and UC4's KPI JSON match (UC4 totals within $0.04, accumulated cent rounding). UC3 retrieves the right pre-ranked document first for all 5 questions. `parity/compare_genai.py` checks this. Changes from Databricks: FAISS + MiniLM is replaced by VECTOR_SEARCH over Vertex embeddings, stored incrementally (the ~16.6k documents are embedded once); samples and reason lists are deterministic; missing AI text is a dbt warning.
 
 ### Phase 6: BI and conversational analytics (session 10)
 

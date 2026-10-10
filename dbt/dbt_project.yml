@@ -13,6 +13,12 @@ clean-targets: [target, dbt_packages]
 
 # Datasets map 1:1 to the Databricks schemas. macros/generate_schema_name.sql
 # makes `+schema` the literal dataset name (no `<target>_` prefix).
+vars:
+  # GenAI (models/genai). Confirm model names at the start of each phase (Risk 6).
+  genai_connection: "us-central1.vertex-ai"       # BigQuery -> Vertex AI connection (Terraform)
+  genai_endpoint: "gemini-3.5-flash"
+  genai_embedding_endpoint: "text-embedding-005"  # 768 dimensions
+
 models:
   globalmart:
     +persist_docs:
@@ -33,6 +39,10 @@ models:
       +schema: gold
       +materialized: table
       +tags: [genai]
+
+seeds:
+  globalmart:
+    +schema: gold
 
 snapshots:
   globalmart:

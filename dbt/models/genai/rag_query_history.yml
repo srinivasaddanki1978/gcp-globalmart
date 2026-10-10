@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: rag_query_history
+    description: "UC3 product RAG: answers to the questions in seeds/rag_test_questions.csv from the top 5 summary/ranked and top 5 detail documents (VECTOR_SEARCH, cosine), region-filtered when the question names a region."
+    columns:
+      - name: question
+        data_tests: [unique, not_null]
+      - name: answer
+        description: "Gemini answer grounded in retrieved_documents (AI-generated)."
+        data_tests:
+          - not_null:
+              config: { severity: warn }
+      - name: retrieved_documents
+        description: "JSON array of the documents given to the model, summary docs first."
+      - name: top_similarity
+        description: "Highest cosine similarity among retrieved documents."

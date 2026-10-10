@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: rag_documents
+    description: "UC3 retrieval corpus: detail documents (product, product x region, return cost, vendor x region) and summary documents (vendor summaries, pre-ranked top-10 lists). embed_text is what is embedded: ranked lists by title only."
+    columns:
+      - name: doc_id
+        data_tests: [unique, not_null]
+      - name: pool
+        data_tests:
+          - accepted_values:
+              arguments: { values: ["summary", "detail"] }
+      - name: doc_region
+        description: "Region named as 'in the <Region> region'; NULL = region-neutral (always eligible)."

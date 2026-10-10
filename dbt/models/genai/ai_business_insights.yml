@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: ai_business_insights
+    description: "UC4 executive intel: Gemini executive summaries for revenue performance, vendor return rates and slow-moving inventory. kpi_data holds the exact pre-computed figures given to the model; quote those, not the prose, when numbers matter."
+    columns:
+      - name: insight_type
+        data_tests:
+          - unique
+          - accepted_values:
+              arguments: { values: ["revenue_performance", "vendor_return_rate", "slow_moving_inventory"] }
+      - name: executive_summary
+        description: "Gemini-written summary (AI-generated)."
+        data_tests:
+          - not_null:
+              config: { severity: warn }
+      - name: kpi_data
+        description: "JSON of the KPIs, rankings and highlights passed to the model."
