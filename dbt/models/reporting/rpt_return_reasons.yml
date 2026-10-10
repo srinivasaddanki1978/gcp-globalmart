@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: rpt_return_reasons
+    description: "Looker Studio Returns & Fraud page: returns by reason and region."

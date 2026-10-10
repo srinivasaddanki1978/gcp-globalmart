@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: rpt_vendor_returns
+    description: "Looker Studio Returns & Fraud page: vendor return rates."

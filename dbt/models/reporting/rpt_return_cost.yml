@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: rpt_return_cost
+    description: "Looker Studio Inventory page: top 20 product-regions by allocated return cost."

@@ -13,6 +13,8 @@ locals {
     "workflows.googleapis.com",
     "cloudbuild.googleapis.com",
     "iam.googleapis.com",
+    "geminidataanalytics.googleapis.com", # Conversational Analytics API (data agent)
+    "cloudaicompanion.googleapis.com",    # Gemini for Google Cloud, used by the data agent
   ]
 
   # Dataset-level roles per service account.

@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: rpt_segment
+    description: "Looker Studio Revenue page: revenue and revenue-weighted profit margin by segment."

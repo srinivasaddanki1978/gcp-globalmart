@@ -19,3 +19,4 @@ dbt/logs/
 dbt/.user.yml
 
 .DS_Store
+agent/test_results.json

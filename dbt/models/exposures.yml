@@ -1,0 +1,50 @@
+version: 2
+
+# Who uses the data: shows in dbt docs lineage, and `dbt ls -s +exposure:<name>`
+# lists everything a consumer depends on.
+exposures:
+  - name: looker_studio_report
+    label: GlobalMart Intelligence (Looker Studio)
+    type: dashboard
+    maturity: medium
+    url: https://lookerstudio.google.com/  # replace with the report URL once created
+    description: "4-page report (Revenue, Returns & Fraud, Inventory, Data Quality & AI) with a year filter; the GCP version of the Databricks AI/BI dashboard. Each chart reads one rpt_* view."
+    owner: { name: Srinivas Addanki }
+    depends_on:
+      - ref('rpt_revenue')
+      - ref('rpt_segment')
+      - ref('rpt_vendor_returns')
+      - ref('rpt_return_reasons')
+      - ref('rpt_flagged')
+      - ref('rpt_slow_moving')
+      - ref('rpt_return_cost')
+      - ref('rpt_dq')
+      - ref('rpt_insights')
+
+  - name: data_agent
+    label: GlobalMart Data Agent (Conversational Analytics)
+    type: application
+    maturity: medium
+    description: "Natural-language Q&A over 20 gold/metrics tables (agent/agent_context.yaml); the GCP version of the Databricks Genie space. 10/10 on agent/test_questions.yaml."
+    owner: { name: Srinivas Addanki }
+    depends_on:
+      - ref('dim_customers')
+      - ref('dim_products')
+      - ref('dim_vendors')
+      - ref('dim_dates')
+      - ref('fact_sales')
+      - ref('fact_returns')
+      - ref('bridge_return_products')
+      - ref('mv_revenue_by_region')
+      - ref('mv_return_rate_by_vendor')
+      - ref('mv_slow_moving_products')
+      - ref('dq_audit_report')
+      - ref('flagged_return_customers')
+      - ref('rag_query_history')
+      - ref('ai_business_insights')
+      - ref('mv_monthly_revenue_by_region')
+      - ref('mv_segment_profitability')
+      - ref('mv_customer_return_history')
+      - ref('mv_return_reason_analysis')
+      - ref('mv_product_return_impact')
+      - ref('mv_vendor_product_performance')

@@ -192,12 +192,14 @@ Each session is about 3 hours. The core build (Phases 0–8) is about **14–16 
 
 ### Phase 6: BI and conversational analytics (session 10)
 
-- [ ] Looker Studio report with 4 pages and a year filter.
-- [ ] Conversational Analytics data agent over the 20 tables. Instructions are adapted from `setup_genie.py`, and the join guidance includes both date roles and the corrected bridge join (`order_id` **and** `product_sk`).
-- [ ] 10 test questions, checking the SQL each time.
-- [ ] dbt **exposures** for the report and the app, so the lineage shows who uses each table.
+- [ ] Looker Studio report with 4 pages and a year filter. (Data prepared: 9 `gold.rpt_*` views plus a one-click create link and page-by-page spec in `docs/looker_studio.md`. The pages are built in the UI, because Looker Studio has no page-building API.)
+- [x] Conversational Analytics data agent over the 20 tables. Instructions are adapted from `setup_genie.py`, and the join guidance includes both date roles and the corrected bridge join (`order_id` **and** `product_sk`).
+- [x] 10 test questions, checking the SQL each time.
+- [x] dbt **exposures** for the report and the app, so the lineage shows who uses each table.
 
 **Done when:** at least 9 of 10 questions are answered correctly.
+
+**Result (10 Oct 2026):** Risk 2 cleared: the Conversational Analytics API is GA (`v1`) on the personal project. The data agent `globalmart-agent` is code (`agent/agent_context.yaml`, deployed with `agent/data_agent.py deploy`): 20 tables, Genie instructions with corrected joins, 3 example queries and a glossary. **10/10** test questions match golden SQL (`agent/data_agent.py test`). The SQL review confirmed `is_current` for customers, both date roles, and the bridge without the `order_id` fan-out. A grounding rule was added after the first answer invented supporting figures; prose numbers now come from the query results.
 
 ### Phase 7: Cloud Run app (sessions 11–13)
 
@@ -297,4 +299,4 @@ This shows streaming skills, the GCP equivalent of Auto Loader running continuou
 3. ~~**SCD Type 2 version date:** use the year in the customer file name?~~ Resolved: the file year creates no history, so SCD Type 2 runs on a dbt snapshot (see Phase 3).
 4. **GitHub:** push `gcp/` to the same remote as the Databricks repo?
 5. **Phases 9 and 10:** include both, or decide after Phase 8?
-6. **Genie join fix:** correct the bridge join in `setup_genie.py` so both versions match?
+6. **Genie join fix:** correct the bridge join in `setup_genie.py` so both versions match? (The GCP agent uses the corrected join; the Databricks side is still open.)

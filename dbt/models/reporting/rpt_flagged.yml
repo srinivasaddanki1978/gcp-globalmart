@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: rpt_flagged
+    description: "Looker Studio Returns & Fraud page: flagged customers with AI investigation briefs (PII)."

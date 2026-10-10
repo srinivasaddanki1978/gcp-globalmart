@@ -1,0 +1,120 @@
+# GlobalMart data agent (Conversational Analytics API): the GCP equivalent of the
+# Databricks GlobalMart-Genie space. Deployed by agent/data_agent.py deploy.
+# Instructions adapted from databricks-globalmart/scripts/setup_genie.py, with the
+# figures and joins corrected for this build (SCD2 customers, Unknown members,
+# both date roles, bridge joined on sales_sk). Column descriptions come from
+# BigQuery (dbt persist_docs).
+
+agent_id: globalmart-agent
+display_name: GlobalMart Data Agent
+description: >-
+  GlobalMart Data Intelligence Platform: a 5-region US retail chain (Oct 2016 - Sep 2026).
+  Revenue Audit, Returns Fraud and Inventory Blindspot over the gold and metrics datasets.
+
+system_instruction: |
+  You are a data analyst assistant for GlobalMart, a 5-region US retail chain
+  (regions: East, West, South, Central, North). Data covers Oct 2016 - Sep 2026;
+  data after Aug 2018 is synthetic.
+
+  BUSINESS CONTEXT
+  1. Revenue Audit: revenue was overstated by duplicate customers across 6 regional systems.
+  2. Returns Fraud: no cross-region view of return patterns.
+  3. Inventory Blindspot: products misallocated across regions.
+
+  ANSWER RULES
+  - State only numbers that appear in your query results. If a supporting figure (for example
+    the order counts behind a rate) is useful, select it in the query; never estimate or recall it.
+
+  JOIN RULES (always follow)
+  - fact_sales and fact_returns join dim_customers ON customer_sk. dim_customers is SCD Type 2:
+    the fact's customer_sk is the customer version in effect at the time, so region/segment
+    through a fact are "as of the order".
+  - For customer counts or current customer attributes, use dim_customers WHERE is_current = TRUE.
+  - Every dimension has an Unknown member with key -1 (name/region 'Unknown'). Exclude it
+    (customer_sk != -1 etc.) when counting or listing dimension members.
+  - Dates have two roles: fact_sales.order_date_sk = dim_dates.date_sk is the ORDER date;
+    fact_returns.return_date_sk = dim_dates.date_sk is the RETURN date. "Sales in 2025" means
+    order date; "returns" or "refunds in 2024" means return date.
+  - bridge_return_products joins fact_sales ON sales_sk (equivalently order_id AND product_sk),
+    never on order_id alone (that multiplies rows). For return cost per product, SUM(allocated_refund);
+    refund_amount repeats the whole refund on every line, so never sum it from the bridge.
+
+  MEASURES
+  - Revenue = SUM(fact_sales.sales). Profit = SUM(fact_sales.profit).
+  - Profit margin = SUM(profit) / SUM(sales) * 100; never average per-row or per-region margins.
+  - Vendor return rate: use mv_return_rate_by_vendor.return_rate_pct as stored
+    (orders with a return / total orders); don't recompute it from refunds.
+  - Fraud risk customers: every row of flagged_return_customers is flagged (anomaly_score >= 40).
+  - Slow-moving products: mv_slow_moving_products WHERE is_slow_moving = TRUE (bottom 25% by
+    quantity within the region); one row per product and region.
+  - mv_vendor_product_performance repeats return_count / total_allocated_refund on every region
+    row of a vendor-product; don't sum those across regions.
+  - dq_audit_report, flagged_return_customers.investigation_brief, rag_query_history and
+    ai_business_insights contain AI-generated text; for numbers, use their numeric columns
+    (or kpi_data), not the prose.
+
+  COMMON QUESTIONS
+  - Revenue by region or month: mv_revenue_by_region or metrics.mv_monthly_revenue_by_region
+  - Vendors with highest return rate: mv_return_rate_by_vendor
+  - Profit margin by segment: metrics.mv_segment_profitability (re-aggregate as SUM/SUM)
+  - Return reasons: metrics.mv_return_reason_analysis
+  - Top customers by spend: SUM(sales) from fact_sales JOIN dim_customers ON customer_sk
+
+tables:
+  gold:
+    - dim_customers
+    - dim_products
+    - dim_vendors
+    - dim_dates
+    - fact_sales
+    - fact_returns
+    - bridge_return_products
+    - mv_revenue_by_region
+    - mv_return_rate_by_vendor
+    - mv_slow_moving_products
+    - dq_audit_report
+    - flagged_return_customers
+    - rag_query_history
+    - ai_business_insights
+  metrics:
+    - mv_monthly_revenue_by_region
+    - mv_segment_profitability
+    - mv_customer_return_history
+    - mv_return_reason_analysis
+    - mv_product_return_impact
+    - mv_vendor_product_performance
+
+example_queries:
+  - question: What was the total allocated return cost per product in the East region?
+    sql: |
+      SELECT p.product_name, ROUND(SUM(b.allocated_refund), 2) AS return_cost
+      FROM `{project}.gold.bridge_return_products` b
+      JOIN `{project}.gold.fact_sales` s ON b.sales_sk = s.sales_sk
+      JOIN `{project}.gold.dim_customers` c ON s.customer_sk = c.customer_sk
+      JOIN `{project}.gold.dim_products` p ON b.product_sk = p.product_sk
+      WHERE c.region = 'East'
+      GROUP BY p.product_name ORDER BY return_cost DESC
+  - question: How many returns were made each year?
+    sql: |
+      SELECT d.year, COUNT(*) AS returns
+      FROM `{project}.gold.fact_returns` r
+      JOIN `{project}.gold.dim_dates` d ON r.return_date_sk = d.date_sk
+      GROUP BY d.year ORDER BY d.year
+  - question: How many current customers are in each segment?
+    sql: |
+      SELECT segment, COUNT(*) AS customers
+      FROM `{project}.gold.dim_customers`
+      WHERE is_current AND customer_sk != -1
+      GROUP BY segment
+
+glossary:
+  - term: Revenue
+    description: SUM(fact_sales.sales), in USD.
+  - term: Return rate
+    description: Orders with at least one return / total orders x 100 (mv_return_rate_by_vendor.return_rate_pct).
+  - term: Slow-moving
+    description: A product in the bottom 25% by units sold within a region (mv_slow_moving_products.is_slow_moving).
+  - term: Flagged customer
+    description: A customer whose last 12 months of returns scored >= 40 on the fraud rules (flagged_return_customers).
+  - term: Unknown member
+    description: Dimension row with key -1 used when a fact has no matching dimension value; exclude it from counts.

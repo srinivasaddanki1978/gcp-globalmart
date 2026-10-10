@@ -39,6 +39,9 @@ models:
       +schema: gold
       +materialized: table
       +tags: [genai]
+    reporting: # one view per Looker Studio chart dataset
+      +schema: gold
+      +materialized: view
 
 seeds:
   globalmart:

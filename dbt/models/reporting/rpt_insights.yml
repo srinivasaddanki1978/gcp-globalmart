@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: rpt_insights
+    description: "Looker Studio Data Quality & AI page: AI executive summaries."

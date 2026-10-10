@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: rpt_dq
+    description: "Looker Studio Data Quality & AI page: rejected records per rule with AI explanations."

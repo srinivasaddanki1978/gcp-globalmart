@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: rpt_revenue
+    description: "Looker Studio Revenue page: monthly revenue, profit and orders by region."

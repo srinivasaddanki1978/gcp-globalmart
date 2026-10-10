@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: rpt_slow_moving
+    description: "Looker Studio Inventory page: slow-moving product-regions by region."

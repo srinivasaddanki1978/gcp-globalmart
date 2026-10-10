@@ -1,0 +1,67 @@
+# Data agent test set (plan target: >= 9 of 10 correct, with the SQL checked).
+# golden_sql returns the expected answer: every value in its result must appear in
+# the agent's result rows (numbers within 0.5% or 0.01, text case-insensitive).
+# Covers both date roles, the bridge join, SCD Type 2 current customers, the
+# Unknown member, fraud flags, vendor return rates and segment margins.
+questions:
+  - id: q01_revenue_by_region
+    question: What is the total revenue by customer region?
+    golden_sql: |
+      SELECT c.region, ROUND(SUM(s.sales), 2) AS revenue
+      FROM gold.fact_sales s JOIN gold.dim_customers c ON s.customer_sk = c.customer_sk
+      GROUP BY c.region
+
+  - id: q02_vendor_highest_return_rate
+    question: Which vendor has the highest return rate, and what is the rate?
+    golden_sql: |
+      SELECT vendor_name, return_rate_pct FROM gold.mv_return_rate_by_vendor
+      ORDER BY return_rate_pct DESC LIMIT 1
+
+  - id: q03_customer_count
+    question: How many unique customers do we have?
+    golden_sql: |
+      SELECT COUNT(*) AS customers FROM gold.dim_customers WHERE is_current AND customer_sk != -1
+
+  - id: q04_sales_2025_by_order_date
+    question: What were total sales for orders placed in 2025?
+    golden_sql: |
+      SELECT ROUND(SUM(s.sales), 2) AS total_sales
+      FROM gold.fact_sales s JOIN gold.dim_dates d ON s.order_date_sk = d.date_sk
+      WHERE d.year = 2025
+
+  - id: q05_refunds_2024_by_return_date
+    question: What was the total refund amount for returns made in 2024?
+    golden_sql: |
+      SELECT ROUND(SUM(r.refund_amount), 2) AS total_refunds
+      FROM gold.fact_returns r JOIN gold.dim_dates d ON r.return_date_sk = d.date_sk
+      WHERE d.year = 2024
+
+  - id: q06_segment_highest_margin
+    question: Which customer segment has the highest profit margin?
+    golden_sql: |
+      SELECT segment FROM gold.fact_sales s JOIN gold.dim_customers c ON s.customer_sk = c.customer_sk
+      GROUP BY segment ORDER BY SUM(profit) / SUM(sales) DESC LIMIT 1
+
+  - id: q07_flagged_fraud_customers
+    question: How many customers are flagged as fraud risks?
+    golden_sql: |
+      SELECT COUNT(*) AS flagged FROM gold.flagged_return_customers WHERE anomaly_score >= 40
+
+  - id: q08_top_products_return_cost
+    question: Which 5 products have the highest total allocated return cost?
+    golden_sql: |
+      SELECT p.product_name
+      FROM gold.bridge_return_products b JOIN gold.dim_products p ON b.product_sk = p.product_sk
+      GROUP BY p.product_name ORDER BY SUM(b.allocated_refund) DESC LIMIT 5
+
+  - id: q09_slow_moving_east
+    question: How many slow-moving products are there in the East region?
+    golden_sql: |
+      SELECT COUNT(*) AS slow_moving FROM gold.mv_slow_moving_products
+      WHERE region = 'East' AND is_slow_moving
+
+  - id: q10_best_month_2024
+    question: Which month of 2024 had the highest revenue?
+    golden_sql: |
+      SELECT d.month_name FROM gold.fact_sales s JOIN gold.dim_dates d ON s.order_date_sk = d.date_sk
+      WHERE d.year = 2024 GROUP BY d.month, d.month_name ORDER BY SUM(s.sales) DESC LIMIT 1
