@@ -6,11 +6,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 The repo is at the planning stage: it only contains `GLOBALMART_GCP_PLAN.md`, the agreed implementation plan (v2). **Read it before starting any phase.** It defines the phases, the checklists, the "done when" criteria and the parity targets. Tick the phase checklists in the plan as work is completed.
 
-Note: the plan's repository layout assumes a `gcp/` folder inside the `databricks-globalmart` repo. This repo (`gcp-globalmart`) is standalone, so place those folders (`terraform/`, `loader/`, `dbt/`, `workflows/`, `parity/`, `dataflow/`, `app/`) at the repo root unless the user says otherwise. The plan lists where to push as an open question.
+Note: the plan's repository layout assumes a `gcp/` folder inside the `databricks-globalmart` repo. This repo (`gcp-globalmart`) is standalone, so place those folders (`terraform/`, `loader/`, `dbt/`, `workflows/`, `parity/`, `dataflow/`, `app/`, plus `source_data/`) at the repo root unless the user says otherwise. The plan lists where to push as an open question.
 
 ## Source files
 
-The local source files are in `/Users/srinivas.addanki/Documents/GitHub/databricks-globalmart/globalmart/bronze/volumes/source_data`, which is in the sibling Databricks repo. Treat them as read-only and upload them to `gs://<project>-globalmart-raw/source_data/` with `gcloud storage rsync -r`.
+The 205 source files are committed in this repo under `source_data/`, so anyone who clones it gets them. They're a verbatim copy of `databricks-globalmart/globalmart/bronze/volumes/source_data`, where `scripts/generate_source_data.py` (seed 2026) generates the synthetic files; don't hand-edit them here. Keep only data files in `source_data/`, because it's uploaded verbatim to `gs://<project>-globalmart-raw/source_data/` with `gcloud storage rsync -r`, and the loader maps files to entities by path.
 
 - There are 205 files in total: 157 CSV and 48 JSON. They sit in `Region 1/` to `Region 6/` (the folder names contain spaces, so quote the paths), plus 4 files at the top level: `vendors.csv`, `products.json`, `returns_2.json` and `transactions_3.csv`.
 - The loader maps each file to an entity by its filename prefix: `customers_*` (60 files), `orders_*` (48), `transactions_*` (48), `returns_*.json` (47), `products.json` and `vendors.csv`. Files are named either by year (`<entity>_2018` … `_2026`) or by number (`<entity>_<n>`, for example `customers_1.csv`).
@@ -61,8 +61,7 @@ cd dbt
 ../.venv/bin/dbt build --profiles-dir . --target prod            # full build (Cloud Run job)
 
 # Re-upload source files (idempotent)
-gcloud storage rsync -r "/Users/srinivas.addanki/Documents/GitHub/databricks-globalmart/globalmart/bronze/volumes/source_data" \
-  gs://globalmart-gcp-lab-globalmart-raw/source_data
+gcloud storage rsync -r source_data gs://globalmart-gcp-lab-globalmart-raw/source_data
 
 # Refresh the Databricks answer key (read-only; Free Edition serverless warehouse)
 python3.12 parity/run_databricks_baseline.py --profile free --warehouse-id 244af7e3ec6e128d

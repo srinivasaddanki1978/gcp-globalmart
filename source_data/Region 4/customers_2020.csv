@@ -1,0 +1,9 @@
+customer_id,customer_email,customer_name,segment,country,state,city,postal_code,region
+JB-20186,msroth@me.com,James Blumstein,Corporate,United States,Minneapolis,Minnesota,55407,Central
+VK-21379,barnett@comcast.net,Victoria Kendrick,Consumer,United States,Fremont,Nebraska,68025,Central
+CA-21650,dawnsong@hotmail.com,Corey Anderson,Consumer,United States,Houston,Texas,77070,Central
+LM-25025,shaffei@sbcglobal.net,Liam Matthias,Corporate,United States,Houston,Texas,77041,Central
+JS-22657,tangsh@mac.com,Jennifer Sayre,Consumer,United States,Minneapolis,Minnesota,55407,Central
+ZB-26924,msroth@me.com,Zuschuss Brown,Corporate,United States,Houston,Texas,77095,Central
+AL-25155,cvrcek@me.com,Anthony Latchford,Corporate,United States,Rochester Hills,Michigan,48307,Central
+EK-25324,fmerges@hotmail.com,Emily Koutras,Consumer,United States,Evanston,Illinois,60201,Central

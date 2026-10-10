@@ -1,0 +1,8 @@
+CustomerID,customer_email,customer_name,segment,country,city,state,postal_code,region
+BA-21915,stern@verizon.net,Bart Arntzen,CORP,United States,Los Angeles,Pennsylvania,90045,W
+JA-21584,mhouston@optonline.net,Jay Allen,HO,United States,San Francisco,Florida,94109,W
+TC-21630,evans@me.com,Ted Caudle,CONS,United States,Redlands,California,92374,W
+FV-27264,specprog@icloud.com,Frank Voltz,CONS,United States,Los Angeles,California,90036,W
+PS-28584,fmerges@hotmail.com,Patricia Schwarz,CONS,United States,Los Angeles,California,90036,W
+GB-29675,cremonini@me.com,Greg Ballard,CONS,United States,Los Angeles,Michigan,90004,W
+DS-29747,leviathan@comcast.net,Dianna Shariari,HO,United States,Hesperia,Texas,92345,W

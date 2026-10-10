@@ -1,0 +1,25 @@
+customer_identifier,email_address,full_name,customer_segment,country,city,state,postal_code,region
+PB-24345,miyop@comcast.net,Patricia Buch,Consumer,United States,Chester,Pennsylvania,19013,East
+JB-20186,msroth@me.com,James Blumstein,Corporate,United States,Minneapolis,Minnesota,55407,Central
+WA-22471,bancboy@icloud.com,William Arnett,Consumer,United States,Minneapolis,Minnesota,85322,North
+HB-23292,fmerges@hotmail.com,Helen Braun,Consumer,United States,Columbus,Ohio,43229,East
+ST-29512,fmerges@hotmail.com,Sue Toch,Consumer,United States,New York City,New York,10024,East
+DG-20087,parrt@aol.com,Dave Gardner,Home Office,United States,New York City,New York,10009,East
+VK-21379,barnett@comcast.net,Victoria Kendrick,Consumer,United States,Fremont,Nebraska,68025,Central
+CA-21650,dawnsong@hotmail.com,Corey Anderson,Consumer,United States,Houston,Texas,77070,Central
+LM-25025,shaffei@sbcglobal.net,Liam Matthias,Corporate,United States,Houston,Texas,77041,Central
+RC-22589,bancboy@icloud.com,Rick Carroll,Corporate,United States,Charlotte,North Carolina,28205,South
+LP-28970,benits@msn.com,Lauren Pistek,Consumer,United States,Seattle,Washington,98105,West
+JS-22657,tangsh@mac.com,Jennifer Sayre,Consumer,United States,Minneapolis,Minnesota,55407,Central
+CH-23091,cremonini@me.com,Chuck Haushalter,Consumer,United States,Carlsbad,New Mexico,88220,West
+ZB-26924,msroth@me.com,Zuschuss Brown,Corporate,United States,Houston,Texas,77095,Central
+AL-25155,cvrcek@me.com,Anthony Latchford,Corporate,United States,Rochester Hills,Michigan,48307,Central
+CB-20032,ozawa@me.com,Carol Buch,Corporate,United States,Las Vegas,Nevada,89115,West
+EF-22526,wildfire@yahoo.com,Eugene Fjeld,Consumer,United States,Jacksonville,Florida,32216,South
+JG-21759,specprog@icloud.com,Janet Gardner,Consumer,United States,San Francisco,California,94109,West
+JD-21925,miyop@comcast.net,Jeremy Donatelli,Consumer,United States,San Francisco,California,94122,West
+RD-25876,,Rob Dortch,Home Office,United States,San Francisco,California,94122,West
+BP-28107,mstrout@me.com,Barry Peterman,Corporate,United States,Arlington,Virginia,22204,South
+EK-25324,fmerges@hotmail.com,Emily Koutras,Consumer,United States,Evanston,Illinois,60201,Central
+OW-28080,pgolle@mac.com,Olivia Walker,Corporate,United States,Bristol,Tennessee,37620,South
+NM-25710,mastinfo@msn.com,Nathan Murdock,Consumer,United States,Marysville,Washington,98270,West

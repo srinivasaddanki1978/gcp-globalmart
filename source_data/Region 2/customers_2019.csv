@@ -1,0 +1,8 @@
+CustomerID,customer_email,customer_name,segment,country,city,state,postal_code,region
+DS-28925,msroth@me.com,David Shami,CONS,United States,Las Vegas,Nevada,89115,W
+RR-22627,dmouse@outlook.com,Rick Roper,CONS,United States,San Francisco,California,94110,W
+RD-21288,evans@me.com,Roland Dona,CONS,United States,San Francisco,New Jersey,94109,W
+MK-21737,dinther@outlook.com,Michael Kipp,CONS,United States,San Francisco,California,94122,W
+MP-26791,dcoppit@gmail.com,Michael Phonely,CONS,United States,Los Angeles,California,90036,W
+JK-21537,dinther@outlook.com,Joseph Kastensmidt,CONS,United States,San Francisco,California,94122,W
+KB-27155,dbindel@gmail.com,Keith Bowman,CONS,United States,Great Falls,Montana,59405,W

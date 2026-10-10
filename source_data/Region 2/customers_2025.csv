@@ -1,0 +1,11 @@
+CustomerID,customer_email,customer_name,segment,country,city,state,postal_code,region
+EL-20814,dmouse@outlook.com,Erica Lawera,CONS,United States,Los Angeles,California,90049,W
+BB-21176,geekgrl@comcast.net,Bill Bergmann,CONS,United States,Lancaster,California,93534,W
+SH-24703,specprog@icloud.com,Stewart Haines,CONS,United States,Des Moines,Washington,98198,W
+RJ-29938,msroth@me.com,Rick Jones,CORP,United States,Louisville,Colorado,80027,W
+AD-21548,world@att.net,Allen Dunbar,CONS,United States,Seattle,Washington,98115,W
+NC-22469,horrocks@verizon.net,Neil Collins,CONS,United States,Santa Clara,Illinois,95051,W
+RC-21822,dinther@outlook.com,Rob Carmichael,CONS,United States,Los Angeles,California,90045,W
+GY-21960,mastinfo@msn.com,Grace Young,CONS,United States,San Francisco,New Jersey,94109,W
+VR-22216,evans@me.com,Victoria Roelle,CONS,United States,Los Angeles,California,90036,W
+SS-21113,dcoppit@gmail.com,Susan Schoenberger,CONS,United States,San Francisco,California,94110,W

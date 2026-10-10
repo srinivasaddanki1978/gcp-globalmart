@@ -1,0 +1,10 @@
+customer_id,customer_email,customer_name,segment,country,city,state,postal_code,region
+DK-20499,cvrcek@me.com,Dan Kennedy,Consumer,United States,Norwich,Connecticut,6360,East
+NM-25802,mstrout@me.com,Nathan MacAllister,Consumer,United States,Philadelphia,Pennsylvania,19143,East
+AS-29178,privcan@optonline.net,Alan Sanchez,Corporate,United States,New York City,New York,10035,East
+KS-28608,specprog@icloud.com,Ken Schwarz,Consumer,United States,New York City,New York,10024,East
+LC-29420,fmerges@hotmail.com,Lisa Carroll,Home Office,United States,New York City,New York,10009,East
+DL-22200,bancboy@icloud.com,Dave Lonsdale,Corporate,United States,Rochester,New York,14609,East
+CR-22510,tangsh@mac.com,Caroline Ritter,Corporate,United States,New York City,New York,10024,East
+AO-23580,stern@verizon.net,Andy O'Brill,Consumer,United States,Springfield,Ohio,45503,East
+CE-23949,pgolle@mac.com,Craig Eaton,Consumer,United States,Auburn,New York,13021,East

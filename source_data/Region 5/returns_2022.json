@@ -1,0 +1,618 @@
+[
+    {
+        "OrderId": "CA-2021-731063",
+        "reason": "Defective Product",
+        "date_of_return": "2022-01-03",
+        "amount": 329.28,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2021-349917",
+        "reason": "?",
+        "date_of_return": "2022-01-14",
+        "amount": 8.18,
+        "status": "Approved"
+    },
+    {
+        "OrderId": "CA-2021-251773",
+        "reason": "Damaged",
+        "date_of_return": "01-16-2022",
+        "amount": 9.58,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2021-921388",
+        "reason": "Wrong Item Received",
+        "date_of_return": "2022-01-30",
+        "amount": 341.92,
+        "status": "Pending"
+    },
+    {
+        "OrderId": "CA-2021-610335",
+        "reason": "Duplicate Order",
+        "date_of_return": "01-23-2022",
+        "amount": 13.83,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2021-107667",
+        "reason": "Quality Not As Described",
+        "date_of_return": "2022-01-08",
+        "amount": 45.38,
+        "status": "Pending"
+    },
+    {
+        "OrderId": "CA-2021-826141",
+        "reason": "Late Delivery",
+        "date_of_return": "01-21-2022",
+        "amount": 81.49,
+        "status": "Approved"
+    },
+    {
+        "OrderId": "CA-2022-872804",
+        "reason": "Wrong Item Received",
+        "date_of_return": "03-05-2022",
+        "amount": 525.77,
+        "status": "Pending"
+    },
+    {
+        "OrderId": "US-2022-924786",
+        "reason": "Duplicate Order",
+        "date_of_return": "2022-02-12",
+        "amount": 7.75,
+        "status": "Pending"
+    },
+    {
+        "OrderId": "CA-2022-315278",
+        "reason": "?",
+        "date_of_return": "2022-01-24",
+        "amount": 356.7,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-161119",
+        "reason": "Duplicate Order",
+        "date_of_return": "01-10-2022",
+        "amount": 966.63,
+        "status": "Pending"
+    },
+    {
+        "OrderId": "US-2022-602844",
+        "reason": "Quality Not As Described",
+        "date_of_return": "03-19-2022",
+        "amount": "?",
+        "status": "Approved"
+    },
+    {
+        "OrderId": "CA-2022-626946",
+        "reason": "Wrong Delivery",
+        "date_of_return": "2022-02-27",
+        "amount": 112.29,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-802898",
+        "reason": "Missing Parts",
+        "date_of_return": "2022-02-18",
+        "amount": 5.4,
+        "status": "Approved"
+    },
+    {
+        "OrderId": "CA-2022-553765",
+        "reason": "Missing Parts",
+        "date_of_return": "2022-02-11",
+        "amount": 48.21,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-544344",
+        "reason": "Wrong Delivery",
+        "date_of_return": "2022-03-03",
+        "amount": 204.66,
+        "status": "Approved"
+    },
+    {
+        "OrderId": "CA-2022-891051",
+        "reason": "Changed Mind",
+        "date_of_return": "03-19-2022",
+        "amount": 431.75,
+        "status": "Approved"
+    },
+    {
+        "OrderId": "CA-2022-377138",
+        "reason": "Damaged",
+        "date_of_return": "NULL",
+        "amount": 9.59,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-675750",
+        "reason": "Quality Not As Described",
+        "date_of_return": "2022-03-22",
+        "amount": 24.52,
+        "status": "Pending"
+    },
+    {
+        "OrderId": "CA-2022-221624",
+        "reason": "?",
+        "date_of_return": "2022-02-28",
+        "amount": 3.18,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-865226",
+        "reason": "Duplicate Order",
+        "date_of_return": "2022-03-23",
+        "amount": 1025.68,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-702151",
+        "reason": "Late Delivery",
+        "date_of_return": "2022-04-22",
+        "amount": 1497.81,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-374626",
+        "reason": "Defective Product",
+        "date_of_return": "2022-03-11",
+        "amount": "?",
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-947199",
+        "reason": "Changed Mind",
+        "date_of_return": "NULL",
+        "amount": 919.42,
+        "status": "Approved"
+    },
+    {
+        "OrderId": "US-2022-479073",
+        "reason": "Changed Mind",
+        "date_of_return": "2022-04-22",
+        "amount": 49.58,
+        "status": "Approved"
+    },
+    {
+        "OrderId": "CA-2022-585888",
+        "reason": "Wrong Item Received",
+        "date_of_return": "2022-04-07",
+        "amount": 27.21,
+        "status": "Approved"
+    },
+    {
+        "OrderId": "US-2022-673900",
+        "reason": "Changed Mind",
+        "date_of_return": "04-10-2022",
+        "amount": 54.4,
+        "status": "Approved"
+    },
+    {
+        "OrderId": "US-2022-964634",
+        "reason": "?",
+        "date_of_return": "2022-04-08",
+        "amount": 1349.2,
+        "status": "Approved"
+    },
+    {
+        "OrderId": "US-2022-520908",
+        "reason": "Late Delivery",
+        "date_of_return": "2022-04-17",
+        "amount": 16.03,
+        "status": "Pending"
+    },
+    {
+        "OrderId": "CA-2022-146412",
+        "reason": "Quality Not As Described",
+        "date_of_return": "05-20-2022",
+        "amount": 5.14,
+        "status": "Approved"
+    },
+    {
+        "OrderId": "CA-2022-117608",
+        "reason": "Late Delivery",
+        "date_of_return": "06-03-2022",
+        "amount": 1623.07,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-617793",
+        "reason": "?",
+        "date_of_return": "06-08-2022",
+        "amount": 36.72,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-338123",
+        "reason": "Missing Parts",
+        "date_of_return": "2022-06-28",
+        "amount": 1012.64,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-942124",
+        "reason": "Missing Parts",
+        "date_of_return": "2022-07-09",
+        "amount": 638.45,
+        "status": "Pending"
+    },
+    {
+        "OrderId": "CA-2022-808524",
+        "reason": "Damaged",
+        "date_of_return": "06-12-2022",
+        "amount": 44.89,
+        "status": "Approved"
+    },
+    {
+        "OrderId": "CA-2022-986314",
+        "reason": "?",
+        "date_of_return": "2022-06-29",
+        "amount": 5.13,
+        "status": "Pending"
+    },
+    {
+        "OrderId": "US-2022-703656",
+        "reason": "Missing Parts",
+        "date_of_return": "2022-06-30",
+        "amount": 88.94,
+        "status": "Pending"
+    },
+    {
+        "OrderId": "CA-2022-249462",
+        "reason": "Missing Parts",
+        "date_of_return": "2022-06-30",
+        "amount": 1699.44,
+        "status": "Pending"
+    },
+    {
+        "OrderId": "CA-2022-780445",
+        "reason": "Changed Mind",
+        "date_of_return": "2022-07-02",
+        "amount": 799.5,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-421086",
+        "reason": "Changed Mind",
+        "date_of_return": "2022-06-20",
+        "amount": 463.17,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-334208",
+        "reason": "Changed Mind",
+        "date_of_return": "2022-07-06",
+        "amount": 344.59,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-781315",
+        "reason": "Missing Parts",
+        "date_of_return": "2022-07-26",
+        "amount": 292.04,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "US-2022-948644",
+        "reason": "Quality Not As Described",
+        "date_of_return": "2022-08-10",
+        "amount": 54.22,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-339439",
+        "reason": "Defective Product",
+        "date_of_return": "2022-07-26",
+        "amount": "?",
+        "status": "Approved"
+    },
+    {
+        "OrderId": "CA-2022-539104",
+        "reason": "?",
+        "date_of_return": "2022-07-08",
+        "amount": 5.6,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-832881",
+        "reason": "Duplicate Order",
+        "date_of_return": "06-27-2022",
+        "amount": 35.82,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-394146",
+        "reason": "Quality Not As Described",
+        "date_of_return": "2022-08-10",
+        "amount": 57.93,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-858224",
+        "reason": "Late Delivery",
+        "date_of_return": "07-24-2022",
+        "amount": "?",
+        "status": "Pending"
+    },
+    {
+        "OrderId": "US-2022-331817",
+        "reason": "Defective Product",
+        "date_of_return": "2022-08-24",
+        "amount": 1.81,
+        "status": "Approved"
+    },
+    {
+        "OrderId": "CA-2022-992615",
+        "reason": "Quality Not As Described",
+        "date_of_return": "2022-09-03",
+        "amount": 138.88,
+        "status": "Approved"
+    },
+    {
+        "OrderId": "US-2022-101883",
+        "reason": "Wrong Delivery",
+        "date_of_return": "2022-09-01",
+        "amount": 1887.2,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "US-2022-415922",
+        "reason": "Quality Not As Described",
+        "date_of_return": "2022-09-15",
+        "amount": 4.38,
+        "status": "Pending"
+    },
+    {
+        "OrderId": "CA-2022-939976",
+        "reason": "Missing Parts",
+        "date_of_return": "2022-07-23",
+        "amount": 43.15,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-858644",
+        "reason": "Wrong Item Received",
+        "date_of_return": "09-08-2022",
+        "amount": 96.54,
+        "status": "Approved"
+    },
+    {
+        "OrderId": "CA-2022-155031",
+        "reason": "Late Delivery",
+        "date_of_return": "07-09-2022",
+        "amount": 6.45,
+        "status": "Approved"
+    },
+    {
+        "OrderId": "CA-2022-945502",
+        "reason": "Late Delivery",
+        "date_of_return": "2022-10-12",
+        "amount": 69.76,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-218722",
+        "reason": "Duplicate Order",
+        "date_of_return": "2022-08-24",
+        "amount": 28.88,
+        "status": "Approved"
+    },
+    {
+        "OrderId": "CA-2022-712794",
+        "reason": "Wrong Delivery",
+        "date_of_return": "2022-10-27",
+        "amount": 67.36,
+        "status": "Pending"
+    },
+    {
+        "OrderId": "CA-2022-861362",
+        "reason": "Wrong Item Received",
+        "date_of_return": "NULL",
+        "amount": 1.81,
+        "status": "Pending"
+    },
+    {
+        "OrderId": "CA-2022-864235",
+        "reason": "?",
+        "date_of_return": "2022-10-12",
+        "amount": 137.62,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-933243",
+        "reason": "Damaged",
+        "date_of_return": "2022-10-07",
+        "amount": 89.48,
+        "status": "Pending"
+    },
+    {
+        "OrderId": "US-2022-848878",
+        "reason": "Defective Product",
+        "date_of_return": "08-20-2022",
+        "amount": 24.09,
+        "status": "Pending"
+    },
+    {
+        "OrderId": "CA-2022-624492",
+        "reason": "Wrong Delivery",
+        "date_of_return": "10-02-2022",
+        "amount": 219.77,
+        "status": "Pending"
+    },
+    {
+        "OrderId": "CA-2022-130278",
+        "reason": "Defective Product",
+        "date_of_return": "2022-10-21",
+        "amount": "?",
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "US-2022-657876",
+        "reason": "Not Satisfied",
+        "date_of_return": "2022-09-16",
+        "amount": 270.32,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-542679",
+        "reason": "Damaged",
+        "date_of_return": "2022-09-19",
+        "amount": 1499.86,
+        "status": "Approved"
+    },
+    {
+        "OrderId": "US-2022-259579",
+        "reason": "Defective Product",
+        "date_of_return": "2022-09-19",
+        "amount": 311.17,
+        "status": "Approved"
+    },
+    {
+        "OrderId": "CA-2022-771962",
+        "reason": "Late Delivery",
+        "date_of_return": "NULL",
+        "amount": 787.95,
+        "status": "Pending"
+    },
+    {
+        "OrderId": "CA-2022-355006",
+        "reason": "Wrong Item Received",
+        "date_of_return": "2022-10-10",
+        "amount": "?",
+        "status": "Approved"
+    },
+    {
+        "OrderId": "US-2022-826572",
+        "reason": "Defective Product",
+        "date_of_return": "11-27-2022",
+        "amount": 74.99,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-167709",
+        "reason": "Damaged",
+        "date_of_return": "11-26-2022",
+        "amount": 101.43,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-337207",
+        "reason": "Duplicate Order",
+        "date_of_return": "2022-10-06",
+        "amount": 442.41,
+        "status": "Pending"
+    },
+    {
+        "OrderId": "CA-2022-103409",
+        "reason": "?",
+        "date_of_return": "11-03-2022",
+        "amount": "?",
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-187585",
+        "reason": "Wrong Item Received",
+        "date_of_return": "2022-11-10",
+        "amount": 24.98,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-218098",
+        "reason": "Not Satisfied",
+        "date_of_return": "10-17-2022",
+        "amount": 780.7,
+        "status": "Approved"
+    },
+    {
+        "OrderId": "CA-2022-852668",
+        "reason": "Missing Parts",
+        "date_of_return": "2022-12-09",
+        "amount": 13.62,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-914132",
+        "reason": "Wrong Delivery",
+        "date_of_return": "11-25-2022",
+        "amount": 6.48,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-276653",
+        "reason": "Quality Not As Described",
+        "date_of_return": "2022-11-01",
+        "amount": 153.25,
+        "status": "Approved"
+    },
+    {
+        "OrderId": "CA-2022-964718",
+        "reason": "Changed Mind",
+        "date_of_return": "2022-12-11",
+        "amount": 61.18,
+        "status": "Pending"
+    },
+    {
+        "OrderId": "CA-2022-166020",
+        "reason": "Quality Not As Described",
+        "date_of_return": "2022-12-14",
+        "amount": 258.42,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "US-2022-149004",
+        "reason": "Wrong Delivery",
+        "date_of_return": "11-30-2022",
+        "amount": 4.52,
+        "status": "Pending"
+    },
+    {
+        "OrderId": "CA-2022-217372",
+        "reason": "Not Satisfied",
+        "date_of_return": "11-14-2022",
+        "amount": "?",
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-620272",
+        "reason": "Wrong Delivery",
+        "date_of_return": "2022-11-15",
+        "amount": 17.45,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-946187",
+        "reason": "Quality Not As Described",
+        "date_of_return": "2022-12-07",
+        "amount": 261.93,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-760353",
+        "reason": "Quality Not As Described",
+        "date_of_return": "2022-12-23",
+        "amount": 62.35,
+        "status": "Rejected"
+    },
+    {
+        "OrderId": "CA-2022-901201",
+        "reason": "Wrong Item Received",
+        "date_of_return": "NULL",
+        "amount": 556.17,
+        "status": "Pending"
+    },
+    {
+        "OrderId": "US-2022-743445",
+        "reason": "Wrong Delivery",
+        "date_of_return": "2022-12-31",
+        "amount": 545.14,
+        "status": "Approved"
+    },
+    {
+        "OrderId": "CA-2022-906783",
+        "reason": "Damaged",
+        "date_of_return": "NULL",
+        "amount": 99.07,
+        "status": "Approved"
+    }
+]

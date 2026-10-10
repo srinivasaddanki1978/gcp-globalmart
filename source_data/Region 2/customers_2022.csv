@@ -1,0 +1,8 @@
+CustomerID,customer_email,customer_name,segment,country,city,state,postal_code,region
+DS-26927,bsikdar@msn.com,Darrin Stewart,CONS,United States,San Francisco,California,94110,W
+MJ-26933,stern@verizon.net,Maya Jones,CORP,United States,Los Angeles,California,90045,W
+JW-27216,evans@me.com,Joseph Willingham,CORP,United States,San Francisco,Ohio,94109,W
+EV-21898,mastinfo@msn.com,Emily Vittorini,CONS,United States,Concord,Connecticut,94521,W
+BP-20686,payned@att.net,Brad Phelps,CONS,United States,San Francisco,Florida,94109,W
+RM-20298,mastinfo@msn.com,Roy McGarr,CONS,United States,Brentwood,Florida,94513,W
+DD-29639,wildfire@yahoo.com,Dan Daly,CONS,United States,San Diego,Michigan,92037,W

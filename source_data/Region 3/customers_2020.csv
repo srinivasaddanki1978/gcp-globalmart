@@ -1,0 +1,5 @@
+cust_id,customer_email,customer_name,segment,country,city,state,postal_code,region
+RC-22589,bancboy@icloud.com,Rick Carroll,Corporate,United States,Charlotte,North Carolina,28205,S
+EF-22526,wildfire@yahoo.com,Eugene Fjeld,Consumer,United States,Jacksonville,Florida,32216,S
+BP-28107,mstrout@me.com,Barry Peterman,Corporate,United States,Arlington,Virginia,22204,S
+OW-28080,pgolle@mac.com,Olivia Walker,Corporate,United States,Bristol,Tennessee,37620,S

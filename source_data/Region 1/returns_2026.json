@@ -1,0 +1,1430 @@
+[
+    {
+        "order_id": "CA-2025-551059",
+        "return_reason": "Changed Mind",
+        "return_date": "2026-01-15",
+        "refund_amount": 458.29,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2025-464040",
+        "return_reason": "Damaged",
+        "return_date": "2026-01-18",
+        "refund_amount": 1406.23,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2025-785368",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-01-08",
+        "refund_amount": 468.98,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2025-264929",
+        "return_reason": "Duplicate Order",
+        "return_date": "2026-01-14",
+        "refund_amount": 353.49,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "US-2025-146920",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-01-17",
+        "refund_amount": 4.13,
+        "return_status": "RJCTD"
+    },
+    {
+        "order_id": "CA-2025-295366",
+        "return_reason": "Wrong Delivery",
+        "return_date": "2026-01-02",
+        "refund_amount": 4.75,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2025-112113",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-01-02",
+        "refund_amount": 3.52,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2025-938660",
+        "return_reason": "Wrong Delivery",
+        "return_date": "2026-02-10",
+        "refund_amount": 232.96,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2025-412279",
+        "return_reason": "Damaged",
+        "return_date": "2026-01-23",
+        "refund_amount": "$937.48",
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2025-667132",
+        "return_reason": "Damaged",
+        "return_date": "2026-01-29",
+        "refund_amount": 97.47,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2025-942746",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-01-19",
+        "refund_amount": 201.87,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2025-360256",
+        "return_reason": "Defective Product",
+        "return_date": "2026-02-02",
+        "refund_amount": 927.06,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2025-384295",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-02-19",
+        "refund_amount": 29.63,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2025-161750",
+        "return_reason": "Wrong Delivery",
+        "return_date": "2026-01-22",
+        "refund_amount": 1066.28,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2025-724029",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-02-02",
+        "refund_amount": 3.67,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2025-829990",
+        "return_reason": "Wrong Delivery",
+        "return_date": "2026-02-08",
+        "refund_amount": "$10.94",
+        "return_status": "PENDG"
+    },
+    {
+        "order_id": "US-2025-650406",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-01-02",
+        "refund_amount": 363.0,
+        "return_status": "PENDG"
+    },
+    {
+        "order_id": "CA-2025-544069",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-02-07",
+        "refund_amount": 277.74,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2025-374018",
+        "return_reason": "Wrong Delivery",
+        "return_date": "2026-01-23",
+        "refund_amount": "$149.59",
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2025-210029",
+        "return_reason": "Damaged",
+        "return_date": "2026-01-13",
+        "refund_amount": "$17.36",
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2025-817558",
+        "return_reason": "Damaged",
+        "return_date": "2026-02-07",
+        "refund_amount": 18.59,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2025-606722",
+        "return_reason": "Damaged",
+        "return_date": "2026-02-20",
+        "refund_amount": 95.6,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2025-893002",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-02-11",
+        "refund_amount": 10.9,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2025-603650",
+        "return_reason": "Damaged",
+        "return_date": "2026-01-03",
+        "refund_amount": 44.41,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "US-2025-288419",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-01-12",
+        "refund_amount": 107.43,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2025-461644",
+        "return_reason": "Damaged",
+        "return_date": "2026-01-23",
+        "refund_amount": 64.96,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2025-740859",
+        "return_reason": "Damaged",
+        "return_date": "2026-02-11",
+        "refund_amount": 77.55,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2025-599600",
+        "return_reason": "Damaged",
+        "return_date": "2026-02-04",
+        "refund_amount": 1047.1,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "US-2025-571572",
+        "return_reason": "Late Delivery",
+        "return_date": "2026-01-22",
+        "refund_amount": 37.07,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2025-928756",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-01-06",
+        "refund_amount": 150.87,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2025-755160",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-01-04",
+        "refund_amount": 209.49,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2025-287213",
+        "return_reason": "Damaged",
+        "return_date": "2026-02-07",
+        "refund_amount": 217.66,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-192949",
+        "return_reason": "Damaged",
+        "return_date": "2026-02-23",
+        "refund_amount": 187.7,
+        "return_status": "RJCTD"
+    },
+    {
+        "order_id": "CA-2026-501843",
+        "return_reason": "Defective Product",
+        "return_date": "2026-02-18",
+        "refund_amount": 47.96,
+        "return_status": "RJCTD"
+    },
+    {
+        "order_id": "CA-2026-459236",
+        "return_reason": "Damaged",
+        "return_date": "2026-02-27",
+        "refund_amount": 23.34,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-898423",
+        "return_reason": "Damaged",
+        "return_date": "2026-03-10",
+        "refund_amount": 133.58,
+        "return_status": "RJCTD"
+    },
+    {
+        "order_id": "CA-2026-885289",
+        "return_reason": "Quality Not As Described",
+        "return_date": "2026-03-10",
+        "refund_amount": 272.15,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-338356",
+        "return_reason": "Damaged",
+        "return_date": "2026-02-17",
+        "refund_amount": 1014.84,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-145006",
+        "return_reason": "Quality Not As Described",
+        "return_date": "2026-02-26",
+        "refund_amount": 23.06,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-828470",
+        "return_reason": "Wrong Delivery",
+        "return_date": "2026-03-01",
+        "refund_amount": 76.37,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-129234",
+        "return_reason": "Damaged",
+        "return_date": "2026-01-22",
+        "refund_amount": 526.92,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-869500",
+        "return_reason": "Duplicate Order",
+        "return_date": "2026-02-10",
+        "refund_amount": 1897.81,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-319569",
+        "return_reason": "Damaged",
+        "return_date": "2026-01-08",
+        "refund_amount": 37.76,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-861399",
+        "return_reason": "Defective Product",
+        "return_date": "2026-01-27",
+        "refund_amount": 94.17,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-247465",
+        "return_reason": "Duplicate Order",
+        "return_date": "2026-02-19",
+        "refund_amount": 9.46,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-123449",
+        "return_reason": "Damaged",
+        "return_date": "2026-03-19",
+        "refund_amount": "$417.45",
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-576035",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-01-21",
+        "refund_amount": 5.79,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-337198",
+        "return_reason": "Missing Parts",
+        "return_date": "2026-03-03",
+        "refund_amount": "$171.25",
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-251606",
+        "return_reason": "Damaged",
+        "return_date": "2026-03-04",
+        "refund_amount": 154.06,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-777066",
+        "return_reason": "Late Delivery",
+        "return_date": "2026-01-21",
+        "refund_amount": "$1734.68",
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-299404",
+        "return_reason": "Changed Mind",
+        "return_date": "2026-03-24",
+        "refund_amount": 12.67,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "US-2026-962961",
+        "return_reason": "Damaged",
+        "return_date": "2026-03-27",
+        "refund_amount": 28.23,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-529085",
+        "return_reason": "Wrong Item Received",
+        "return_date": "2026-03-03",
+        "refund_amount": 338.06,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-780654",
+        "return_reason": "Wrong Delivery",
+        "return_date": "2026-04-14",
+        "refund_amount": 16.42,
+        "return_status": "RJCTD"
+    },
+    {
+        "order_id": "CA-2026-450181",
+        "return_reason": "Damaged",
+        "return_date": "2026-03-24",
+        "refund_amount": 233.66,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-782845",
+        "return_reason": "Wrong Delivery",
+        "return_date": "2026-02-18",
+        "refund_amount": "$13.44",
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "US-2026-347361",
+        "return_reason": "Missing Parts",
+        "return_date": "2026-03-20",
+        "refund_amount": 9.19,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-639536",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-02-14",
+        "refund_amount": 2193.95,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-322410",
+        "return_reason": "Wrong Delivery",
+        "return_date": "2026-02-17",
+        "refund_amount": "$5480.1",
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-122304",
+        "return_reason": "Wrong Delivery",
+        "return_date": "2026-03-15",
+        "refund_amount": 350.29,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "US-2026-123440",
+        "return_reason": "Damaged",
+        "return_date": "2026-03-05",
+        "refund_amount": 87.2,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "US-2026-704277",
+        "return_reason": "Damaged",
+        "return_date": "2026-03-07",
+        "refund_amount": 10.78,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-667335",
+        "return_reason": "Defective Product",
+        "return_date": "2026-03-29",
+        "refund_amount": 372.11,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-454032",
+        "return_reason": "Defective Product",
+        "return_date": "2026-03-10",
+        "refund_amount": 1191.87,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-697136",
+        "return_reason": "Damaged",
+        "return_date": "2026-02-28",
+        "refund_amount": 23.69,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-304145",
+        "return_reason": "Wrong Delivery",
+        "return_date": "2026-03-19",
+        "refund_amount": 8.74,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-436428",
+        "return_reason": "Wrong Item Received",
+        "return_date": "2026-03-23",
+        "refund_amount": "$939.86",
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-401579",
+        "return_reason": "Quality Not As Described",
+        "return_date": "2026-03-14",
+        "refund_amount": 627.19,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-936962",
+        "return_reason": "Wrong Item Received",
+        "return_date": "2026-04-01",
+        "refund_amount": 386.49,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "US-2026-491095",
+        "return_reason": "Wrong Delivery",
+        "return_date": "2026-04-15",
+        "refund_amount": "$39.89",
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-633439",
+        "return_reason": "Defective Product",
+        "return_date": "2026-03-06",
+        "refund_amount": 1750.56,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-724053",
+        "return_reason": "Wrong Delivery",
+        "return_date": "2026-03-13",
+        "refund_amount": 212.67,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-357289",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-04-03",
+        "refund_amount": 3763.11,
+        "return_status": "RJCTD"
+    },
+    {
+        "order_id": "CA-2026-241368",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-03-30",
+        "refund_amount": 1.78,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-319758",
+        "return_reason": "Changed Mind",
+        "return_date": "2026-04-14",
+        "refund_amount": 23.09,
+        "return_status": "APPRVD"
+    },
+    {
+        "order_id": "CA-2026-293548",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-03-22",
+        "refund_amount": 231.38,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-690244",
+        "return_reason": "Wrong Item Received",
+        "return_date": "2026-04-07",
+        "refund_amount": 378.57,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-559739",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-03-23",
+        "refund_amount": 11.34,
+        "return_status": "PENDG"
+    },
+    {
+        "order_id": "CA-2026-268352",
+        "return_reason": "Damaged",
+        "return_date": "2026-04-26",
+        "refund_amount": 109.72,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-512553",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-04-29",
+        "refund_amount": "$102.88",
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-336750",
+        "return_reason": "Damaged",
+        "return_date": "2026-04-18",
+        "refund_amount": 50.66,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-809273",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-04-28",
+        "refund_amount": 4.57,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-806763",
+        "return_reason": "Wrong Item Received",
+        "return_date": "2026-04-13",
+        "refund_amount": 16.65,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "US-2026-935168",
+        "return_reason": "Changed Mind",
+        "return_date": "2026-04-23",
+        "refund_amount": 808.83,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-184709",
+        "return_reason": "Missing Parts",
+        "return_date": "2026-06-01",
+        "refund_amount": 1290.09,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-748813",
+        "return_reason": "Wrong Item Received",
+        "return_date": "2026-05-13",
+        "refund_amount": 1347.3,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-178049",
+        "return_reason": "Defective Product",
+        "return_date": "2026-05-23",
+        "refund_amount": 450.78,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-650639",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-04-16",
+        "refund_amount": 87.08,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "US-2026-497182",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-04-26",
+        "refund_amount": 69.99,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-413363",
+        "return_reason": "Defective Product",
+        "return_date": "2026-05-05",
+        "refund_amount": "$103.06",
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-652371",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-05-30",
+        "refund_amount": 358.73,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-378114",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-06-03",
+        "refund_amount": 8.47,
+        "return_status": "APPRVD"
+    },
+    {
+        "order_id": "CA-2026-392508",
+        "return_reason": "Wrong Delivery",
+        "return_date": "2026-05-01",
+        "refund_amount": 100.29,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "US-2026-476737",
+        "return_reason": "Defective Product",
+        "return_date": "2026-05-12",
+        "refund_amount": 46.53,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-549229",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-06-06",
+        "refund_amount": 243.0,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-382667",
+        "return_reason": "Changed Mind",
+        "return_date": "2026-05-15",
+        "refund_amount": 103.24,
+        "return_status": "RJCTD"
+    },
+    {
+        "order_id": "CA-2026-928018",
+        "return_reason": "Damaged",
+        "return_date": "2026-04-27",
+        "refund_amount": 97.32,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-244812",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-05-25",
+        "refund_amount": 256.11,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-793973",
+        "return_reason": "Quality Not As Described",
+        "return_date": "2026-05-02",
+        "refund_amount": 330.26,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-691470",
+        "return_reason": "Quality Not As Described",
+        "return_date": "2026-05-11",
+        "refund_amount": "$58.95",
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-303474",
+        "return_reason": "Damaged",
+        "return_date": "2026-05-30",
+        "refund_amount": 26.14,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-612642",
+        "return_reason": "Wrong Delivery",
+        "return_date": "2026-06-03",
+        "refund_amount": 3285.0,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-517218",
+        "return_reason": "Damaged",
+        "return_date": "2026-06-23",
+        "refund_amount": 88.52,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-419903",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-05-15",
+        "refund_amount": 95.76,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "US-2026-618177",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-05-11",
+        "refund_amount": 592.46,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "US-2026-436972",
+        "return_reason": "Wrong Delivery",
+        "return_date": "2026-04-10",
+        "refund_amount": 30.59,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-154578",
+        "return_reason": "Wrong Delivery",
+        "return_date": "2026-05-07",
+        "refund_amount": 17.37,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "US-2026-607060",
+        "return_reason": "Damaged",
+        "return_date": "2026-04-29",
+        "refund_amount": 297.42,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-367571",
+        "return_reason": "Changed Mind",
+        "return_date": "2026-05-20",
+        "refund_amount": "$875.22",
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-591829",
+        "return_reason": "Defective Product",
+        "return_date": "2026-06-10",
+        "refund_amount": 11.97,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "US-2026-719246",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-06-27",
+        "refund_amount": "$49.29",
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "US-2026-863025",
+        "return_reason": "Damaged",
+        "return_date": "2026-05-30",
+        "refund_amount": "$0.34",
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-495927",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-06-02",
+        "refund_amount": 37.94,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-223605",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-07-20",
+        "refund_amount": "$286.2",
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "US-2026-393775",
+        "return_reason": "Damaged",
+        "return_date": "2026-07-13",
+        "refund_amount": 378.16,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-296895",
+        "return_reason": "Late Delivery",
+        "return_date": "2026-05-26",
+        "refund_amount": 75.58,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-593391",
+        "return_reason": "Late Delivery",
+        "return_date": "2026-06-19",
+        "refund_amount": 70.18,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-605855",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-05-29",
+        "refund_amount": 307.3,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-923457",
+        "return_reason": "Defective Product",
+        "return_date": "2026-07-08",
+        "refund_amount": 270.86,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-174549",
+        "return_reason": "Quality Not As Described",
+        "return_date": "2026-06-22",
+        "refund_amount": 89.6,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-799289",
+        "return_reason": "Wrong Delivery",
+        "return_date": "2026-07-04",
+        "refund_amount": 47.48,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "US-2026-248679",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-07-10",
+        "refund_amount": 6695.3,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-725778",
+        "return_reason": "Late Delivery",
+        "return_date": "2026-06-30",
+        "refund_amount": 262.69,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-403135",
+        "return_reason": "Damaged",
+        "return_date": "2026-06-18",
+        "refund_amount": 36.58,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-499245",
+        "return_reason": "Wrong Item Received",
+        "return_date": "2026-06-18",
+        "refund_amount": 997.44,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-759623",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-07-27",
+        "refund_amount": 791.73,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-640357",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-05-18",
+        "refund_amount": "$15.08",
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-151040",
+        "return_reason": "Damaged",
+        "return_date": "2026-05-13",
+        "refund_amount": 17.18,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-539531",
+        "return_reason": "Damaged",
+        "return_date": "2026-06-13",
+        "refund_amount": 171.43,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-945608",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-06-28",
+        "refund_amount": "$141.18",
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-568650",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-05-29",
+        "refund_amount": "$286.54",
+        "return_status": "APPRVD"
+    },
+    {
+        "order_id": "US-2026-221434",
+        "return_reason": "Damaged",
+        "return_date": "2026-06-10",
+        "refund_amount": 423.26,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-774301",
+        "return_reason": "Damaged",
+        "return_date": "2026-06-06",
+        "refund_amount": 46.47,
+        "return_status": "RJCTD"
+    },
+    {
+        "order_id": "CA-2026-135701",
+        "return_reason": "Wrong Delivery",
+        "return_date": "2026-07-03",
+        "refund_amount": 32.8,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-539387",
+        "return_reason": "Damaged",
+        "return_date": "2026-07-05",
+        "refund_amount": 45.52,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "US-2026-533037",
+        "return_reason": "Wrong Delivery",
+        "return_date": "2026-07-12",
+        "refund_amount": 140.85,
+        "return_status": "PENDG"
+    },
+    {
+        "order_id": "CA-2026-932191",
+        "return_reason": "Damaged",
+        "return_date": "2026-05-10",
+        "refund_amount": 66.97,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-471430",
+        "return_reason": "Damaged",
+        "return_date": "2026-07-07",
+        "refund_amount": "$14.05",
+        "return_status": "APPRVD"
+    },
+    {
+        "order_id": "CA-2026-411333",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-07-28",
+        "refund_amount": 13.1,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-745145",
+        "return_reason": "Defective Product",
+        "return_date": "2026-07-18",
+        "refund_amount": 610.89,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-995344",
+        "return_reason": "Late Delivery",
+        "return_date": "2026-06-15",
+        "refund_amount": 168.0,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "US-2026-313505",
+        "return_reason": "Wrong Item Received",
+        "return_date": "2026-07-19",
+        "refund_amount": 26.95,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "US-2026-694253",
+        "return_reason": "Defective Product",
+        "return_date": "2026-06-30",
+        "refund_amount": 253.71,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-395264",
+        "return_reason": "Missing Parts",
+        "return_date": "2026-07-03",
+        "refund_amount": "$307.08",
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-930847",
+        "return_reason": "Wrong Delivery",
+        "return_date": "2026-08-02",
+        "refund_amount": 96.6,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-589803",
+        "return_reason": "Defective Product",
+        "return_date": "2026-06-30",
+        "refund_amount": 408.2,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-893618",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-06-26",
+        "refund_amount": 27.22,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-108155",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-07-05",
+        "refund_amount": 18.82,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-657600",
+        "return_reason": "Damaged",
+        "return_date": "2026-08-01",
+        "refund_amount": 103.08,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-346134",
+        "return_reason": "Quality Not As Described",
+        "return_date": "2026-07-04",
+        "refund_amount": 46.02,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-674698",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-07-04",
+        "refund_amount": 83.99,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-695840",
+        "return_reason": "Defective Product",
+        "return_date": "2026-07-12",
+        "refund_amount": 30.6,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-987720",
+        "return_reason": "Damaged",
+        "return_date": "2026-08-13",
+        "refund_amount": "$54.75",
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-266661",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-08-09",
+        "refund_amount": 475.87,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-799503",
+        "return_reason": "Wrong Item Received",
+        "return_date": "2026-08-23",
+        "refund_amount": 350.98,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-253511",
+        "return_reason": "Changed Mind",
+        "return_date": "2026-08-09",
+        "refund_amount": 487.4,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-218112",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-06-19",
+        "refund_amount": 147.86,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-924823",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-08-08",
+        "refund_amount": "$28.01",
+        "return_status": "RJCTD"
+    },
+    {
+        "order_id": "CA-2026-169656",
+        "return_reason": "Damaged",
+        "return_date": "2026-07-26",
+        "refund_amount": 17.76,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-525948",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-07-19",
+        "refund_amount": 28.64,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-499317",
+        "return_reason": "Defective Product",
+        "return_date": "2026-08-10",
+        "refund_amount": 368.21,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-411134",
+        "return_reason": "Defective Product",
+        "return_date": "2026-06-21",
+        "refund_amount": 433.11,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-246088",
+        "return_reason": "Wrong Delivery",
+        "return_date": "2026-07-26",
+        "refund_amount": 400.45,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-920879",
+        "return_reason": "Changed Mind",
+        "return_date": "2026-08-11",
+        "refund_amount": 100.91,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-493410",
+        "return_reason": "Damaged",
+        "return_date": "2026-07-13",
+        "refund_amount": 1552.77,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-696758",
+        "return_reason": "Wrong Delivery",
+        "return_date": "2026-08-14",
+        "refund_amount": 70.59,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "US-2026-959781",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-08-29",
+        "refund_amount": 387.99,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-489692",
+        "return_reason": "Late Delivery",
+        "return_date": "2026-07-19",
+        "refund_amount": "$7.75",
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-303276",
+        "return_reason": "Changed Mind",
+        "return_date": "2026-08-19",
+        "refund_amount": 7.85,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-646934",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-09-11",
+        "refund_amount": 702.01,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-405427",
+        "return_reason": "Quality Not As Described",
+        "return_date": "2026-08-14",
+        "refund_amount": 42.66,
+        "return_status": "RJCTD"
+    },
+    {
+        "order_id": "CA-2026-903599",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-08-08",
+        "refund_amount": 3.23,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-685129",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-08-08",
+        "refund_amount": 3.32,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-302885",
+        "return_reason": "Damaged",
+        "return_date": "2026-09-09",
+        "refund_amount": "$34.76",
+        "return_status": "APPRVD"
+    },
+    {
+        "order_id": "CA-2026-903307",
+        "return_reason": "Late Delivery",
+        "return_date": "2026-08-06",
+        "refund_amount": 31.11,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-106869",
+        "return_reason": "Damaged",
+        "return_date": "2026-07-09",
+        "refund_amount": 440.75,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-170562",
+        "return_reason": "Changed Mind",
+        "return_date": "2026-08-18",
+        "refund_amount": 8.77,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-191971",
+        "return_reason": "Late Delivery",
+        "return_date": "2026-08-31",
+        "refund_amount": 2.08,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-888555",
+        "return_reason": "Late Delivery",
+        "return_date": "2026-09-09",
+        "refund_amount": 109.81,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-938261",
+        "return_reason": "Quality Not As Described",
+        "return_date": "2026-07-29",
+        "refund_amount": 122.61,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-871108",
+        "return_reason": "Defective Product",
+        "return_date": "2026-08-26",
+        "refund_amount": "$113.77",
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-239023",
+        "return_reason": "Defective Product",
+        "return_date": "2026-09-14",
+        "refund_amount": 2206.43,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-459146",
+        "return_reason": "Duplicate Order",
+        "return_date": "2026-08-03",
+        "refund_amount": 606.56,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-594640",
+        "return_reason": "Wrong Delivery",
+        "return_date": "2026-08-14",
+        "refund_amount": 563.23,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-293301",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-08-21",
+        "refund_amount": 20.82,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-947502",
+        "return_reason": "Wrong Item Received",
+        "return_date": "2026-08-15",
+        "refund_amount": 3065.75,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-505075",
+        "return_reason": "Damaged",
+        "return_date": "2026-09-20",
+        "refund_amount": 725.03,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-704669",
+        "return_reason": "Late Delivery",
+        "return_date": "2026-09-26",
+        "refund_amount": 3317.11,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "US-2026-478565",
+        "return_reason": "Damaged",
+        "return_date": "2026-09-16",
+        "refund_amount": 98.55,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-691023",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-09-09",
+        "refund_amount": 2706.13,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "US-2026-109443",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-08-21",
+        "refund_amount": "$295.93",
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-792912",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-09-14",
+        "refund_amount": 228.22,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-426944",
+        "return_reason": "Damaged",
+        "return_date": "2026-09-13",
+        "refund_amount": 36.37,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-480933",
+        "return_reason": "Quality Not As Described",
+        "return_date": "2026-08-24",
+        "refund_amount": 1766.81,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-233369",
+        "return_reason": "Wrong Item Received",
+        "return_date": "2026-09-27",
+        "refund_amount": 3.24,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-768459",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-08-17",
+        "refund_amount": 1510.2,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-408666",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-09-08",
+        "refund_amount": 10.75,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-790138",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-08-25",
+        "refund_amount": 0.84,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-160624",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-09-19",
+        "refund_amount": 2080.06,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-484930",
+        "return_reason": "Changed Mind",
+        "return_date": "2026-09-12",
+        "refund_amount": 102.09,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2026-602294",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-09-12",
+        "refund_amount": 1705.42,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-279359",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-09-27",
+        "refund_amount": 416.23,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2026-793750",
+        "return_reason": "Not Satisfied",
+        "return_date": "2026-09-18",
+        "refund_amount": 318.15,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2026-244332",
+        "return_reason": "Defective Product",
+        "return_date": "2026-09-30",
+        "refund_amount": 235.38,
+        "return_status": "PENDG"
+    }
+]

@@ -1,0 +1,8 @@
+CustomerID,customer_email,customer_name,segment,country,city,state,postal_code,region
+LP-28970,benits@msn.com,Lauren Pistek,CONS,United States,Seattle,Washington,98105,W
+CH-23091,cremonini@me.com,Chuck Haushalter,CONS,United States,Carlsbad,New Mexico,88220,W
+CB-20032,ozawa@me.com,Carol Buch,CORP,United States,Las Vegas,Nevada,89115,W
+JG-21759,specprog@icloud.com,Janet Gardner,CONS,United States,San Francisco,California,94109,W
+JD-21925,miyop@comcast.net,Jeremy Donatelli,CONS,United States,San Francisco,California,94122,W
+RD-25876,mhouston@optonline.net,Rob Dortch,HO,United States,San Francisco,California,94122,W
+NM-25710,mastinfo@msn.com,Nathan Murdock,CONS,United States,Marysville,Washington,98270,W

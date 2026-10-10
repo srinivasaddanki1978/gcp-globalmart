@@ -1,0 +1,4 @@
+customer_id,customer_email,customer_name,segment,country,city,state,postal_code,region
+AG-28612,geekgrl@comcast.net,Art Gockenbach,Corporate,United States,Manchester,Connecticut,6040,East
+OB-27134,duncand@mac.com,Olvera Braden,Consumer,United States,New York City,New York,10035,East
+KM-28452,specprog@icloud.com,Ken Mitchum,Consumer,United States,Dover,Delaware,19901,East

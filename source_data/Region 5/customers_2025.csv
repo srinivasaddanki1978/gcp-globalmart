@@ -1,0 +1,5 @@
+customer_id,customer_name,segment,country,city,state,postal_code,region
+RF-21689,Robert Fritzler,Consumer,United States,Detroit,Michigan,73788,North
+RS-29099,Roy Shonely,Corporate,United States,Milwaukee,Wisconsin,87170,North
+LB-23405,Liam Brandow,Consumer,United States,Denver,Colorado,67691,North
+MH-27844,Maribeth Hoffman,Home Office,United States,Kansas City,Missouri,94866,North

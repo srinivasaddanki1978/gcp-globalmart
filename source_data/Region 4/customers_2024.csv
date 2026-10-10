@@ -1,0 +1,9 @@
+customer_id,customer_email,customer_name,segment,country,state,city,postal_code,region
+RD-28290,mastinfo@msn.com,Ruben Doherty,Consumer,United States,Gladstone,Missouri,64118,Central
+AC-23868,msroth@me.com,Anthony Crestani,Home Office,United States,Lakeville,Minnesota,55044,Central
+SG-25585,bancboy@icloud.com,Sanjit Gardner,Home Office,United States,Columbus,Indiana,47201,Central
+MM-21493,gordonjcp@comcast.net,Maya Martinez,Home Office,United States,Houston,Texas,77070,Central
+BS-28157,unreal@live.com,Brian Seite,Home Office,United States,Peoria,Illinois,61604,Central
+BJ-24328,atmarks@live.com,Bradley Jacobs,Corporate,United States,Norman,Oklahoma,73071,Central
+JA-29909,bancboy@icloud.com,Jay Atkinson,Consumer,United States,Chicago,Illinois,60610,Central
+JZ-25100,evans@me.com,Joseph Zandusky,Corporate,United States,Chicago,Illinois,60610,Central

@@ -1,0 +1,6 @@
+customer_id,customer_email,customer_name,segment,country,state,city,postal_code,region
+DP-23680,msroth@me.com,Dave Preis,Corporate,United States,Columbus,Indiana,47201,Central
+TL-22589,tangsh@mac.com,Toby Lee,Corporate,United States,Chicago,Illinois,60610,Central
+SM-25881,bancboy@icloud.com,Steven Mull,Consumer,United States,Detroit,Michigan,48227,Central
+JG-20676,unreal@live.com,Jim Gastineau,Consumer,United States,Chicago,Illinois,60610,Central
+SH-25791,world@att.net,Sally Hwang,Corporate,United States,Quincy,Illinois,62301,Central

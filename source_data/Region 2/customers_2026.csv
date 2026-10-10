@@ -1,0 +1,9 @@
+CustomerID,customer_email,customer_name,segment,country,city,state,postal_code,region
+CH-27750,pgolle@mac.com,Chris Hall,CONS,United States,Seattle,Washington,98105,W
+EB-23496,cvrcek@me.com,Ellis Braxton,CORP,United States,Los Angeles,California,90045,W
+RA-25752,ylchang@att.net,Ross Armstrong,CONS,United States,San Francisco,California,94122,W
+LW-23524,dinther@outlook.com,Linda Willman,HO,United States,San Diego,California,92105,W
+EH-26656,leviathan@comcast.net,Emily Holt,CONS,United States,Los Angeles,California,90036,W
+SA-20896,horrocks@verizon.net,Steven Armold,HO,United States,San Francisco,California,94122,W
+CS-20833,duncand@mac.com,Chuck Stewart,CONS,United States,Los Angeles,California,90004,W
+RO-27822,payned@att.net,Roy Overcash,CONS,United States,San Francisco,Pennsylvania,94110,W

@@ -1,0 +1,5 @@
+customer_id,customer_email,customer_name,segment,country,city,state,postal_code,region
+PB-24345,miyop@comcast.net,Patricia Buch,Consumer,United States,Chester,Pennsylvania,19013,East
+HB-23292,fmerges@hotmail.com,Helen Braun,Consumer,United States,Columbus,Ohio,43229,East
+ST-29512,fmerges@hotmail.com,Sue Toch,Consumer,United States,New York City,New York,10024,East
+DG-20087,parrt@aol.com,Dave Gardner,Home Office,United States,New York City,New York,10009,East

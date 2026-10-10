@@ -1,0 +1,8 @@
+customer_id,customer_email,customer_name,segment,country,city,state,postal_code,region
+HM-20291,world@att.net,Heather Molinari,Consumer,United States,Oceanside,New York,11572,East
+DY-25069,cvrcek@me.com,Dave Young,Consumer,United States,Cincinnati,Ohio,45231,East
+GJ-25358,louise@msn.com,Gary Johnson,Consumer,United States,Philadelphia,Pennsylvania,19143,East
+AC-25999,leviathan@comcast.net,Arthur Coakley,Corporate,United States,Philadelphia,Pennsylvania,19143,East
+RB-29762,mastinfo@msn.com,Ralph Baird,Home Office,United States,New York City,New York,10035,East
+KO-21279,msroth@me.com,Kristen Ordway,Corporate,United States,Wilmington,Delaware,19805,East
+JL-26422,geekgrl@comcast.net,Janet Lonsdale,Corporate,United States,Cleveland,Ohio,44105,East

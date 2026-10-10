@@ -1,0 +1,359 @@
+[
+    {
+        "order_id": "US-2018-411680",
+        "return_reason": "Missing Parts",
+        "return_date": "2018-10-13",
+        "refund_amount": 79.37,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2018-815505",
+        "return_reason": "Not Satisfied",
+        "return_date": "2018-09-26",
+        "refund_amount": 24.25,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2018-625876",
+        "return_reason": "Late Delivery",
+        "return_date": "2018-10-08",
+        "refund_amount": "$58.91",
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2018-444607",
+        "return_reason": "Not Satisfied",
+        "return_date": "2018-09-24",
+        "refund_amount": 336.28,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2018-301858",
+        "return_reason": "Not Satisfied",
+        "return_date": "2018-11-12",
+        "refund_amount": "$657.94",
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2018-700596",
+        "return_reason": "Wrong Item Received",
+        "return_date": "2018-11-23",
+        "refund_amount": 37.32,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2018-458127",
+        "return_reason": "Not Satisfied",
+        "return_date": "2018-11-08",
+        "refund_amount": 18.0,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2018-624174",
+        "return_reason": "Not Satisfied",
+        "return_date": "2018-10-11",
+        "refund_amount": 0.21,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2018-657009",
+        "return_reason": "Wrong Delivery",
+        "return_date": "2018-10-06",
+        "refund_amount": "$766.32",
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2018-222861",
+        "return_reason": "Damaged",
+        "return_date": "2018-10-02",
+        "refund_amount": 23.1,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2018-467211",
+        "return_reason": "Quality Not As Described",
+        "return_date": "2018-10-30",
+        "refund_amount": 49.5,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "US-2018-274619",
+        "return_reason": "Not Satisfied",
+        "return_date": "2018-10-31",
+        "refund_amount": 7.14,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2018-817704",
+        "return_reason": "Duplicate Order",
+        "return_date": "2018-12-03",
+        "refund_amount": 91.35,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2018-537613",
+        "return_reason": "Not Satisfied",
+        "return_date": "2018-12-12",
+        "refund_amount": 347.74,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2018-385340",
+        "return_reason": "Not Satisfied",
+        "return_date": "2018-11-04",
+        "refund_amount": 15.36,
+        "return_status": "APPRVD"
+    },
+    {
+        "order_id": "CA-2018-748606",
+        "return_reason": "Damaged",
+        "return_date": "2018-10-23",
+        "refund_amount": 470.71,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "US-2018-713334",
+        "return_reason": "Duplicate Order",
+        "return_date": "2018-11-28",
+        "refund_amount": 1745.95,
+        "return_status": "PENDG"
+    },
+    {
+        "order_id": "US-2018-581311",
+        "return_reason": "Damaged",
+        "return_date": "2018-11-18",
+        "refund_amount": 6.5,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2018-128028",
+        "return_reason": "Damaged",
+        "return_date": "2018-11-09",
+        "refund_amount": 54.64,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "US-2018-183264",
+        "return_reason": "Duplicate Order",
+        "return_date": "2018-12-10",
+        "refund_amount": 269.62,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2018-754764",
+        "return_reason": "Late Delivery",
+        "return_date": "2018-11-08",
+        "refund_amount": 31.56,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2018-411136",
+        "return_reason": "Damaged",
+        "return_date": "2018-11-06",
+        "refund_amount": 19.6,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2018-768054",
+        "return_reason": "Not Satisfied",
+        "return_date": "2018-11-16",
+        "refund_amount": 35.77,
+        "return_status": "APPRVD"
+    },
+    {
+        "order_id": "CA-2018-221937",
+        "return_reason": "Not Satisfied",
+        "return_date": "2018-12-17",
+        "refund_amount": 100.91,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2018-262416",
+        "return_reason": "Wrong Delivery",
+        "return_date": "2018-12-10",
+        "refund_amount": 32.83,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2018-155368",
+        "return_reason": "Not Satisfied",
+        "return_date": "2018-10-17",
+        "refund_amount": 84.13,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2018-645286",
+        "return_reason": "Late Delivery",
+        "return_date": "2018-10-26",
+        "refund_amount": 28.91,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "US-2018-771511",
+        "return_reason": "Not Satisfied",
+        "return_date": "2018-11-28",
+        "refund_amount": 148.79,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2018-829375",
+        "return_reason": "Not Satisfied",
+        "return_date": "2018-10-26",
+        "refund_amount": 63.8,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2018-593639",
+        "return_reason": "Late Delivery",
+        "return_date": "2018-11-30",
+        "refund_amount": 770.88,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2018-167601",
+        "return_reason": "Quality Not As Described",
+        "return_date": "2018-12-26",
+        "refund_amount": 0.99,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2018-750841",
+        "return_reason": "Not Satisfied",
+        "return_date": "2018-11-17",
+        "refund_amount": 1015.42,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2018-608797",
+        "return_reason": "Changed Mind",
+        "return_date": "2018-12-04",
+        "refund_amount": 122.34,
+        "return_status": "RJCTD"
+    },
+    {
+        "order_id": "CA-2018-318332",
+        "return_reason": "Duplicate Order",
+        "return_date": "2018-12-21",
+        "refund_amount": "$460.64",
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2018-324342",
+        "return_reason": "Not Satisfied",
+        "return_date": "2018-12-06",
+        "refund_amount": 387.88,
+        "return_status": "APPRVD"
+    },
+    {
+        "order_id": "CA-2018-201613",
+        "return_reason": "Wrong Delivery",
+        "return_date": "2018-12-29",
+        "refund_amount": 300.36,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "US-2018-110730",
+        "return_reason": "Wrong Delivery",
+        "return_date": "2018-12-30",
+        "refund_amount": 20.38,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2018-811647",
+        "return_reason": "Not Satisfied",
+        "return_date": "2018-11-24",
+        "refund_amount": 412.33,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2018-692251",
+        "return_reason": "Wrong Item Received",
+        "return_date": "2018-12-05",
+        "refund_amount": 157.21,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2018-359324",
+        "return_reason": "Not Satisfied",
+        "return_date": "2018-12-24",
+        "refund_amount": 168.17,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2018-115269",
+        "return_reason": "Not Satisfied",
+        "return_date": "2018-12-22",
+        "refund_amount": 34.47,
+        "return_status": "APPRVD"
+    },
+    {
+        "order_id": "CA-2018-556844",
+        "return_reason": "Defective Product",
+        "return_date": "2018-12-20",
+        "refund_amount": 67.83,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "US-2018-970682",
+        "return_reason": "Not Satisfied",
+        "return_date": "2018-12-22",
+        "refund_amount": 28.28,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2018-372579",
+        "return_reason": "Not Satisfied",
+        "return_date": "2018-12-24",
+        "refund_amount": 119.79,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2018-294819",
+        "return_reason": "Damaged",
+        "return_date": "2018-12-20",
+        "refund_amount": 92.18,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2018-185523",
+        "return_reason": "Not Satisfied",
+        "return_date": "2018-12-14",
+        "refund_amount": 571.32,
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2018-623157",
+        "return_reason": "Wrong Delivery",
+        "return_date": "2018-12-26",
+        "refund_amount": 16.93,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "US-2018-224597",
+        "return_reason": "Not Satisfied",
+        "return_date": "2018-12-22",
+        "refund_amount": 14.34,
+        "return_status": "Approved"
+    },
+    {
+        "order_id": "CA-2018-974117",
+        "return_reason": "Defective Product",
+        "return_date": "2018-12-25",
+        "refund_amount": "$440.45",
+        "return_status": "Pending"
+    },
+    {
+        "order_id": "CA-2018-967945",
+        "return_reason": "Not Satisfied",
+        "return_date": "2018-12-25",
+        "refund_amount": 132.29,
+        "return_status": "Rejected"
+    },
+    {
+        "order_id": "CA-2018-528379",
+        "return_reason": "Not Satisfied",
+        "return_date": "2018-12-31",
+        "refund_amount": 945.25,
+        "return_status": "Approved"
+    }
+]

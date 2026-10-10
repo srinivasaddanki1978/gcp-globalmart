@@ -1,0 +1,8 @@
+customer_id,customer_email,customer_name,segment,country,city,state,postal_code,region
+AO-25767,horrocks@verizon.net,Annie O'Brian,Corporate,United States,New York City,New York,10024,East
+GJ-20247,payned@att.net,Guy Jarboe,Consumer,United States,Newark,Ohio,43055,East
+PS-26550,gordonjcp@comcast.net,Phillina Stevenson,Consumer,United States,Dublin,Ohio,43017,East
+CA-26218,cremonini@me.com,Craig Armold,Consumer,United States,Hamilton,Ohio,45011,East
+BK-20065,payned@att.net,Bill Kinney,Corporate,United States,New York City,New York,10024,East
+NE-25130,shaffei@sbcglobal.net,Nick Ellison,Home Office,United States,New York City,New York,10024,East
+EH-24824,louise@msn.com,Erin Hoffmann,Home Office,United States,Akron,Ohio,44312,East

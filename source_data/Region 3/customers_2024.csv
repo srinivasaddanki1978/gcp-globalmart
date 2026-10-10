@@ -1,0 +1,5 @@
+cust_id,customer_email,customer_name,segment,country,city,state,postal_code,region
+CS-26678,specprog@icloud.com,Christine Schoenberger,Consumer,United States,Cary,North Carolina,27511,S
+DD-22320,evans@me.com,Darren Dominguez,Consumer,United States,Jacksonville,Florida,32216,S
+MB-23709,ylchang@att.net,Mark Brandow,Corporate,United States,Charlotte,North Carolina,28205,S
+AC-29987,dinther@outlook.com,Astrea Christensen,Corporate,United States,Bossier City,Louisiana,71111,S

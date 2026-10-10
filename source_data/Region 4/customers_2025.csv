@@ -1,0 +1,5 @@
+customer_id,customer_email,customer_name,segment,country,state,city,postal_code,region
+MS-20836,mstrout@me.com,Maribeth Sayre,Consumer,United States,Eagan,Minnesota,55122,Central
+ME-20508,benits@msn.com,Mary Ellison,Consumer,United States,Tyler,Texas,75701,Central
+NC-25697,ylchang@att.net,Nathan Chapman,Consumer,United States,Cottage Grove,Minnesota,55016,Central
+SL-28851,msroth@me.com,Sophia liebe,Corporate,United States,Grand Prairie,Texas,75051,Central

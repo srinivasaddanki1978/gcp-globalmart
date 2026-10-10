@@ -251,8 +251,8 @@ This shows streaming skills, the GCP equivalent of Auto Loader running continuou
 5. **Terraform foundations:** we write `gcp/terraform/` together and run `terraform apply`.
 6. **Upload the source files:**
    ```bash
-   gcloud storage rsync -r "globalmart/bronze/volumes/source_data" \
-     "gs://globalmart-gcp-lab-globalmart-raw/source_data"
+   gcloud storage rsync -r source_data \
+     "gs://globalmart-gcp-lab-globalmart-raw/source_data"   # source_data/ is committed in this repo
    ```
 7. **dbt:** `cd gcp/dbt && dbt init` (or we scaffold the project by hand), then `dbt debug`.
 8. **Start the Bronze loader** with `vendors.csv` and the customer files.

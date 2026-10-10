@@ -1,0 +1,6 @@
+cust_id,customer_email,customer_name,segment,country,city,state,postal_code,region
+SA-21138,mstrout@me.com,Sonia Atkinson,Corporate,United States,Jackson,Mississippi,39212,S
+GM-28152,,Guy Mautz,Corporate,United States,Arlington,Virginia,22204,S
+DD-29207,,Dean Daniels,Consumer,United States,Jacksonville,Florida,32216,S
+DC-21741,,Dave Carroll,Home Office,United States,Charlotte,North Carolina,28205,S
+LK-24865,cremonini@me.com,Linda Kastensmidt,Consumer,United States,Arlington,Virginia,22204,S

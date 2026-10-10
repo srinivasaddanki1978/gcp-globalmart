@@ -1,0 +1,6 @@
+customer_id,customer_email,customer_name,segment,country,state,city,postal_code,region
+DR-28465,louise@msn.com,Doug Reed,Home Office,United States,Dallas,Texas,75220,Central
+GT-22440,msroth@me.com,Guy Toch,Consumer,United States,Chicago,Illinois,60610,Central
+AS-24133,pgolle@mac.com,Anthony Smith,Home Office,United States,Jackson,Michigan,49201,Central
+JR-29441,specprog@icloud.com,Jack Roelle,Corporate,United States,Houston,Texas,77036,Central
+AJ-25612,world@att.net,Alan Jacobs,Consumer,United States,Lakeville,Minnesota,55044,Central

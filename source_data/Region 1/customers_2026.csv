@@ -1,0 +1,6 @@
+customer_id,customer_email,customer_name,segment,country,city,state,postal_code,region
+AO-27630,benits@msn.com,Anthony O'Connel,Consumer,United States,New York City,New York,10024,East
+JJ-24289,pgolle@mac.com,John Johnson,Consumer,United States,New York City,New York,10009,East
+DK-23057,privcan@optonline.net,Darrin Kirkland,Consumer,United States,Cincinnati,Ohio,45231,East
+HC-24561,leviathan@comcast.net,Harold Coakley,Consumer,United States,New York City,New York,10009,East
+EP-26117,world@att.net,Eric Prichep,Corporate,United States,Philadelphia,Pennsylvania,19140,East

@@ -1,0 +1,5 @@
+CustomerID,customer_email,customer_name,segment,country,city,state,postal_code,region
+LT-22833,specprog@icloud.com,Lindsay Thompson,CONS,United States,Los Angeles,California,90036,W
+TA-21294,fmerges@hotmail.com,Tamara Armstrong,CONS,United States,San Francisco,Ohio,94109,W
+MR-23035,atmarks@live.com,Maureen Rawles,CORP,United States,Whittier,California,90604,W
+TA-22508,world@att.net,Tracy A,CONS,United States,Portland,Oregon,97206,W

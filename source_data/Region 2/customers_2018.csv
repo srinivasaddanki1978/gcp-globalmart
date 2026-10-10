@@ -1,0 +1,11 @@
+CustomerID,customer_email,customer_name,segment,country,city,state,postal_code,region
+PA-21681,atmarks@live.com,Philisse Applegate,CONS,United States,Anaheim,California,92804,W
+BC-24706,specprog@icloud.com,Brad Cheatham,CONS,United States,Phoenix,Arizona,85023,W
+LK-25148,stern@verizon.net,Liam Knutson,CONS,United States,Santa Clara,Illinois,95051,W
+MD-27851,leviathan@comcast.net,Mike Daniels,HO,United States,Colorado Springs,Colorado,80906,W
+EL-20800,parrt@aol.com,Eudokia Ludtke,CONS,United States,Los Angeles,California,90049,W
+TK-27701,atmarks@live.com,Toby Kennedy,CORP,United States,San Francisco,Indiana,94122,W
+MS-27507,parrt@aol.com,Mary Shifley,CONS,United States,Long Beach,California,90805,W
+SS-21360,bancboy@icloud.com,Sally Schwarz,CORP,United States,Seattle,Washington,98115,W
+AS-24399,bancboy@icloud.com,Anthony Schwarz,CONS,United States,Los Angeles,California,90045,W
+JM-29552,louise@msn.com,Jim Miller,CONS,United States,San Diego,California,92024,W
