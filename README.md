@@ -44,33 +44,28 @@ source_data/ ──► GCS ──► Cloud Run job: Bronze loader (Python) ─�
 
 ## Set up from scratch
 
-Prerequisites: a GCP project with billing, `gcloud`, `terraform` (≥ 1.6), Python 3.12 and Node 24.
+**[docs/DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md)** walks through everything step by step: Google
+account and billing, installing the tools, creating the project, then either Terraform or creating every
+resource by hand, running and verifying the pipeline, the data agent, the app, Looker Studio and CI/CD.
+
+Short version (Terraform; needs `gcloud`, `terraform` ≥ 1.6, Python 3.12; project IDs are global, so pick your own):
 
 ```bash
-gcloud auth login && gcloud auth application-default login
-gcloud config set project <PROJECT_ID>
+export PROJECT_ID=<your-project-id> REGION=us-central1 GCP_PROJECT=<your-project-id>
+gcloud auth login && gcloud auth application-default login && gcloud config set project $PROJECT_ID
 
-# 1. Infrastructure
-cd terraform && cp terraform.tfvars.example terraform.tfvars   # set project_id
-terraform init && terraform apply
-
-# 2. Source files
-gcloud storage rsync -r source_data gs://<PROJECT_ID>-globalmart-raw/source_data
-
-# 3. Images (or let CI build them: cloudbuild.yaml)
-for img in loader dbt app; do
-  gcloud builds submit $img --region=us-central1 --tag us-central1-docker.pkg.dev/<PROJECT_ID>/globalmart/$img:latest
+cd terraform && cp terraform.tfvars.example terraform.tfvars        # set project_id
+terraform init && terraform apply -target=google_artifact_registry_repository.images && cd ..
+for img in loader dbt app; do                                        # images must exist before the jobs
+  gcloud builds submit $img --region=$REGION --tag $REGION-docker.pkg.dev/$PROJECT_ID/globalmart/$img:latest
 done
-terraform apply   # jobs/service pick up the images
+cd terraform && terraform apply && cd ..                             # everything else
 
-# 4. Run the pipeline: Bronze -> Silver -> Gold -> Metrics -> GenAI (~8 min)
-gcloud workflows run globalmart-e2e --location=us-central1
+gcloud storage rsync -r source_data gs://$PROJECT_ID-globalmart-raw/source_data
+gcloud workflows run globalmart-e2e --location=$REGION              # Bronze -> ... -> GenAI (~8 min)
 
-# 5. Data agent
-python3.12 -m venv .venv && .venv/bin/pip install -r loader/requirements.txt -r dbt/requirements.txt pyyaml
+python3.12 -m venv .venv && .venv/bin/pip install -r loader/requirements.txt -r dbt/requirements.txt
 .venv/bin/python agent/data_agent.py deploy && .venv/bin/python agent/data_agent.py test
-
-# 6. Looker Studio: follow docs/looker_studio.md
 ```
 
 ## Daily use

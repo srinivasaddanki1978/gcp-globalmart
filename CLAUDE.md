@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 The core build is complete (10 Oct 2026). Bronze → Silver → Gold → Metrics → GenAI run on GCP and match the Databricks numbers layer by layer (`parity/`, summarised in `docs/parity_report.md`). The data agent, the Cloud Run app and Cloud Build CI/CD are deployed. The original implementation plan was removed from the repo; it's in git history (last version in commit `abc5b71`).
 
+`docs/DEPLOYMENT_GUIDE.md` is the from-zero setup guide (Terraform path and a by-hand path that mirrors every Terraform resource and IAM binding). **When you add or change infrastructure in `terraform/`, update its Part 4B and Appendix A to match.**
+
 Open items:
 - Looker Studio pages are built by hand (`docs/looker_studio.md`); then put the report URL in `dbt/models/exposures.yml`.
 - The Cloud Build GitHub trigger `globalmart-main` needs the `globalmart-github` connection (us-central1) to finish the user's GitHub OAuth. Then link the repo (`gcloud builds repositories create`) and create the trigger with `sa-cloudbuild`.
