@@ -18,12 +18,11 @@ models:
     +persist_docs:
       relation: true
       columns: true
-    staging:
-      +schema: silver
-      +materialized: view
     silver:
       +schema: silver
       +materialized: table
+      staging: # harmonise column variants + explicit casts; views over bronze
+        +materialized: view
     gold:
       +schema: gold
       +materialized: table

@@ -34,6 +34,8 @@ Orchestration: Cloud Workflows `globalmart-e2e` runs the loader job, then the db
 
 ## Key design rules (these span several components)
 
+- **Bronze loader** (`loader/main.py`) matches Databricks Bronze exactly; `parity/compare_bronze.py` checks this. It lower-cases headers and keys (BigQuery column names are case-insensitive, so `Order_ID`/`Order_id` must merge). Empty CSV fields become NULL, and JSON numbers keep their original text (`parse_float=str`). It runs one load job per entity, and adds new columns with `ALLOW_FIELD_ADDITION`. A file counts as already loaded if it's in `ops.ingest_log` **or** its `_source_file` is already in Bronze; the second case backfills the log after a crash.
+
 - **Bronze is all STRING.** The source JSON files are JSON *arrays*, so the loader converts them to NDJSON. Regional files use different names for the same column (for example `customer_id`, `CustomerID`, `cust_id`, `customer_identifier`). Staging models harmonise them with `COALESCE` and cast every type explicitly. This is the most likely cause of parity differences.
 - **The loader is idempotent.** It skips files already recorded in `ops.ingest_log`, so a second run must load nothing. It adds `_source_file` (the full GCS path, which the Region 4 city/state fix relies on) and `_load_timestamp`.
 - **Each Silver rule is written once** in `dbt/macros/rules/`, as a list of name, field, issue type and `fail_if` condition. The same macros generate both `silver.clean_<entity>` and `silver.rejected_records`. Wrap every condition in `coalesce(..., false)`. The invariant *Bronze = Silver + rejected* is tested through `pipeline_audit_log.reconciliation_diff = 0`.
@@ -59,6 +61,16 @@ cd dbt
 ../.venv/bin/dbt build --profiles-dir . --select <model>         # build and test one model
 ../.venv/bin/dbt build --profiles-dir . --select tag:genai       # GenAI layer only
 ../.venv/bin/dbt build --profiles-dir . --target prod            # full build (Cloud Run job)
+
+# Bronze loader (loader/main.py): tests, local run, image build, Cloud Run job
+cd loader && ../.venv/bin/python -m pytest -q                        # single test: -k <name>
+GOOGLE_CLOUD_PROJECT=globalmart-gcp-lab ../.venv/bin/python main.py [--dry-run]
+gcloud builds submit loader --region=us-central1 \
+  --tag us-central1-docker.pkg.dev/globalmart-gcp-lab/globalmart/loader:latest   # no local Docker
+gcloud run jobs execute globalmart-loader --region=us-central1 --wait
+
+# Bronze parity: per-column profile of every raw_* table vs Databricks
+../.venv/bin/python parity/compare_bronze.py --warehouse-id 244af7e3ec6e128d
 
 # Re-upload source files (idempotent)
 gcloud storage rsync -r source_data gs://globalmart-gcp-lab-globalmart-raw/source_data

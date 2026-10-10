@@ -1,0 +1,54 @@
+version: 2
+
+sources:
+  - name: bronze
+    description: >
+      Raw source files loaded by the Bronze loader (Cloud Run job globalmart-loader).
+      Every source column is STRING with lower-cased names; regional files use different
+      names for the same field, which staging models harmonise with COALESCE.
+    schema: bronze
+    config:
+      loaded_at_field: _load_timestamp
+      freshness:
+        warn_after: { count: 7, period: day }
+    tables:
+      - name: raw_customers
+        description: "Customers from 6 regional systems (60 files). ID appears as customer_id, customerid, cust_id or customer_identifier."
+        columns:
+          - name: _source_file
+            description: "Full gs:// path. Region 4's city/state swap is fixed by folder name in Silver."
+            data_tests: [not_null]
+      - name: raw_orders
+        description: "Orders (48 files). Some files lack order_estimated_delivery_date."
+        columns:
+          - name: _source_file
+            data_tests: [not_null]
+      - name: raw_transactions
+        description: "Order lines (48 files). One file has no profit column."
+        columns:
+          - name: _source_file
+            data_tests: [not_null]
+      - name: raw_returns
+        description: "Returns from JSON arrays (47 files), in two layouts: order_id/refund_amount/return_date/return_reason/return_status or orderid/amount/date_of_return/reason/status."
+        columns:
+          - name: _source_file
+            data_tests: [not_null]
+      - name: raw_products
+        description: "Product catalogue from products.json."
+        columns:
+          - name: _source_file
+            data_tests: [not_null]
+      - name: raw_vendors
+        description: "Vendor list from vendors.csv."
+        columns:
+          - name: _source_file
+            data_tests: [not_null]
+
+  - name: ops
+    schema: ops
+    tables:
+      - name: ingest_log
+        description: "One row per source file loaded by the Bronze loader; a file is never loaded twice."
+        columns:
+          - name: file_uri
+            data_tests: [unique, not_null]

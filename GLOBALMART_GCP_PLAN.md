@@ -101,7 +101,7 @@ databricks-globalmart/
     │   ├── profiles.yml                   ← method: oauth (local login / Cloud Run service account)
     │   ├── Dockerfile
     │   ├── macros/rules/                  ← each Silver rule written ONCE
-    │   ├── models/{staging,silver,gold,metrics,genai}/
+    │   ├── models/{bronze,silver,gold,metrics,genai}/   ← bronze = sources only; silver/staging = harmonise + cast views
     │   ├── snapshots/customers_snapshot.yml
     │   └── models/exposures.yml           ← Looker Studio report + Cloud Run app
     ├── workflows/globalmart_e2e.yaml
@@ -127,19 +127,21 @@ Each session is about 3 hours. The core build (Phases 0–8) is about **14–16 
 
 ### Phase 1: Bronze loader (sessions 1–2)
 
-- [ ] Python loader: list the bucket and skip files already in `ops.ingest_log`. Map each file to its entity by name pattern.
-- [ ] CSV: all columns as STRING, header names in lower case, new columns allowed.
-- [ ] JSON array: convert to NDJSON, then load the same way.
-- [ ] Add `_source_file` and `_load_timestamp`, and log each file.
-- [ ] Package it as a Cloud Run job and run it twice: the second run must load nothing.
-- [ ] Declare the 6 Bronze tables as **dbt sources**, with a freshness check on `_load_timestamp`.
+- [x] Python loader: list the bucket and skip files already in `ops.ingest_log`. Map each file to its entity by name pattern.
+- [x] CSV: all columns as STRING, header names in lower case, new columns allowed.
+- [x] JSON array: convert to NDJSON, then load the same way.
+- [x] Add `_source_file` and `_load_timestamp`, and log each file.
+- [x] Package it as a Cloud Run job and run it twice: the second run must load nothing.
+- [x] Declare the 6 Bronze tables as **dbt sources**, with a freshness check on `_load_timestamp`.
 
 **Done when:** Bronze counts match `pipeline_audit_log.bronze_count` from Databricks.
+
+**Result (10 Oct 2026):** All 205 files and every Bronze row count match exactly. `parity/compare_bronze.py` also matches every column's non-null count, distinct count and total length on all 6 tables. The Cloud Run job `globalmart-loader` loads everything in about 2.5 minutes, and a second run loads nothing. Note: Databricks Bronze turned out to be all STRING too, so Risk 1 only affects Silver casts.
 
 ### Phase 2: Silver quality layer (sessions 3–4)
 
 - [ ] Port the 23 rules from `silver/clean/*.py` into `macros/rules/` as lists of name, field, issue type and `fail_if` condition.
-- [ ] `staging` models: harmonise column variants, parse dates in several formats (`SAFE.PARSE_TIMESTAMP`), and clean `$`, `%`, `'NULL'` values and abbreviations.
+- [ ] `silver/staging` models (`stg_<entity>` views): harmonise column variants, parse dates in several formats (`SAFE.PARSE_TIMESTAMP`), and clean `$`, `%`, `'NULL'` values and abbreviations.
 - [ ] `silver.clean_<entity>`: rows where no rule fails. Wrap each condition in `coalesce(..., false)` so a NULL result doesn't drop a row silently.
 - [ ] `silver.rejected_records`: one row per failure, generated from the same macros. Same columns as Databricks.
 - [ ] `silver.pipeline_audit_log`: reconciliation per entity.
