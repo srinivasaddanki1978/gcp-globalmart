@@ -1,0 +1,23 @@
+version: 2
+
+models:
+  - name: mv_return_rate_by_vendor
+    description: "Vendor return rate = orders with a return / total orders x 100 (Returns Fraud). Use return_rate_pct as-is; don't recompute it from refunds."
+    config:
+      contract: { enforced: true }
+    columns:
+      - name: vendor_id
+        data_type: string
+        data_tests: [unique, not_null]
+      - name: vendor_name
+        data_type: string
+      - name: total_orders
+        data_type: int64
+      - name: total_sales
+        data_type: float64
+      - name: return_order_count
+        data_type: int64
+      - name: total_refunded
+        data_type: float64
+      - name: return_rate_pct
+        data_type: float64

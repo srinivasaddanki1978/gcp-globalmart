@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: rejected_records
+    description: "Quarantine: one row per rule failure across all entities, generated from macros/rules/silver_rules.sql."
+    columns:
+      - name: source_table
+        description: "clean_<entity> the row was rejected from."
+        data_tests: [not_null]
+      - name: record_key
+        description: "Business key of the rejected row (order_id for transactions, so not unique)."
+      - name: affected_field
+        data_tests: [not_null]
+      - name: issue_type
+        data_tests:
+          - accepted_values:
+              arguments: { values: ["missing_value", "invalid_value", "out_of_range", "parse_failure"] }
+      - name: record_data
+        description: "The harmonised row as JSON; NULLs written as the text 'NULL', as in Databricks."
+      - name: _source_file
+        data_tests: [not_null]

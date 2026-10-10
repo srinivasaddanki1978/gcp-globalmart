@@ -1,0 +1,7 @@
+version: 2
+
+models:
+  - name: stg_vendors
+    description: >
+      Trims vendor fields. Adds one _fail_<rule> flag per Silver rule, _has_any_failure and record_data,
+      all generated from macros/rules/silver_rules.sql. Feeds clean_vendors and rejected_records.

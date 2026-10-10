@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: pipeline_audit_log
+    description: "Row count reconciliation per entity: bronze_count = silver_count + rejected_count."
+    columns:
+      - name: entity
+        data_tests: [unique, not_null]
+      - name: reconciliation_diff
+        description: "Must be 0: every Bronze row is either clean or rejected."
+        data_tests:
+          - dbt_utils.expression_is_true:
+              arguments: { expression: "= 0" }

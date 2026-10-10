@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: clean_returns
+    description: "Validated returns from both JSON layouts."
+    columns:
+      - name: order_id
+        data_tests: [not_null]
+      - name: refund_amount
+        data_tests:
+          - dbt_utils.expression_is_true:
+              arguments: { expression: ">= 0" }
+      - name: return_status
+        data_tests:
+          - accepted_values:
+              arguments: { values: ["Approved", "Pending", "Rejected"] }
+      - name: return_date
+        data_tests: [not_null]

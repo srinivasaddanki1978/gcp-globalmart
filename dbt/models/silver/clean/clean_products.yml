@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: clean_products
+    description: "Validated product catalogue; UPC repaired from scientific notation."
+    columns:
+      - name: product_id
+        data_tests: [not_null]
+      - name: product_name
+        data_tests: [not_null]

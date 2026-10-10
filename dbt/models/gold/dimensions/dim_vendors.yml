@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: dim_vendors
+    description: "Vendor dimension, one row per vendor_id, plus the Unknown member (-1)."
+    config:
+      contract: { enforced: true }
+    constraints:
+      - type: primary_key
+        warn_unenforced: false
+        columns: [vendor_sk]
+    columns:
+      - name: vendor_sk
+        description: "Surrogate key: FARM_FINGERPRINT(vendor_id); -1 = Unknown."
+        data_type: int64
+        constraints: [{ type: not_null }]
+        data_tests: [unique]
+      - name: vendor_id
+        data_type: string
+        data_tests: [unique, not_null]
+      - name: vendor_name
+        data_type: string

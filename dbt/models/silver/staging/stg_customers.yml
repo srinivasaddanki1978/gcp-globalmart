@@ -1,0 +1,7 @@
+version: 2
+
+models:
+  - name: stg_customers
+    description: >
+      Harmonises the 4 regional customer layouts (customer_id / customerid / cust_id / customer_identifier), fixes Region 4's city/state swap, expands segment and region abbreviations. Adds one _fail_<rule> flag per Silver rule, _has_any_failure and record_data,
+      all generated from macros/rules/silver_rules.sql. Feeds clean_customers and rejected_records.

@@ -40,8 +40,10 @@ Orchestration: Cloud Workflows `globalmart-e2e` runs the loader job, then the db
 - **The loader is idempotent.** It skips files already recorded in `ops.ingest_log`, so a second run must load nothing. It adds `_source_file` (the full GCS path, which the Region 4 city/state fix relies on) and `_load_timestamp`.
 - **Each Silver rule is written once**, in `dbt/macros/rules/silver_rules.sql`. One definition per entity lists its rules (name, field, issue_type, `fail_if`), its record key and its `record_data` fields. `rule_columns(entity)` turns them into the `_fail_*` columns, `_has_any_failure` and `record_data` in each `silver/staging/stg_<entity>` view. `silver/clean/clean_<entity>` keeps rows `where not _has_any_failure`, and `silver/quarantine/rejected_records` loops over the same definitions. To add or change a rule, edit only that macro. `pipeline_audit_log` counts rejected rows as distinct `(record_data, _source_file)`, and the `reconciliation_diff = 0` test enforces *Bronze = Silver + rejected*.
 - **Copy Spark's behaviour, not BigQuery's defaults.** The goal is matching Databricks results, so follow Spark's non-ANSI semantics: failed casts and parses return NULL (`try_cast`, `try_parse_timestamp` with a list of formats, first match wins). A double-to-long cast truncates (`truncate_to_int`). In `record_data`, doubles keep a trailing `.0` and timestamps print as `yyyy-MM-dd HH:mm:ss` (`spark_string`). All platform-specific SQL lives in `dbt/macros/dialect.sql` behind `adapter.dispatch`. Databricks `_source_file` is URL-encoded (`Region%201/...`) and GCS paths keep the space; `is_region_4()` accepts both.
-- **Surrogate keys** come from a `FARM_FINGERPRINT(business_key)` macro. Every dimension has an Unknown member row (`-1`). Parity checks compare business keys, never hash keys.
-- **Gold tables use enforced dbt contracts** with `primary_key`/`foreign_key` constraints, grain tests and `relationships` tests. Turn on `persist_docs` so the data agent can read the descriptions. Customers use SCD Type 1 for parity, plus SCD Type 2 (a backfill model and a dbt snapshot).
+- **Surrogate keys** come from `hash_key()` (FARM_FINGERPRINT of the business key). `dim_dates.date_sk` is the integer yyyymmdd. Every dimension has an Unknown member (`-1`, added by `unknown_member()`), and facts use `coalesce(sk, -1)`, never NULL. Parity checks compare business columns and exclude `-1` rows; BigQuery's `-1` count must equal Databricks' NULL-key count.
+- **`dim_customers` is the only customer dimension, and it's SCD Type 2.** It's built on the dbt snapshot `silver.customers_snapshot`, which also deduplicates: every customer arrives twice (regional file + Region 6), the latest load wins, preferring a row with an email. **That snapshot is the only copy of customer history: never drop or full-refresh it.** `customer_sk` is a version key. Facts join on `customer_id` and the event date between `valid_from` and `valid_to`, so `mv_*` views join on `customer_sk` (region as of the order). Use `is_current` for today's attributes. Unit tests with mock rows (in `dim_customers.yml` and `fact_sales.yml`) cover the version logic.
+- **Gold tables use enforced dbt contracts**, with PK/FK constraints marked `warn_unenforced: false`; BigQuery records them but doesn't enforce them, and the `unique`/`relationships` tests do. Data types must match exactly (int64, float64, string, date, timestamp, bool). `fact_sales` grain is `(order_id, product_id, line_seq)`, because the source repeats order/product pairs; the bridge grain is `(return_sk, sales_sk)`. Money totals use `exact_sum()` (BIGNUMERIC, order-independent) and `spark_round()` (half-up on decimal text, as in Spark), which is why some `mv_*` rows differ from Databricks by one cent: Databricks rounds inexact float sums.
+- **One YAML file per model,** next to its `.sql`, holding descriptions, contract, tests and any unit tests. Descriptions are persisted to BigQuery for the data agent.
 - **GenAI runs in SQL inside dbt models** (`AI.GENERATE`, `ML.GENERATE_EMBEDDING`, `VECTOR_SEARCH` through a Vertex AI connection), tagged `genai`. To control cost, only send aggregates or flagged customers to Gemini.
 - **Keep dialect-specific SQL in a few `adapter.dispatch` macros** from the start, so the same dbt project can target Databricks later (Phase 10).
 - **App queries** are files on an allowlist of `.sql` files and use BigQuery named parameters (`@param`). CI dry-runs every app query, so a breaking change in Gold fails the build.
@@ -62,6 +64,7 @@ cd dbt
 ../.venv/bin/dbt build --profiles-dir . --select <model>         # build and test one model
 ../.venv/bin/dbt build --profiles-dir . --select source:bronze+   # everything downstream of Bronze
 ../.venv/bin/dbt build --profiles-dir . --select tag:genai       # GenAI layer only
+../.venv/bin/dbt test --profiles-dir . --select test_type:unit   # unit tests (mock-data logic checks)
 ../.venv/bin/dbt build --profiles-dir . --target prod            # full build (Cloud Run job)
 
 # Bronze loader (loader/main.py): tests, local run, image build, Cloud Run job
@@ -74,6 +77,7 @@ gcloud run jobs execute globalmart-loader --region=us-central1 --wait
 # Parity vs Databricks (exit 1 on any difference)
 .venv/bin/python parity/compare_bronze.py --warehouse-id 244af7e3ec6e128d   # per-column profile of raw_*
 .venv/bin/python parity/compare_silver.py --warehouse-id 244af7e3ec6e128d   # audit log, rejected rows, clean profiles
+.venv/bin/python parity/compare_gold.py --warehouse-id 244af7e3ec6e128d     # every Gold table, row level on business columns
 
 # Re-upload source files (idempotent)
 gcloud storage rsync -r source_data gs://globalmart-gcp-lab-globalmart-raw/source_data

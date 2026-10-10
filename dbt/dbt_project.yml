@@ -36,4 +36,4 @@ models:
 
 snapshots:
   globalmart:
-    +schema: gold
+    +schema: silver # history store behind gold.dim_customers; never drop it

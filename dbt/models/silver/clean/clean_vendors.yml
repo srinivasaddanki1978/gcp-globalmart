@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: clean_vendors
+    description: "Validated vendor reference data."
+    columns:
+      - name: vendor_id
+        data_tests: [not_null]
+      - name: vendor_name
+        data_tests: [not_null]

@@ -1,0 +1,7 @@
+version: 2
+
+models:
+  - name: stg_products
+    description: >
+      Trims text fields and repairs UPCs exported in scientific notation. Adds one _fail_<rule> flag per Silver rule, _has_any_failure and record_data,
+      all generated from macros/rules/silver_rules.sql. Feeds clean_products and rejected_records.

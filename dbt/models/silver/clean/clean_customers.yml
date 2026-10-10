@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: clean_customers
+    description: "Validated, harmonised customers. Duplicates are kept for Gold's survivorship dedup."
+    columns:
+      - name: customer_id
+        data_tests: [not_null]
+      - name: customer_name
+        data_tests: [not_null]
+      - name: segment
+        data_tests:
+          - accepted_values:
+              arguments: { values: ["Consumer", "Corporate", "Home Office"] }
+      - name: region
+        data_tests:
+          - accepted_values:
+              arguments: { values: ["East", "West", "South", "Central", "North"] }
+      - name: city
+        description: "Swapped with state for Region 4 files (fixed by folder name)."

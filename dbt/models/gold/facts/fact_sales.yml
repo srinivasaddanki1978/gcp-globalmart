@@ -1,0 +1,133 @@
+version: 2
+
+models:
+  - name: fact_sales
+    description: "Sales fact, one row per order line (orders x transactions). Revenue = sum(sales). Join dim_dates on order_date_sk for the order date."
+    config:
+      contract: { enforced: true }
+    constraints:
+      - type: primary_key
+        warn_unenforced: false
+        columns: [sales_sk]
+      - type: foreign_key
+        warn_unenforced: false
+        columns: [customer_sk]
+        to: ref('dim_customers')
+        to_columns: [customer_sk]
+      - type: foreign_key
+        warn_unenforced: false
+        columns: [product_sk]
+        to: ref('dim_products')
+        to_columns: [product_sk]
+      - type: foreign_key
+        warn_unenforced: false
+        columns: [vendor_sk]
+        to: ref('dim_vendors')
+        to_columns: [vendor_sk]
+      - type: foreign_key
+        warn_unenforced: false
+        columns: [order_date_sk]
+        to: ref('dim_dates')
+        to_columns: [date_sk]
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments: { combination_of_columns: [order_id, product_id, line_seq] }
+    columns:
+      - name: sales_sk
+        description: "Surrogate key: FARM_FINGERPRINT(order_id, product_id, line_seq)."
+        data_type: int64
+        constraints: [{ type: not_null }]
+        data_tests: [unique]
+      - name: order_id
+        data_type: string
+      - name: line_seq
+        description: "Line number within (order_id, product_id); the source repeats that pair on 63 lines."
+        data_type: int64
+      - name: customer_sk
+        data_type: int64
+        constraints: [{ type: not_null }]
+        data_tests:
+          - relationships:
+              arguments: { to: ref('dim_customers'), field: customer_sk }
+      - name: customer_id
+        data_type: string
+      - name: product_sk
+        data_type: int64
+        constraints: [{ type: not_null }]
+        data_tests:
+          - relationships:
+              arguments: { to: ref('dim_products'), field: product_sk }
+      - name: product_id
+        data_type: string
+      - name: vendor_sk
+        data_type: int64
+        constraints: [{ type: not_null }]
+        data_tests:
+          - relationships:
+              arguments: { to: ref('dim_vendors'), field: vendor_sk }
+      - name: vendor_id
+        data_type: string
+      - name: order_date_sk
+        description: "Order date role of dim_dates."
+        data_type: int64
+        constraints: [{ type: not_null }]
+        data_tests:
+          - relationships:
+              arguments: { to: ref('dim_dates'), field: date_sk }
+      - name: order_date_key
+        data_type: date
+      - name: sales
+        description: "Line revenue in USD."
+        data_type: float64
+      - name: quantity
+        data_type: int64
+      - name: discount
+        description: "Discount as a fraction (0.2 = 20%)."
+        data_type: float64
+      - name: profit
+        description: "Line profit in USD (STRING in Databricks; typed here)."
+        data_type: float64
+      - name: ship_mode
+        data_type: string
+      - name: order_status
+        data_type: string
+      - name: order_purchase_date
+        data_type: timestamp
+      - name: payment_type
+        data_type: string
+
+unit_tests:
+  - name: fact_sales_points_at_customer_version_on_order_date
+    description: "Orders before and after the customer's move get different customer_sk; a customer missing from the dimension gets -1."
+    model: fact_sales
+    given:
+      - input: ref('clean_orders')
+        rows:
+          - { order_id: O1, customer_id: C1, vendor_id: V1, order_purchase_date: "2026-03-15 10:00:00", ship_mode: Same Day, order_status: delivered }
+          - { order_id: O2, customer_id: C1, vendor_id: V1, order_purchase_date: "2026-07-15 10:00:00", ship_mode: Same Day, order_status: delivered }
+          - { order_id: O3, customer_id: C9, vendor_id: V1, order_purchase_date: "2026-07-15 10:00:00", ship_mode: Same Day, order_status: delivered }
+      - input: ref('clean_transactions')
+        rows:
+          - { order_id: O1, product_id: P1, sales: 10.0, quantity: 1, discount: 0.0, profit: "1.5", _source_file: f }
+          - { order_id: O2, product_id: P1, sales: 20.0, quantity: 2, discount: 0.0, profit: "3", _source_file: f }
+          - { order_id: O3, product_id: P1, sales: 30.0, quantity: 3, discount: 0.0, profit: "4", _source_file: f }
+      - input: ref('dim_customers')
+        rows:
+          - { customer_sk: 101, customer_id: C1, region: East, valid_from: "1900-01-01 00:00:00", valid_to: "2026-06-01 00:00:00", is_current: false }
+          - { customer_sk: 102, customer_id: C1, region: West, valid_from: "2026-06-01 00:00:00", valid_to: "9999-12-31 00:00:00", is_current: true }
+          - { customer_sk: -1, customer_id: UNKNOWN, region: Unknown, valid_from: "1900-01-01 00:00:00", valid_to: "9999-12-31 00:00:00", is_current: true }
+      - input: ref('dim_products')
+        rows:
+          - { product_sk: 201, product_id: P1 }
+      - input: ref('dim_vendors')
+        rows:
+          - { vendor_sk: 301, vendor_id: V1 }
+      - input: ref('dim_dates')
+        rows:
+          - { date_sk: 20260315, date_key: "2026-03-15" }
+          - { date_sk: 20260715, date_key: "2026-07-15" }
+    expect:
+      rows:
+        - { order_id: O1, customer_sk: 101, product_sk: 201, vendor_sk: 301, order_date_sk: 20260315, profit: 1.5 }
+        - { order_id: O2, customer_sk: 102, product_sk: 201, vendor_sk: 301, order_date_sk: 20260715, profit: 3.0 }
+        - { order_id: O3, customer_sk: -1, product_sk: 201, vendor_sk: 301, order_date_sk: 20260715, profit: 4.0 }

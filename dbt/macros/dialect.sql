@@ -83,3 +83,61 @@
 {% macro is_region_4(path) -%}
     (strpos({{ path }}, 'Region 4') > 0 or strpos({{ path }}, 'Region%204') > 0 or strpos({{ path }}, 'Region4') > 0)
 {%- endmacro %}
+
+
+{#- Stable surrogate key from business key columns (improvement over Databricks'
+    monotonically_increasing_id, which changes on every rebuild). -#}
+{% macro hash_key(columns) -%}
+    {{ return(adapter.dispatch('hash_key', 'globalmart')(columns)) }}
+{%- endmacro %}
+
+{% macro bigquery__hash_key(columns) -%}
+    farm_fingerprint(concat(
+        {%- for c in columns %}
+        coalesce(cast({{ c }} as string), '<null>'){{ ", '|'," if not loop.last }}
+        {%- endfor %}
+    ))
+{%- endmacro %}
+
+
+{#- Spark's round(double, n): HALF_UP on the double's shortest decimal text
+    (2.675 -> 2.68). BigQuery's ROUND on FLOAT64 works on the binary value. -#}
+{% macro spark_round(expr, n) -%}
+    {{ return(adapter.dispatch('spark_round', 'globalmart')(expr, n)) }}
+{%- endmacro %}
+
+{% macro bigquery__spark_round(expr, n) -%}
+    cast(round(cast(cast({{ expr }} as string) as bignumeric), {{ n }}) as float64)
+{%- endmacro %}
+
+
+{#- Spark's x / y on doubles returns NULL for y = 0; BigQuery raises an error. -#}
+{% macro safe_divide(x, y) -%}
+    {{ return(adapter.dispatch('safe_divide', 'globalmart')(x, y)) }}
+{%- endmacro %}
+
+{% macro bigquery__safe_divide(x, y) -%}
+    safe_divide({{ x }}, {{ y }})
+{%- endmacro %}
+
+
+{#- The Unknown member row (-1) every dimension carries, so facts never hold NULL
+    keys. `columns` maps column name -> SQL literal, in the dimension's column order. -#}
+{% macro unknown_member(key_column, columns) -%}
+select
+    -1 as {{ key_column }},
+    {%- for name, value in columns.items() %}
+    {{ value }} as {{ name }}{{ "," if not loop.last }}
+    {%- endfor %}
+{%- endmacro %}
+
+
+{#- Exact decimal sum of doubles: adds each value's decimal text as BIGNUMERIC, so the
+    total doesn't depend on row order (Spark's double sums do). Use for money. -#}
+{% macro exact_sum(expr) -%}
+    {{ return(adapter.dispatch('exact_sum', 'globalmart')(expr)) }}
+{%- endmacro %}
+
+{% macro bigquery__exact_sum(expr) -%}
+    cast(sum(cast(cast({{ expr }} as string) as bignumeric)) as float64)
+{%- endmacro %}

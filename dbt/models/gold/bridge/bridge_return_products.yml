@@ -1,0 +1,67 @@
+version: 2
+
+models:
+  - name: bridge_return_products
+    description: "Allocates each return's refund across its order's lines by share of order sales. One row per (return, sales line). Join to fact_sales on sales_sk, or on order_id AND product_sk; joining on order_id alone multiplies rows."
+    config:
+      contract: { enforced: true }
+    constraints:
+      - type: foreign_key
+        warn_unenforced: false
+        columns: [return_sk]
+        to: ref('fact_returns')
+        to_columns: [return_sk]
+      - type: foreign_key
+        warn_unenforced: false
+        columns: [sales_sk]
+        to: ref('fact_sales')
+        to_columns: [sales_sk]
+      - type: foreign_key
+        warn_unenforced: false
+        columns: [product_sk]
+        to: ref('dim_products')
+        to_columns: [product_sk]
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments: { combination_of_columns: [return_sk, sales_sk] }
+    columns:
+      - name: return_sk
+        data_type: int64
+        constraints: [{ type: not_null }]
+      - name: sales_sk
+        data_type: int64
+        constraints: [{ type: not_null }]
+        data_tests:
+          - relationships:
+              arguments: { to: ref('fact_sales'), field: sales_sk }
+      - name: order_id
+        data_type: string
+      - name: product_sk
+        data_type: int64
+        constraints: [{ type: not_null }]
+      - name: product_id
+        data_type: string
+      - name: return_date_sk
+        data_type: int64
+      - name: return_date_key
+        data_type: date
+      - name: return_reason
+        data_type: string
+      - name: return_status
+        data_type: string
+      - name: refund_amount
+        description: "The whole return's refund (repeated on each line); sum allocated_refund instead."
+        data_type: float64
+      - name: line_sales
+        data_type: float64
+      - name: total_order_sales
+        data_type: float64
+      - name: allocation_weight
+        description: "line_sales / total_order_sales, rounded to 4 places."
+        data_type: float64
+        data_tests:
+          - dbt_utils.expression_is_true:
+              arguments: { expression: "between 0 and 1" }
+      - name: allocated_refund
+        description: "Refund allocated to this line in USD (rounded to cents, so totals can differ from refunds by cents)."
+        data_type: float64

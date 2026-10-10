@@ -153,15 +153,17 @@ Each session is about 3 hours. The core build (Phases 0–8) is about **14–16 
 
 ### Phase 3: Gold dimensional model (sessions 5–6)
 
-- [ ] Dimensions with `FARM_FINGERPRINT` keys (in a macro) and an **Unknown member** row (`-1`) in each.
-- [ ] `dim_customers` (survivorship: latest record, prefer one with email), `dim_products`, `dim_vendors`, and `dim_dates` (`GENERATE_DATE_ARRAY`, full calendar years).
-- [ ] `fact_sales`, `fact_returns`, `bridge_return_products`, and the 3 Gold view tables.
-- [ ] **Contracts** (`contract: enforced: true`) on every Gold table, with `primary_key` and `foreign_key` constraints.
-- [ ] Grain tests (`unique` or `dbt_utils.unique_combination_of_columns`) and `relationships` tests from each fact to its dimensions.
-- [ ] `persist_docs` so table and column descriptions appear in BigQuery for the data agent.
-- [ ] SCD Type 2: a one-time **backfill model** built with window functions, using the year in the file name as the version date, plus a **dbt snapshot** for changes from here on.
+- [x] Dimensions with `FARM_FINGERPRINT` keys (in a macro) and an **Unknown member** row (`-1`) in each.
+- [x] `dim_customers` (survivorship: latest record, prefer one with email), `dim_products`, `dim_vendors`, and `dim_dates` (`GENERATE_DATE_ARRAY`, full calendar years).
+- [x] `fact_sales`, `fact_returns`, `bridge_return_products`, and the 3 Gold view tables.
+- [x] **Contracts** (`contract: enforced: true`) on every Gold table, with `primary_key` and `foreign_key` constraints.
+- [x] Grain tests (`unique` or `dbt_utils.unique_combination_of_columns`) and `relationships` tests from each fact to its dimensions.
+- [x] `persist_docs` so table and column descriptions appear in BigQuery for the data agent.
+- [x] SCD Type 2 (revised 10 Oct 2026): **one** `dim_customers`, SCD Type 2, built on the dbt snapshot `silver.customers_snapshot`. Facts look up the version in effect on the event date; `is_current` gives today's attributes. The file-year backfill was dropped because each customer's two rows come from the same year (regional file + Region 6), so it created no history. Unit tests cover the version logic with mock data.
 
 **Done when:** `dim_customers` = 590, all contracts and tests pass, and revenue matches the baseline.
+
+**Result (10 Oct 2026):** `parity/compare_gold.py` matches every Gold table row by row on business columns: the dimensions (current `dim_customers` rows = 590), both facts, and the Unknown-key counts (371 returns without a customer = Databricks' NULL keys). The bridge totals match (allocated 2,478,124.40). Revenue by year × region matches within one cent. The only differences are Databricks' float-summation rounding: 7 rows of `mv_revenue_by_region` and 28 of `mv_slow_moving_products` differ by one cent, because BigQuery adds money exactly (`exact_sum`). 96 models, snapshot and tests pass. Improvements: FARM_FINGERPRINT keys, Unknown members, enforced contracts with PK/FK, typed `profit`, `sales_sk`/`line_seq` grain, SCD Type 2.
 
 ### Phase 4: Metrics and orchestration (session 7)
 
@@ -288,7 +290,7 @@ This shows streaming skills, the GCP equivalent of Auto Loader running continuou
 
 1. **Project ID:** is `globalmart-gcp-lab` OK? IDs are global, so we may need a suffix.
 2. **Ask-My-Lakehouse:** should this become your Ask-My-Lakehouse lab? If yes, connect the `gcp-demo` folder so we can align the two plans.
-3. **SCD Type 2 version date:** use the year in the customer file name?
+3. ~~**SCD Type 2 version date:** use the year in the customer file name?~~ Resolved: the file year creates no history, so SCD Type 2 runs on a dbt snapshot (see Phase 3).
 4. **GitHub:** push `gcp/` to the same remote as the Databricks repo?
 5. **Phases 9 and 10:** include both, or decide after Phase 8?
 6. **Genie join fix:** correct the bridge join in `setup_genie.py` so both versions match?

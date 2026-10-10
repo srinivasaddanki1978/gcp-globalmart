@@ -42,3 +42,33 @@ SELECT source_table, affected_field, issue_type, COUNT(*) AS failure_count
 FROM silver.rejected_records
 GROUP BY ALL
 ORDER BY source_table, affected_field, issue_type;
+
+-- q05_gold_row_counts: (target: dim_customers = 590; Unknown members (-1) excluded)
+SELECT 'dim_customers' AS table_name, COUNTIF(customer_sk != -1) AS row_count FROM gold.dim_customers UNION ALL
+SELECT 'dim_products',                COUNTIF(product_sk != -1) FROM gold.dim_products  UNION ALL
+SELECT 'dim_vendors',                 COUNTIF(vendor_sk != -1)  FROM gold.dim_vendors   UNION ALL
+SELECT 'dim_dates',                   COUNTIF(date_sk != -1)    FROM gold.dim_dates     UNION ALL
+SELECT 'fact_sales',                  COUNT(*) FROM gold.fact_sales    UNION ALL
+SELECT 'fact_returns',                COUNT(*) FROM gold.fact_returns  UNION ALL
+SELECT 'bridge_return_products',      COUNT(*) FROM gold.bridge_return_products
+ORDER BY table_name;
+
+-- q06_revenue_by_year_region: (target: match within rounding)
+SELECT d.year, c.region,
+       COUNT(DISTINCT s.order_id)  AS order_count,
+       ROUND(SUM(s.sales), 2)      AS total_sales,
+       ROUND(SUM(s.profit), 2)     AS total_profit,
+       SUM(s.quantity)             AS total_quantity
+FROM gold.fact_sales s
+JOIN gold.dim_customers c ON s.customer_id = c.customer_id
+JOIN gold.dim_dates d     ON s.order_date_key = d.date_key
+GROUP BY d.year, c.region
+ORDER BY d.year, c.region;
+
+-- q07_bridge_vs_refunds: allocated refunds vs refunds (target: diff within cents)
+SELECT
+  (SELECT ROUND(SUM(refund_amount), 2)
+     FROM gold.fact_returns
+    WHERE order_id IN (SELECT order_id FROM gold.bridge_return_products)) AS refunds_with_lines,
+  (SELECT ROUND(SUM(allocated_refund), 2) FROM gold.bridge_return_products) AS allocated_refund_total,
+  (SELECT ROUND(SUM(refund_amount), 2) FROM gold.fact_returns)            AS refunds_total;

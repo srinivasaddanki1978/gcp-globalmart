@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: mv_revenue_by_region
+    description: "Monthly revenue by customer region (Revenue Audit)."
+    config:
+      contract: { enforced: true }
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments: { combination_of_columns: [year, month, region] }
+    columns:
+      - name: year
+        data_type: int64
+      - name: month
+        data_type: int64
+      - name: month_name
+        data_type: string
+      - name: region
+        data_type: string
+      - name: order_count
+        data_type: int64
+      - name: total_sales
+        data_type: float64
+      - name: total_profit
+        data_type: float64
+      - name: total_quantity
+        data_type: int64
+      - name: unique_customers
+        data_type: int64

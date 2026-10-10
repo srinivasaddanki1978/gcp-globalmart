@@ -1,0 +1,7 @@
+version: 2
+
+models:
+  - name: stg_returns
+    description: >
+      Harmonises the 2 return layouts, expands status abbreviations, maps '?' reasons to Unknown and parses refunds and dates. Adds one _fail_<rule> flag per Silver rule, _has_any_failure and record_data,
+      all generated from macros/rules/silver_rules.sql. Feeds clean_returns and rejected_records.

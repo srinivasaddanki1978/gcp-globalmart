@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: dim_products
+    description: "Product dimension, one row per product_id, plus the Unknown member (-1)."
+    config:
+      contract: { enforced: true }
+    constraints:
+      - type: primary_key
+        warn_unenforced: false
+        columns: [product_sk]
+    columns:
+      - name: product_sk
+        description: "Surrogate key: FARM_FINGERPRINT(product_id); -1 = Unknown."
+        data_type: int64
+        constraints: [{ type: not_null }]
+        data_tests: [unique]
+      - name: product_id
+        data_type: string
+        data_tests: [unique, not_null]
+      - name: product_name
+        data_type: string
+      - name: brand
+        data_type: string
+      - name: category
+        description: "Comma-separated category path from the catalogue."
+        data_type: string
+      - name: upc
+        description: "UPC, repaired from scientific notation."
+        data_type: string

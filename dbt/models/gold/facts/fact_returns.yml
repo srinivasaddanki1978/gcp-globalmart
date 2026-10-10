@@ -1,0 +1,70 @@
+version: 2
+
+models:
+  - name: fact_returns
+    description: "Returns fact, one row per return. Returns whose order was rejected in Silver (~4.7%) point at the Unknown customer and vendor (-1). Join dim_dates on return_date_sk for the return date."
+    config:
+      contract: { enforced: true }
+    constraints:
+      - type: primary_key
+        warn_unenforced: false
+        columns: [return_sk]
+      - type: foreign_key
+        warn_unenforced: false
+        columns: [customer_sk]
+        to: ref('dim_customers')
+        to_columns: [customer_sk]
+      - type: foreign_key
+        warn_unenforced: false
+        columns: [vendor_sk]
+        to: ref('dim_vendors')
+        to_columns: [vendor_sk]
+      - type: foreign_key
+        warn_unenforced: false
+        columns: [return_date_sk]
+        to: ref('dim_dates')
+        to_columns: [date_sk]
+    columns:
+      - name: return_sk
+        description: "Surrogate key: FARM_FINGERPRINT(order_id); one return per order."
+        data_type: int64
+        constraints: [{ type: not_null }]
+        data_tests: [unique]
+      - name: order_id
+        data_type: string
+        data_tests: [unique, not_null]
+      - name: customer_sk
+        data_type: int64
+        constraints: [{ type: not_null }]
+        data_tests:
+          - relationships:
+              arguments: { to: ref('dim_customers'), field: customer_sk }
+      - name: customer_id
+        data_type: string
+      - name: vendor_sk
+        data_type: int64
+        constraints: [{ type: not_null }]
+        data_tests:
+          - relationships:
+              arguments: { to: ref('dim_vendors'), field: vendor_sk }
+      - name: vendor_id
+        data_type: string
+      - name: return_date_sk
+        description: "Return date role of dim_dates."
+        data_type: int64
+        constraints: [{ type: not_null }]
+        data_tests:
+          - relationships:
+              arguments: { to: ref('dim_dates'), field: date_sk }
+      - name: return_date_key
+        data_type: date
+      - name: refund_amount
+        description: "Refund in USD."
+        data_type: float64
+      - name: return_reason
+        data_type: string
+      - name: return_status
+        description: "Approved, Pending or Rejected."
+        data_type: string
+      - name: return_date
+        data_type: timestamp

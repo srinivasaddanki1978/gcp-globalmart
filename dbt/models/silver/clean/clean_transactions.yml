@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: clean_transactions
+    description: "Validated order lines. Sales stripped of currency symbols; percentage discounts converted to fractions."
+    columns:
+      - name: order_id
+        data_tests: [not_null]
+      - name: product_id
+        data_tests: [not_null]
+      - name: sales
+        data_tests:
+          - dbt_utils.expression_is_true:
+              arguments: { expression: ">= 0" }
+      - name: quantity
+        data_tests:
+          - dbt_utils.expression_is_true:
+              arguments: { expression: "> 0" }
+      - name: discount
+        data_tests:
+          - dbt_utils.expression_is_true:
+              arguments: { expression: "between 0 and 1" }

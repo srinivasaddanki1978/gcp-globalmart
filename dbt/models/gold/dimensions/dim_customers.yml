@@ -1,0 +1,75 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: "Customer dimension, SCD Type 2: one row per customer version (history from silver.customers_snapshot). Facts point at the version in effect on the order/return date. For current attributes filter is_current = true (one row per customer_id). Includes the Unknown member (customer_sk = -1)."
+    config:
+      contract: { enforced: true }
+    constraints:
+      - type: primary_key
+        warn_unenforced: false
+        columns: [customer_sk]
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments: { combination_of_columns: [customer_id, valid_from] }
+    columns:
+      - name: customer_sk
+        description: "Surrogate key of the customer version: FARM_FINGERPRINT(customer_id, snapshot valid-from); -1 = Unknown."
+        data_type: int64
+        constraints: [{ type: not_null }]
+        data_tests: [unique]
+      - name: customer_id
+        description: "Business key from the regional source systems; unique among current rows."
+        data_type: string
+        data_tests:
+          - not_null
+          - unique:
+              config: { where: "is_current" }
+      - name: customer_name
+        description: "Customer full name (PII)."
+        data_type: string
+      - name: customer_email
+        description: "Customer email (PII); NULL when no source row had one."
+        data_type: string
+      - name: segment
+        description: "Consumer, Corporate or Home Office."
+        data_type: string
+        data_tests:
+          - accepted_values:
+              arguments: { values: ["Consumer", "Corporate", "Home Office", "Unknown"] }
+      - name: city
+        data_type: string
+      - name: state
+        data_type: string
+      - name: region
+        description: "Customer sales region: East, West, South, Central or North. Through fact_sales.customer_sk this is the region at the time of the order."
+        data_type: string
+        data_tests:
+          - accepted_values:
+              arguments: { values: ["East", "West", "South", "Central", "North", "Unknown"] }
+      - name: valid_from
+        description: "Start of this version (inclusive). The first version of each customer starts 1900-01-01."
+        data_type: timestamp
+      - name: valid_to
+        description: "End of this version (exclusive); 9999-12-31 for the current version."
+        data_type: timestamp
+      - name: is_current
+        description: "True for the customer's current version."
+        data_type: bool
+
+unit_tests:
+  - name: dim_customers_builds_versions_from_snapshot
+    description: "A customer who moved East -> West has two versions; the first is open from 1900-01-01, only the latest is current."
+    model: dim_customers
+    given:
+      - input: ref('customers_snapshot')
+        rows:
+          - { customer_id: C1, customer_name: Ann, customer_email: a@x.com, segment: Consumer, city: Boston, state: Massachusetts, region: East,
+              dbt_valid_from: "2026-01-01 00:00:00", dbt_valid_to: "2026-06-01 00:00:00" }
+          - { customer_id: C1, customer_name: Ann, customer_email: a@x.com, segment: Consumer, city: Seattle, state: Washington, region: West,
+              dbt_valid_from: "2026-06-01 00:00:00", dbt_valid_to: null }
+    expect:
+      rows:
+        - { customer_id: C1, region: East, valid_from: "1900-01-01 00:00:00", valid_to: "2026-06-01 00:00:00", is_current: false }
+        - { customer_id: C1, region: West, valid_from: "2026-06-01 00:00:00", valid_to: "9999-12-31 00:00:00", is_current: true }
+        - { customer_id: UNKNOWN, region: Unknown, valid_from: "1900-01-01 00:00:00", valid_to: "9999-12-31 00:00:00", is_current: true }
