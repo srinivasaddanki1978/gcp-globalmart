@@ -16,6 +16,6 @@ models:
           - accepted_values:
               arguments: { values: ["missing_value", "invalid_value", "out_of_range", "parse_failure"] }
       - name: record_data
-        description: "The harmonised row as JSON; NULLs written as the text 'NULL', as in Databricks."
+        description: "The harmonised row as JSON; NULLs written as the text 'NULL' so every field is present."
       - name: _source_file
         data_tests: [not_null]

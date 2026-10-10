@@ -1,7 +1,6 @@
 -- UC4 executive intel: three executive summaries (revenue, vendor returns,
 -- slow-moving inventory). All KPIs, rankings and "highlights" are pre-computed in
 -- SQL and passed to Gemini as JSON, so the model never derives or ranks figures.
--- Ported from databricks-globalmart/globalmart/gold/genai/uc4_executive_intel.py.
 {%- set system_prompt %}You are a senior business analyst writing executive summaries for GlobalMart's leadership.
 Rules:
 - Use only the KPI figures provided. Never invent numbers, periods, or causes the data does not show.
@@ -15,8 +14,8 @@ rev as (select * from {{ ref('mv_monthly_revenue_by_region') }}),
 by_region as (
     select
         region,
-        {{ spark_round(exact_sum('total_revenue'), 2) }} as revenue,
-        {{ spark_round(exact_sum('total_profit'), 2) }} as profit
+        {{ round_half_up(exact_sum('total_revenue'), 2) }} as revenue,
+        {{ round_half_up(exact_sum('total_profit'), 2) }} as profit
     from rev
     group by region
 ),
@@ -24,10 +23,10 @@ by_region as (
 by_segment as (
     select
         segment,
-        {{ spark_round(exact_sum('total_revenue'), 2) }} as revenue,
-        {{ spark_round(exact_sum('total_profit'), 2) }} as profit,
+        {{ round_half_up(exact_sum('total_revenue'), 2) }} as revenue,
+        {{ round_half_up(exact_sum('total_profit'), 2) }} as profit,
         -- revenue-weighted margin, not the average of per-region margins
-        {{ spark_round(safe_divide(exact_sum('total_profit'), exact_sum('total_revenue')) ~ ' * 100', 2) }} as margin_pct
+        {{ round_half_up(safe_divide(exact_sum('total_profit'), exact_sum('total_revenue')) ~ ' * 100', 2) }} as margin_pct
     from {{ ref('mv_segment_profitability') }}
     group by segment
 ),
@@ -36,11 +35,11 @@ revenue_kpis as (
     select to_json_string(struct(
         (select format('%d-%02d to %d-%02d', div(min(year * 100 + month), 100), mod(min(year * 100 + month), 100),
                        div(max(year * 100 + month), 100), mod(max(year * 100 + month), 100)) from rev) as period,
-        (select {{ spark_round(exact_sum('total_revenue'), 2) }} from rev) as grand_total_revenue,
-        (select {{ spark_round(exact_sum('total_profit'), 2) }} from rev) as grand_total_profit,
+        (select {{ round_half_up(exact_sum('total_revenue'), 2) }} from rev) as grand_total_revenue,
+        (select {{ round_half_up(exact_sum('total_profit'), 2) }} from rev) as grand_total_profit,
         (select sum(total_quantity) from rev) as grand_total_units,
         (select sum(order_count) from rev) as grand_total_orders,
-        (select array_agg(struct(region, revenue, profit, {{ spark_round('profit / revenue * 100', 2) }} as margin_pct)
+        (select array_agg(struct(region, revenue, profit, {{ round_half_up('profit / revenue * 100', 2) }} as margin_pct)
                           order by revenue desc) from by_region) as by_region,
         (select array_agg(struct(segment, revenue, profit, margin_pct) order by margin_pct desc) from by_segment) as by_segment,
         struct(
@@ -65,7 +64,7 @@ vendor_kpis as (
         (select array_agg(struct(
             vendor_name as vendor, total_orders, total_sales, return_order_count as orders_with_returns,
             return_rate_pct, total_refunded) order by return_rate_pct desc) from vendors) as vendors,
-        (select {{ spark_round(exact_sum('total_refunded'), 2) }} from vendors) as total_refunded_all_vendors,
+        (select {{ round_half_up(exact_sum('total_refunded'), 2) }} from vendors) as total_refunded_all_vendors,
         struct(
             (select vendor_name from vendors order by return_rate_pct desc limit 1) as highest_return_rate_vendor,
             (select vendor_name from vendors order by total_refunded desc limit 1) as largest_refunded_vendor
@@ -81,7 +80,7 @@ slow_stats as (
         s.is_slow_moving,
         count(*) as product_regions,
         countif(i.total_return_cost > 0) as with_returns,
-        {{ spark_round(exact_sum('i.total_return_cost'), 2) }} as return_cost
+        {{ round_half_up(exact_sum('i.total_return_cost'), 2) }} as return_cost
     from {{ ref('mv_slow_moving_products') }} as s
     left join impact as i on s.product_id = i.product_id and s.region = i.region
     group by s.is_slow_moving
@@ -90,15 +89,15 @@ slow_stats as (
 inventory_kpis as (
     select to_json_string(struct(
         (select count(*) from impact) as total_product_region_combos,
-        (select {{ spark_round(exact_sum('total_return_cost'), 2) }} from impact) as total_return_cost,
-        (select {{ spark_round(exact_avg('avg_return_cost'), 2) }} from impact) as avg_return_cost,
+        (select {{ round_half_up(exact_sum('total_return_cost'), 2) }} from impact) as total_return_cost,
+        (select {{ round_half_up(exact_avg('avg_return_cost'), 2) }} from impact) as avg_return_cost,
         (select array_agg(struct(product_name as product, region, total_return_cost as return_cost,
                                  return_line_count as return_lines) order by total_return_cost desc limit 5)
          from impact) as top_5_return_cost_products,
-        (select struct(product_regions, {{ spark_round(safe_divide('with_returns', 'product_regions') ~ ' * 100', 2) }} as share_with_returns_pct,
+        (select struct(product_regions, {{ round_half_up(safe_divide('with_returns', 'product_regions') ~ ' * 100', 2) }} as share_with_returns_pct,
                        coalesce(return_cost, 0.0) as return_cost)
          from slow_stats where is_slow_moving) as slow_moving_product_regions,
-        (select struct(product_regions, {{ spark_round(safe_divide('with_returns', 'product_regions') ~ ' * 100', 2) }} as share_with_returns_pct,
+        (select struct(product_regions, {{ round_half_up(safe_divide('with_returns', 'product_regions') ~ ' * 100', 2) }} as share_with_returns_pct,
                        coalesce(return_cost, 0.0) as return_cost)
          from slow_stats where not is_slow_moving) as other_product_regions
     ), true) as kpi_data

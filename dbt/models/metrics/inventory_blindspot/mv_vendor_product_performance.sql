@@ -1,5 +1,5 @@
 -- Vendor x product x region performance with returns (Inventory Blindspot).
--- As in Databricks, returns are aggregated per vendor x product (no region) and
+-- Returns are aggregated per vendor x product (no region) and
 -- repeated on each region's row; don't sum return columns across regions.
 with sales_agg as (
     select
@@ -10,9 +10,9 @@ with sales_agg as (
         p.brand,
         c.region,
         count(distinct s.order_id) as order_count,
-        {{ spark_round(exact_sum('s.sales'), 2) }} as total_sales,
+        {{ round_half_up(exact_sum('s.sales'), 2) }} as total_sales,
         sum(s.quantity) as total_quantity,
-        {{ spark_round(exact_sum('s.profit'), 2) }} as total_profit
+        {{ round_half_up(exact_sum('s.profit'), 2) }} as total_profit
     from {{ ref('fact_sales') }} as s
     inner join {{ ref('dim_customers') }} as c on s.customer_sk = c.customer_sk and c.customer_sk != -1
     inner join {{ ref('dim_products') }} as p on s.product_sk = p.product_sk
@@ -25,7 +25,7 @@ return_agg as (
         o.vendor_id,
         b.product_id,
         count(*) as return_count,
-        {{ spark_round(exact_sum('b.allocated_refund'), 2) }} as total_allocated_refund
+        {{ round_half_up(exact_sum('b.allocated_refund'), 2) }} as total_allocated_refund
     from {{ ref('bridge_return_products') }} as b
     inner join (select distinct order_id, vendor_id from {{ ref('fact_sales') }}) as o on b.order_id = o.order_id
     group by o.vendor_id, b.product_id

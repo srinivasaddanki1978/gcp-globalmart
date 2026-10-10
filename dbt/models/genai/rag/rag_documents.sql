@@ -1,4 +1,4 @@
--- UC3 retrieval corpus, the same documents as the Databricks notebook (uc3_product_rag.py):
+-- UC3 retrieval corpus:
 --   detail  : one per product, product x region, product x region return cost, vendor x region
 --   summary : vendor summaries + pre-ranked top-N lists, so "top / highest / lowest"
 --             questions retrieve one ranked document instead of a sample of details
@@ -23,11 +23,11 @@ vendor_region as (
         vendor_id,
         vendor_name,
         region,
-        {{ spark_round(exact_sum('total_sales'), 2) }} as total_sales,
+        {{ round_half_up(exact_sum('total_sales'), 2) }} as total_sales,
         sum(order_count) as order_count,
         count(distinct product_id) as product_count,
         sum(return_count) as return_lines,
-        {{ spark_round(exact_sum('total_allocated_refund'), 2) }} as refunded
+        {{ round_half_up(exact_sum('total_allocated_refund'), 2) }} as refunded
     from {{ ref('mv_vendor_product_performance') }}
     group by vendor_id, vendor_name, region
 ),

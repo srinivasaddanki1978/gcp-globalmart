@@ -1,8 +1,8 @@
 {#-
   Platform-specific SQL lives here, behind adapter.dispatch, so models stay
-  portable (Phase 10 adds databricks__ versions). Semantics follow Spark's
-  non-ANSI behaviour, because that is what the Databricks pipeline produced:
-  failed casts and parses return NULL.
+  portable across warehouses. Conventions: failed casts and date parses return
+  NULL (bad values are caught by the Silver rules, never by query errors), and
+  money is summed exactly and rounded half-up on its decimal value.
 -#}
 
 {#- First format that parses wins. `formats` are strftime-style (BigQuery). -#}
@@ -34,7 +34,7 @@
 {%- endmacro %}
 
 
-{#- Spark's double -> long cast truncates; BigQuery's float64 -> int64 rounds. -#}
+{#- Double -> integer that truncates (BigQuery's float64 -> int64 cast rounds). -#}
 {% macro truncate_to_int(expr) -%}
     {{ return(adapter.dispatch('truncate_to_int', 'globalmart')(expr)) }}
 {%- endmacro %}
@@ -44,13 +44,13 @@
 {%- endmacro %}
 
 
-{#- Text form of a value inside record_data, matching Spark's cast(... as string):
-    doubles keep a trailing ".0" and timestamps print as "yyyy-MM-dd HH:mm:ss". -#}
-{% macro spark_string(expr, type='string') -%}
-    {{ return(adapter.dispatch('spark_string', 'globalmart')(expr, type)) }}
+{#- Text form of a value inside record_data: doubles keep a trailing ".0" and
+    timestamps print as "yyyy-MM-dd HH:mm:ss". -#}
+{% macro decimal_text(expr, type='string') -%}
+    {{ return(adapter.dispatch('decimal_text', 'globalmart')(expr, type)) }}
 {%- endmacro %}
 
-{% macro bigquery__spark_string(expr, type) -%}
+{% macro bigquery__decimal_text(expr, type) -%}
     {%- if type == 'float64' -%}
     case
         when {{ expr }} = trunc({{ expr }}) and abs({{ expr }}) < 1e7 then format('%.1f', {{ expr }})
@@ -79,14 +79,13 @@
 
 
 {#- Region 4 files have city and state swapped; matched on the folder in the path
-    (same variants the Databricks notebook checks). -#}
+    (plain, URL-encoded and space-less forms). -#}
 {% macro is_region_4(path) -%}
     (strpos({{ path }}, 'Region 4') > 0 or strpos({{ path }}, 'Region%204') > 0 or strpos({{ path }}, 'Region4') > 0)
 {%- endmacro %}
 
 
-{#- Stable surrogate key from business key columns (improvement over Databricks'
-    monotonically_increasing_id, which changes on every rebuild). -#}
+{#- Stable surrogate key from business key columns: the same key on every rebuild. -#}
 {% macro hash_key(columns) -%}
     {{ return(adapter.dispatch('hash_key', 'globalmart')(columns)) }}
 {%- endmacro %}
@@ -100,18 +99,18 @@
 {%- endmacro %}
 
 
-{#- Spark's round(double, n): HALF_UP on the double's shortest decimal text
-    (2.675 -> 2.68). BigQuery's ROUND on FLOAT64 works on the binary value. -#}
-{% macro spark_round(expr, n) -%}
-    {{ return(adapter.dispatch('spark_round', 'globalmart')(expr, n)) }}
+{#- Round half-up on the double's shortest decimal text (2.675 -> 2.68).
+    BigQuery's ROUND on FLOAT64 works on the binary value (2.675 -> 2.67). -#}
+{% macro round_half_up(expr, n) -%}
+    {{ return(adapter.dispatch('round_half_up', 'globalmart')(expr, n)) }}
 {%- endmacro %}
 
-{% macro bigquery__spark_round(expr, n) -%}
+{% macro bigquery__round_half_up(expr, n) -%}
     cast(round(cast(cast({{ expr }} as string) as bignumeric), {{ n }}) as float64)
 {%- endmacro %}
 
 
-{#- Spark's x / y on doubles returns NULL for y = 0; BigQuery raises an error. -#}
+{#- x / y that returns NULL for y = 0 instead of raising an error. -#}
 {% macro safe_divide(x, y) -%}
     {{ return(adapter.dispatch('safe_divide', 'globalmart')(x, y)) }}
 {%- endmacro %}
@@ -133,7 +132,7 @@ select
 
 
 {#- Exact decimal sum of doubles: adds each value's decimal text as BIGNUMERIC, so the
-    total doesn't depend on row order (Spark's double sums do). Use for money. -#}
+    total doesn't depend on row order (float sums can differ in the last cent). Use for money. -#}
 {% macro exact_sum(expr) -%}
     {{ return(adapter.dispatch('exact_sum', 'globalmart')(expr)) }}
 {%- endmacro %}
@@ -154,7 +153,7 @@ select
 
 
 {#- Distinct values joined with ', ', sorted so the result is deterministic
-    (Spark's concat_ws(collect_set(...)) order varies between runs). -#}
+    (an unordered set would vary between runs). -#}
 {% macro sorted_distinct_list(expr) -%}
     {{ return(adapter.dispatch('sorted_distinct_list', 'globalmart')(expr)) }}
 {%- endmacro %}

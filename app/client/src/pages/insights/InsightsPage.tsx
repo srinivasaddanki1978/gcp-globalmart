@@ -1,4 +1,4 @@
-import { useAnalyticsQuery, Accordion, AccordionContent, AccordionItem, AccordionTrigger, Badge, Card, CardContent, CardHeader, CardTitle, Skeleton } from '../../lib/appkit';
+import { useAnalyticsQuery, Accordion, AccordionContent, AccordionItem, AccordionTrigger, Badge, Card, CardContent, CardHeader, CardTitle, Skeleton } from '../../lib/components';
 
 import { DashboardHeader, count, percent } from '../shared/dashboard-ui';
 

@@ -11,7 +11,7 @@ seed-paths: ["seeds"]
 target-path: target
 clean-targets: [target, dbt_packages]
 
-# Datasets map 1:1 to the Databricks schemas. macros/generate_schema_name.sql
+# Datasets: bronze, silver, gold, metrics, ops. macros/generate_schema_name.sql
 # makes `+schema` the literal dataset name (no `<target>_` prefix).
 vars:
   # GenAI (models/genai). Confirm model names at the start of each phase (Risk 6).

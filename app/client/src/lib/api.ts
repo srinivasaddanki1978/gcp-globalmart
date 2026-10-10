@@ -1,10 +1,10 @@
-// Data access for the pages: same shape as AppKit's useAnalyticsQuery, backed by
-// POST /api/query/:key (allowlisted SQL files run on BigQuery).
+// Data access for the pages: useAnalyticsQuery(key, parameters) runs an allowlisted
+// SQL file via POST /api/query/:key (BigQuery) and returns { data, loading, error }.
 import { useEffect, useState } from 'react';
 
 export type Row = Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
 
-/** Parameter helpers kept for page compatibility: values are sent as plain JSON. */
+/** Parameter helpers: values are sent to the server as plain JSON and typed there. */
 export const sql = {
   number: (v: number) => v,
   string: (v: string) => v,

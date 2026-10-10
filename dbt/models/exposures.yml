@@ -8,7 +8,7 @@ exposures:
     type: dashboard
     maturity: medium
     url: https://lookerstudio.google.com/  # replace with the report URL once created
-    description: "4-page report (Revenue, Returns & Fraud, Inventory, Data Quality & AI) with a year filter; the GCP version of the Databricks AI/BI dashboard. Each chart reads one rpt_* view."
+    description: "4-page report (Revenue, Returns & Fraud, Inventory, Data Quality & AI) with a year filter. Each chart reads one rpt_* view."
     owner: { name: Srinivas Addanki }
     depends_on:
       - ref('rpt_revenue')
@@ -25,7 +25,7 @@ exposures:
     label: GlobalMart Data Agent (Conversational Analytics)
     type: application
     maturity: medium
-    description: "Natural-language Q&A over 20 gold/metrics tables (agent/agent_context.yaml); the GCP version of the Databricks Genie space. 10/10 on agent/test_questions.yaml."
+    description: "Natural-language Q&A over 20 gold/metrics tables (agent/agent_context.yaml). 10/10 on agent/test_questions.yaml."
     owner: { name: Srinivas Addanki }
     depends_on:
       - ref('dim_customers')

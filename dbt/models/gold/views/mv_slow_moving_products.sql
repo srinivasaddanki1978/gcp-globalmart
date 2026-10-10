@@ -1,16 +1,15 @@
 -- Product x region performance; slow-moving = bottom 25% by quantity within the
--- region (Inventory Blindspot). PERCENTILE_DISC matches Spark's percentile_approx,
--- which is exact at this size.
+-- region (Inventory Blindspot), using the exact PERCENTILE_DISC.
 with agg as (
     select
         s.product_id,
         p.product_name,
         p.brand,
         c.region,
-        {{ spark_round(exact_sum('s.sales'), 2) }} as total_sales,
+        {{ round_half_up(exact_sum('s.sales'), 2) }} as total_sales,
         sum(s.quantity) as total_quantity,
         count(distinct s.order_id) as order_count,
-        {{ spark_round(exact_sum('s.profit'), 2) }} as total_profit
+        {{ round_half_up(exact_sum('s.profit'), 2) }} as total_profit
     from {{ ref('fact_sales') }} as s
     inner join {{ ref('dim_products') }} as p on s.product_id = p.product_id
     inner join {{ ref('dim_customers') }} as c on s.customer_sk = c.customer_sk  -- region as of the order

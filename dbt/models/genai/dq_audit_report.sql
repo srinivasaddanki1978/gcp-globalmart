@@ -1,8 +1,6 @@
 -- UC1 DQ reporter: one row per failing rule (source_table, field, issue type) with
 -- counts, up to 3 sample records, and a Gemini explanation for business data stewards.
--- Ported from databricks-globalmart/globalmart/gold/genai/uc1_dq_reporter.py.
--- Samples are the first 3 distinct records in sorted order (Databricks' collect_set
--- picks an arbitrary 3).
+-- Samples are the first 3 distinct records in sorted order, so reruns are stable.
 {%- set samples_per_issue = 3 %}
 
 with grouped as (

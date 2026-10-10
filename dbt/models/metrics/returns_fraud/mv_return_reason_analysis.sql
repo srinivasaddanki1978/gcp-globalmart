@@ -3,8 +3,8 @@ select
     r.return_reason,
     c.region,
     count(*) as return_count,
-    {{ spark_round(exact_sum('r.refund_amount'), 2) }} as total_refunded,
-    {{ spark_round(exact_avg('r.refund_amount'), 2) }} as avg_refund,
+    {{ round_half_up(exact_sum('r.refund_amount'), 2) }} as total_refunded,
+    {{ round_half_up(exact_avg('r.refund_amount'), 2) }} as avg_refund,
     count(distinct r.customer_id) as unique_customers,
     countif(r.return_status = 'Approved') as approved_count,
     countif(r.return_status = 'Rejected') as rejected_count

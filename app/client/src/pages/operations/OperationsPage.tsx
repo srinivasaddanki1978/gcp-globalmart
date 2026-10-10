@@ -1,4 +1,4 @@
-import { useAnalyticsQuery, BarChart, DonutChart, sql } from '../../lib/appkit';
+import { useAnalyticsQuery, BarChart, DonutChart, sql } from '../../lib/components';
 
 import { ChartCard, DashboardHeader, Kpi, count, currency, percent } from '../shared/dashboard-ui';
 

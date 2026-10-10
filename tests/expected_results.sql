@@ -1,10 +1,6 @@
--- GlobalMart parity baseline (the answer key).
--- Run in Databricks SQL against catalog `globalmart` after a successful
--- GlobalMart-End-to-End-Intelligence run. Export each result to
--- parity/baseline_results/<query_name>.csv. bigquery_parity.sql runs the same
--- queries against BigQuery; compare on business keys only (surrogate keys differ).
-
-USE CATALOG globalmart;
+-- Expected-results check: each `-- qNN_name:` block must return the rows saved in
+-- tests/expected_results/qNN_name.csv (run tests/check_expected_results.py).
+-- Unknown members (-1) are excluded where dimension rows are counted.
 
 -- q01_bronze_files: files per entity (target: 205 total, each loaded once)
 SELECT entity, COUNT(DISTINCT _source_file) AS file_count, COUNT(*) AS row_count
@@ -19,9 +15,9 @@ FROM (
 GROUP BY entity
 ORDER BY entity;
 
--- q02_rows_per_file: row count per source file (pinpoints loader differences)
+-- q02_rows_per_file: row count per source file
 SELECT entity,
-       regexp_extract(_source_file, 'source_data/(.*)$', 1) AS file_path,
+       REGEXP_EXTRACT(_source_file, r'source_data/(.*)$') AS file_path,
        COUNT(*) AS row_count
 FROM (
   SELECT 'customers'    AS entity, _source_file FROM bronze.raw_customers    UNION ALL
@@ -45,11 +41,11 @@ FROM silver.rejected_records
 GROUP BY ALL
 ORDER BY source_table, affected_field, issue_type;
 
--- q05_gold_row_counts: (target: dim_customers = 374)
-SELECT 'dim_customers' AS table_name, COUNT(*) AS row_count FROM gold.dim_customers UNION ALL
-SELECT 'dim_products',                COUNT(*) FROM gold.dim_products  UNION ALL
-SELECT 'dim_vendors',                 COUNT(*) FROM gold.dim_vendors   UNION ALL
-SELECT 'dim_dates',                   COUNT(*) FROM gold.dim_dates     UNION ALL
+-- q05_gold_row_counts: (target: dim_customers = 590; Unknown members (-1) excluded)
+SELECT 'dim_customers' AS table_name, COUNTIF(customer_sk != -1) AS row_count FROM gold.dim_customers UNION ALL
+SELECT 'dim_products',                COUNTIF(product_sk != -1) FROM gold.dim_products  UNION ALL
+SELECT 'dim_vendors',                 COUNTIF(vendor_sk != -1)  FROM gold.dim_vendors   UNION ALL
+SELECT 'dim_dates',                   COUNTIF(date_sk != -1)    FROM gold.dim_dates     UNION ALL
 SELECT 'fact_sales',                  COUNT(*) FROM gold.fact_sales    UNION ALL
 SELECT 'fact_returns',                COUNT(*) FROM gold.fact_returns  UNION ALL
 SELECT 'bridge_return_products',      COUNT(*) FROM gold.bridge_return_products
@@ -75,22 +71,21 @@ SELECT
   (SELECT ROUND(SUM(allocated_refund), 2) FROM gold.bridge_return_products) AS allocated_refund_total,
   (SELECT ROUND(SUM(refund_amount), 2) FROM gold.fact_returns)            AS refunds_total;
 
--- q08_fraud_flag_rate: flagged / scored customers, 12-month window (target: ~22%)
+-- q08_fraud_flag_rate: flagged / scored customers, 12-month window (expected ~22.5%)
 WITH window_end AS (SELECT MAX(return_date) AS d FROM gold.fact_returns),
 scored AS (
   SELECT COUNT(DISTINCT r.customer_id) AS scored_customers
   FROM gold.fact_returns r
-  JOIN gold.dim_customers c ON r.customer_sk = c.customer_sk
+  JOIN gold.dim_customers c ON r.customer_sk = c.customer_sk AND c.customer_sk != -1
   CROSS JOIN window_end w
-  WHERE r.return_date >= add_months(w.d, -12)
+  WHERE r.return_date >= TIMESTAMP(DATE_SUB(DATE(w.d), INTERVAL 12 MONTH))
 )
 SELECT s.scored_customers,
        (SELECT COUNT(*) FROM gold.flagged_return_customers) AS flagged_customers,
-       ROUND((SELECT COUNT(*) FROM gold.flagged_return_customers) * 100.0
-             / s.scored_customers, 2)                      AS flag_rate_pct
+       ROUND((SELECT COUNT(*) FROM gold.flagged_return_customers) * 100.0 / s.scored_customers, 2) AS flag_rate_pct
 FROM scored s;
 
--- q09_flagged_customers: business keys + scores for row-level comparison
+-- q09_flagged_customers: the flagged customers with their scores
 SELECT customer_id, total_returns, total_refund_value, anomaly_score, rules_violated
 FROM gold.flagged_return_customers
 ORDER BY customer_id;

@@ -1,4 +1,4 @@
-import { useAnalyticsQuery, BarChart, LineChart } from '../../lib/appkit';
+import { useAnalyticsQuery, BarChart, LineChart } from '../../lib/components';
 
 import { ChartCard, DashboardHeader, Kpi, count, currency, percent } from '../shared/dashboard-ui';
 import { DEFAULT_YEAR } from '../shared/years';

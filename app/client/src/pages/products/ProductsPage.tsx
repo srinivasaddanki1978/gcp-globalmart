@@ -1,4 +1,4 @@
-import { useAnalyticsQuery, BarChart, DonutChart, Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, sql } from '../../lib/appkit';
+import { useAnalyticsQuery, BarChart, DonutChart, Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, sql } from '../../lib/components';
 import { useState } from 'react';
 
 import { ChartCard, DashboardHeader, Kpi, count, currency } from '../shared/dashboard-ui';

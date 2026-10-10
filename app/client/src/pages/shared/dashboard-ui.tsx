@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle, Skeleton } from '../../lib/appkit';
+import { Card, CardContent, CardHeader, CardTitle, Skeleton } from '../../lib/components';
 import type { ReactNode } from 'react';
 
 export const currency = (value: string | number) =>

@@ -20,8 +20,8 @@ select
     r.refund_amount,
     s.sales as line_sales,
     t.total_order_sales,
-    {{ spark_round(safe_divide('s.sales', 't.total_order_sales'), 4) }} as allocation_weight,
-    {{ spark_round(safe_divide('r.refund_amount * s.sales', 't.total_order_sales'), 2) }} as allocated_refund
+    {{ round_half_up(safe_divide('s.sales', 't.total_order_sales'), 4) }} as allocation_weight,
+    {{ round_half_up(safe_divide('r.refund_amount * s.sales', 't.total_order_sales'), 2) }} as allocated_refund
 from {{ ref('fact_returns') }} as r
 inner join {{ ref('fact_sales') }} as s on r.order_id = s.order_id
 inner join order_totals as t on r.order_id = t.order_id

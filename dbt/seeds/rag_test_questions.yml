@@ -2,4 +2,4 @@ version: 2
 
 seeds:
   - name: rag_test_questions
-    description: "Test questions for UC3 product RAG (same as Databricks). Add rows to ask more."
+    description: "Test questions for UC3 product RAG. Add rows to ask more."

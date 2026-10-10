@@ -9,5 +9,5 @@ dbt/target/
 dbt/dbt_packages/
 dbt/logs/
 terraform/
-parity/
+tests/
 docs/

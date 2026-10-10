@@ -4,7 +4,7 @@
   and opens a new version when a tracked attribute changes. This table is the
   only copy of customer history: never drop or full-refresh it.
 
-  Survivorship as in Databricks' dim_customers: every customer arrives twice
+  Survivorship: every customer arrives twice
   (regional file + Region 6); the latest load wins, preferring a row with an email.
 -#}
 {% snapshot customers_snapshot %}

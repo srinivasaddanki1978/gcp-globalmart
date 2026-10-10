@@ -1,5 +1,5 @@
-// Chart components with AppKit's props (queryKey, parameters, xKey, yKey,
-// valueFormatter, showLegend), drawn with Recharts. Each fetches its own query.
+// Chart components (BarChart, LineChart, AreaChart, DonutChart) drawn with Recharts.
+// Props: queryKey, parameters, xKey, yKey, valueFormatter, showLegend. Each fetches its own query.
 import {
   Area,
   AreaChart as RArea,

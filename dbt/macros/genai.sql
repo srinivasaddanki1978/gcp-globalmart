@@ -1,8 +1,7 @@
 {#-
   GenAI helpers: every Gemini / embedding call goes through these, so the model,
   connection and request settings live in one place (vars in dbt_project.yml).
-  BigQuery-specific (AI.GENERATE / AI.EMBED); Phase 10 would add databricks__
-  versions on ai_query().
+  BigQuery-specific (AI.GENERATE / AI.EMBED), dispatched per adapter.
 -#}
 
 {% macro vertex_connection() -%}
@@ -37,7 +36,7 @@
 {%- endmacro %}
 
 
-{#- $1,234.56, as Python's f"${v:,.2f}" in the Databricks notebooks. -#}
+{#- $1,234.56 (thousands separators, 2 decimals). -#}
 {% macro money(expr) -%}
     concat('$', format("%'.2f", coalesce(cast({{ expr }} as float64), 0)))
 {%- endmacro %}

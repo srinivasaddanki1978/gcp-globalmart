@@ -1,5 +1,5 @@
 -- UC3 product RAG: answer each test question (seeds/rag_test_questions.csv) from
--- retrieved documents. Retrieval as in Databricks: top 5 summary/ranked docs plus top
+-- retrieved documents. Retrieval: top 5 summary/ranked docs plus top
 -- 5 detail docs by cosine similarity; when the question names a region, only that
 -- region's docs and region-neutral docs are eligible (search 250 deep, then filter).
 {%- set k = 5 %}

@@ -26,7 +26,7 @@ select
     extract(month from date_key) as month,
     format_date('%B', date_key) as month_name,
     extract(day from date_key) as day,
-    extract(dayofweek from date_key) as day_of_week, -- 1 = Sunday, as in Spark
+    extract(dayofweek from date_key) as day_of_week, -- 1 = Sunday
     extract(dayofweek from date_key) in (1, 7) as is_weekend
 from calendar
 

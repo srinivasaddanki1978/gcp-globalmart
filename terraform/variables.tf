@@ -10,10 +10,10 @@ variable "region" {
 }
 
 variable "datasets" {
-  description = "BigQuery datasets, mirroring the Databricks schemas."
+  description = "BigQuery datasets, one per medallion layer plus ops."
   type        = map(string)
   default = {
-    bronze  = "Raw source files, every column STRING (Auto Loader equivalent)"
+    bronze  = "Raw source files, every column STRING"
     silver  = "Cleaned entities, rejected_records and pipeline_audit_log"
     gold    = "Dimensional model, views and GenAI outputs"
     metrics = "Business metric aggregations"

@@ -1,6 +1,5 @@
 # Looker Studio report: GlobalMart Intelligence
 
-The GCP version of the Databricks AI/BI dashboard (`globalmart_intelligence.lvdash.json`):
 4 pages, each chart reading one `gold.rpt_*` view (dbt, `models/reporting/`). Looker Studio
 has no API for building pages, so the report is assembled in the UI. The link below creates it
 with all 9 BigQuery data sources already attached.
@@ -44,8 +43,7 @@ report-wide (*Make report-level*).
 | | Table: Data quality audit (UC1) | rpt_dq | All fields |
 | | Table: AI executive insights | rpt_insights | insight_type, executive_summary |
 
-The year filter only affects charts whose data source has a `year` field (the Revenue page),
-as on Databricks.
+The year filter only affects charts whose data source has a `year` field (the Revenue page).
 
 ## 3. Record it
 

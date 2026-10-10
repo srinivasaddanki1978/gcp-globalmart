@@ -1,5 +1,5 @@
-// Minimal shadcn/ui-style components with the same names and props the pages use
-// (originally from @databricks/appkit-ui). Tailwind only, no runtime UI library.
+// Minimal shadcn/ui-style components (Card, Select, Badge, Accordion…).
+// Tailwind only, no runtime UI library.
 import { Children, isValidElement, type ReactElement, type ReactNode } from 'react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';

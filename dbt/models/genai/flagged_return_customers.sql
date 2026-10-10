@@ -1,7 +1,6 @@
 -- UC2 fraud investigator: score each customer's last 12 months of returns with 5
 -- weighted rules (thresholds = P85 across customers), flag score >= 40, and write a
 -- Gemini investigation brief only for flagged customers (bounded cost).
--- Ported from databricks-globalmart/globalmart/gold/genai/uc2_fraud_investigator.py.
 {%- set lookback_months = 12 %}
 {%- set threshold_pct = 0.85 %}
 
@@ -22,8 +21,8 @@ profiles as (
         c.segment,
         c.region,
         count(*) as total_returns,
-        {{ spark_round(exact_sum('r.refund_amount'), 2) }} as total_refund_value,
-        {{ spark_round(exact_avg('r.refund_amount'), 2) }} as avg_refund_per_return,
+        {{ round_half_up(exact_sum('r.refund_amount'), 2) }} as total_refund_value,
+        {{ round_half_up(exact_avg('r.refund_amount'), 2) }} as avg_refund_per_return,
         countif(r.return_status = 'Approved') as approved_count,
         count(distinct r.return_reason) as distinct_reason_count,
         {{ sorted_distinct_list('r.return_reason') }} as return_reasons
@@ -32,7 +31,7 @@ profiles as (
     group by r.customer_id, c.customer_name, c.segment, c.region
 ),
 
--- P85 thresholds; PERCENTILE_DISC equals Spark's percentile_approx at this size.
+-- P85 thresholds (exact PERCENTILE_DISC).
 thresholds as (
     select distinct
         greatest(percentile_disc(total_returns, {{ threshold_pct }}) over (), 3) as th_returns,
@@ -45,7 +44,7 @@ thresholds as (
 scored as (
     select
         p.*,
-        {{ spark_round(safe_divide('p.approved_count', 'p.total_returns') ~ ' * 100', 2) }} as approval_rate,
+        {{ round_half_up(safe_divide('p.approved_count', 'p.total_returns') ~ ' * 100', 2) }} as approval_rate,
         if(p.total_returns > t.th_returns, 20, 0) as score_high_return_count,
         if(p.total_refund_value > t.th_refund, 25, 0) as score_high_total_refund,
         if(p.avg_refund_per_return > t.th_avg_refund, 20, 0) as score_high_avg_refund,

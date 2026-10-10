@@ -3,12 +3,11 @@
   view turns them into _fail_<name> columns, clean_<entity> keeps rows where
   none fail, and rejected_records writes one row per failure.
 
-  Ported 1:1 from databricks-globalmart/globalmart/silver/clean/*.py
-  (23 rules). `fail_if` is evaluated on the harmonised stg_ columns and
+  23 rules. `fail_if` is evaluated on the harmonised stg_ columns and
   wrapped in coalesce(..., false), so a NULL result never drops a row silently.
 
   record_data lists the fields serialised into rejected_records.record_data,
-  in the Databricks order; the type controls Spark-style text formatting.
+  in order; the type controls how each value is written as text (decimal_text).
 -#}
 {% macro silver_rules() %}
 {{ return({
@@ -102,10 +101,10 @@
         coalesce({{ rule['fail_if'] }}, false){{ " or" if not loop.last }}
         {%- endfor %}
     ) as _has_any_failure,
-    -- Databricks wraps every field in coalesce(..., "NULL") because to_json drops nulls.
+    -- Every field is wrapped in coalesce(..., 'NULL') so missing values stay visible in the JSON.
     {%- set pairs = [] %}
     {%- for field, type in spec['record_data'] %}
-    {%- do pairs.append(("coalesce(" ~ spark_string(field, type) ~ ", 'NULL')", field)) %}
+    {%- do pairs.append(("coalesce(" ~ decimal_text(field, type) ~ ", 'NULL')", field)) %}
     {%- endfor %}
     {{ json_object(pairs) }} as record_data
 {%- endmacro %}

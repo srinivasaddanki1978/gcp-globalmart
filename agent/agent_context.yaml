@@ -1,9 +1,7 @@
-# GlobalMart data agent (Conversational Analytics API): the GCP equivalent of the
-# Databricks GlobalMart-Genie space. Deployed by agent/data_agent.py deploy.
-# Instructions adapted from databricks-globalmart/scripts/setup_genie.py, with the
-# figures and joins corrected for this build (SCD2 customers, Unknown members,
-# both date roles, bridge joined on sales_sk). Column descriptions come from
-# BigQuery (dbt persist_docs).
+# GlobalMart data agent (Conversational Analytics API). Deployed by
+# agent/data_agent.py deploy. The instructions encode the model's join rules
+# (SCD2 customers, Unknown members, both date roles, bridge joined on sales_sk);
+# column descriptions come from BigQuery (dbt persist_docs).
 
 agent_id: globalmart-agent
 display_name: GlobalMart Data Agent

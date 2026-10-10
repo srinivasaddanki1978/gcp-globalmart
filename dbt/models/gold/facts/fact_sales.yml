@@ -85,7 +85,7 @@ models:
         description: "Discount as a fraction (0.2 = 20%)."
         data_type: float64
       - name: profit
-        description: "Line profit in USD (STRING in Databricks; typed here)."
+        description: "Line profit in USD (STRING in the source files; typed here)."
         data_type: float64
       - name: ship_mode
         data_type: string

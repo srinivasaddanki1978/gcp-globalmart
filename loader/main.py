@@ -1,4 +1,4 @@
-"""GlobalMart Bronze loader: the Auto Loader equivalent on GCP.
+"""GlobalMart Bronze loader: incremental file ingestion from GCS into BigQuery.
 
 Lists the source files in GCS, skips files that are already loaded, and appends
 each new file to bronze.raw_<entity> with every column as STRING, plus
@@ -103,7 +103,7 @@ def _as_string(value) -> str | None:
 
 def parse_csv(text: str, source: str) -> tuple[list[str], list[dict]]:
     """CSV -> (columns, rows). Headers are lower-cased; empty fields become NULL
-    (as in Spark's CSV reader)."""
+    (missing, not an empty string)."""
     reader = csv.reader(io.StringIO(text))
     header = [h.strip().lower() for h in next(reader)]
     _check_unique(header, source)
@@ -119,7 +119,7 @@ def parse_csv(text: str, source: str) -> tuple[list[str], list[dict]]:
 
 def parse_json(text: str, source: str) -> tuple[list[str], list[dict]]:
     """JSON array (or NDJSON) -> (columns, rows). Keys are lower-cased. Numbers
-    keep their original text (106.36 stays "106.36"), as Auto Loader stores them."""
+    keep their original text (106.36 stays "106.36"), with no float round-trip."""
     as_text = {"parse_float": str, "parse_int": str, "parse_constant": str}
     stripped = text.lstrip()
     if stripped.startswith("["):

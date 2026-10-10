@@ -1,9 +1,11 @@
 # GlobalMart Data Intelligence Platform on Google Cloud
 
-The [Databricks GlobalMart platform](https://github.com/srinivasaddanki1978/databricks-globalmart)
-rebuilt on native Google Cloud services, with the same 205 source files and warehouse design. Every
-layer is checked against the Databricks numbers (`parity/`). See
-[`docs/parity_report.md`](docs/parity_report.md) for the platform comparison.
+An end-to-end retail data platform on native Google Cloud services. 205 source files from six
+regional systems go through a medallion pipeline (Bronze → Silver → Gold → Metrics) in BigQuery, with
+Gemini-powered analysis, a natural-language data agent, a web app, dashboards and CI/CD.
+
+**New here? Build it yourself:** [`docs/MANUAL_SETUP_GUIDE.md`](docs/MANUAL_SETUP_GUIDE.md) walks
+you through creating every Google Cloud resource by hand, explaining each service as you go.
 
 ```
 source_data/ ──► GCS ──► Cloud Run job: Bronze loader (Python) ──► BigQuery bronze (all STRING)
@@ -39,16 +41,19 @@ source_data/ ──► GCS ──► Cloud Run job: Bronze loader (Python) ─�
 | `workflows/` | Cloud Workflows definition (rendered by Terraform) |
 | `agent/` | Data agent definition, deploy/ask/test script, 10 golden test questions |
 | `app/` | React + Express app, 27 allowlisted queries, query contract check |
-| `parity/` | Databricks answer key and per-layer comparison scripts |
-| `docs/` | Looker Studio build guide, parity report |
+| `tests/` | Known-good results and the check that compares a pipeline run against them |
+| `docs/` | Manual setup guide (learning path), Looker Studio build guide |
 
-## Set up from scratch
+## Set up
 
-**[docs/DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md)** walks through everything step by step: Google
-account and billing, installing the tools, creating the project, then either Terraform or creating every
-resource by hand, running and verifying the pipeline, the data agent, the app, Looker Studio and CI/CD.
+**Learn it by hand (recommended for a first build):**
+[`docs/MANUAL_SETUP_GUIDE.md`](docs/MANUAL_SETUP_GUIDE.md). It goes from creating a Google Cloud
+account and billing account to a running pipeline, data agent, web app, dashboards and CI/CD. Every
+step explains the service, then gives the console clicks, the CLI commands and a check.
 
-Short version (Terraform; needs `gcloud`, `terraform` ≥ 1.6, Python 3.12; project IDs are global, so pick your own):
+**Set up with Terraform (quick, once you know the pieces).** `terraform/` declares the same resources
+as code. In a fresh project (needs `gcloud`, `terraform` ≥ 1.6 and Python 3.12; project IDs are global,
+so pick your own):
 
 ```bash
 export PROJECT_ID=<your-project-id> REGION=us-central1 GCP_PROJECT=<your-project-id>
@@ -62,9 +67,10 @@ done
 cd terraform && terraform apply && cd ..                             # everything else
 
 gcloud storage rsync -r source_data gs://$PROJECT_ID-globalmart-raw/source_data
-gcloud workflows run globalmart-e2e --location=$REGION              # Bronze -> ... -> GenAI (~8 min)
+gcloud workflows run globalmart-e2e --location=$REGION              # Bronze → … → GenAI (~8 min)
 
 python3.12 -m venv .venv && .venv/bin/pip install -r loader/requirements.txt -r dbt/requirements.txt
+.venv/bin/python tests/check_expected_results.py                     # all 10 checks should be OK
 .venv/bin/python agent/data_agent.py deploy && .venv/bin/python agent/data_agent.py test
 ```
 
@@ -76,7 +82,7 @@ gcloud run services proxy globalmart-app --region=us-central1 --port=8080 # app 
 .venv/bin/python agent/data_agent.py ask "Which vendor has the highest return rate?"
 ```
 
-Local development: `CLAUDE.md` lists the commands for each component (dbt, loader, app, parity checks).
+Local development: `CLAUDE.md` lists the commands for each component (dbt, loader, app, expected-results check).
 
 ## CI/CD
 

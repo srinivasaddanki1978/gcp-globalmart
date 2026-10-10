@@ -12,9 +12,9 @@ select
     p.brand,
     sr.region,
     count(*) as return_line_count,
-    {{ spark_round(exact_sum('b.allocated_refund'), 2) }} as total_return_cost,
-    {{ spark_round(exact_avg('b.allocated_refund'), 2) }} as avg_return_cost,
-    {{ spark_round(exact_sum('b.allocation_weight'), 4) }} as total_allocation_weight
+    {{ round_half_up(exact_sum('b.allocated_refund'), 2) }} as total_return_cost,
+    {{ round_half_up(exact_avg('b.allocated_refund'), 2) }} as avg_return_cost,
+    {{ round_half_up(exact_sum('b.allocation_weight'), 4) }} as total_allocation_weight
 from {{ ref('bridge_return_products') }} as b
 inner join sales_region as sr on b.order_id = sr.order_id and b.product_sk = sr.product_sk
 inner join {{ ref('dim_products') }} as p on b.product_sk = p.product_sk
