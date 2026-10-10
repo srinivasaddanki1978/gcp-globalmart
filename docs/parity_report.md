@@ -94,11 +94,11 @@ for running the same dbt project on Databricks (Phase 10).
 | Cloud Build | A few builds/day, 8-vCPU machine | Free tier (2,500 build-min/month) to cents |
 
 Budget alert: ₹900/month (≈ US$10). Check the actual spend in the Billing console after the first
-full week (plan, Cost guardrails).
+full week.
 
 ## 7. Effort
 
-The core build (plan Phases 0–8) was done in one long working session on 10 Oct 2026, against an
+The core build (ingestion through CI/CD, Phases 0–8) was done in one long working session on 10 Oct 2026, against an
 estimate of 14–16 three-hour sessions. Most of the time went into the parity work, not the platform
 plumbing: matching Spark's type and rounding behaviour, then explaining every remaining difference.
 

@@ -3,7 +3,6 @@
 The [Databricks GlobalMart platform](https://github.com/srinivasaddanki1978/databricks-globalmart)
 rebuilt on native Google Cloud services, with the same 205 source files and warehouse design. Every
 layer is checked against the Databricks numbers (`parity/`). See
-[`GLOBALMART_GCP_PLAN.md`](GLOBALMART_GCP_PLAN.md) for the plan and per-phase results, and
 [`docs/parity_report.md`](docs/parity_report.md) for the platform comparison.
 
 ```

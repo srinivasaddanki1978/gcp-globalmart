@@ -1,4 +1,4 @@
-# Data agent test set (plan target: >= 9 of 10 correct, with the SQL checked).
+# Data agent test set (target: >= 9 of 10 correct, with the SQL checked).
 # golden_sql returns the expected answer: every value in its result must appear in
 # the agent's result rows (numbers within 0.5% or 0.01, text case-insensitive).
 # Covers both date roles, the bridge join, SCD Type 2 current customers, the

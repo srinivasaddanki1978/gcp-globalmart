@@ -2,11 +2,16 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Current state
+## Status
 
-The repo is at the planning stage: it only contains `GLOBALMART_GCP_PLAN.md`, the agreed implementation plan (v2). **Read it before starting any phase.** It defines the phases, the checklists, the "done when" criteria and the parity targets. Tick the phase checklists in the plan as work is completed.
+The core build is complete (10 Oct 2026). Bronze → Silver → Gold → Metrics → GenAI run on GCP and match the Databricks numbers layer by layer (`parity/`, summarised in `docs/parity_report.md`). The data agent, the Cloud Run app and Cloud Build CI/CD are deployed. The original implementation plan was removed from the repo; it's in git history (last version in commit `abc5b71`).
 
-Note: the plan's repository layout assumes a `gcp/` folder inside the `databricks-globalmart` repo. This repo (`gcp-globalmart`) is standalone, so place those folders (`terraform/`, `loader/`, `dbt/`, `workflows/`, `parity/`, `dataflow/`, `app/`, plus `source_data/`) at the repo root unless the user says otherwise. The plan lists where to push as an open question.
+Open items:
+- Looker Studio pages are built by hand (`docs/looker_studio.md`); then put the report URL in `dbt/models/exposures.yml`.
+- The Cloud Build GitHub trigger `globalmart-main` needs the `globalmart-github` connection (us-central1) to finish the user's GitHub OAuth. Then link the repo (`gcloud builds repositories create`) and create the trigger with `sa-cloudbuild`.
+- The app runs the Ask page as `sa-app`. Per-user identity needs IAP or an OAuth client (consent screen on a personal project).
+- Optional Phase 9: replay orders to Pub/Sub, then a Dataflow (Beam, Python) streaming job validating events with the Silver rules (dead-letter `bronze.orders_stream_rejected`, good rows to `bronze.raw_orders_stream`, 1-minute revenue windows to `metrics.live_revenue_by_region`), merged by an incremental dbt model. Cap workers at 1–2 and drain and cancel after demos: Dataflow has no free tier.
+- Optional Phase 10: run the same dbt project on Databricks (`dbt-databricks` target), adding `databricks__` versions of the macros in `dbt/macros/dialect.sql` and `genai.sql`, and compare Gold numbers.
 
 ## Source files
 
@@ -17,9 +22,9 @@ The 205 source files are committed in this repo under `source_data/`, so anyone 
 
 ## What this project is
 
-A rebuild of the GlobalMart Data Intelligence Platform (originally on Databricks) on native Google Cloud, using the same source files and warehouse design. The end goal is a side-by-side parity comparison (*one warehouse design, two platforms*). Matching the Databricks numbers is the main measure of success. See the parity targets in section 1 of the plan, for example `dim_customers` = 590 rows, a fraud flag rate of about 22% (22.52%), and a reconciliation difference of 0 for all 6 entities.
+A rebuild of the GlobalMart Data Intelligence Platform (originally on Databricks) on native Google Cloud, using the same source files and warehouse design. The end goal is a side-by-side parity comparison (*one warehouse design, two platforms*). Matching the Databricks numbers is the main measure of success. The parity targets: all 205 files loaded once; reconciliation difference 0 for all 6 entities; `dim_customers` = 590 current rows; revenue by year × region within rounding; bridge allocated refunds within cents; fraud flag rate 22.52%; data agent ≥ 9/10 test questions; one command runs the pipeline within budget.
 
-## Architecture (planned)
+## Architecture
 
 ```
 GCS bucket (source_data/) → Cloud Run job: Python Bronze loader → BigQuery `bronze` (all STRING)

@@ -84,7 +84,7 @@ resource "google_cloud_run_v2_job" "dbt" {
 # --- App: Cloud Run service (React + Express) ---------------------------------
 # Requires authentication (no allUsers): open it with
 #   gcloud run services proxy globalmart-app --region=us-central1
-# IAP needs an OAuth consent screen on a personal project (plan Risk 4), so the
+# IAP needs an OAuth consent screen on a personal project (no organisation), so the
 # fallback is Cloud Run IAM; grant more users roles/run.invoker via var.app_users.
 resource "google_cloud_run_v2_service" "app" {
   name                = "globalmart-app"
