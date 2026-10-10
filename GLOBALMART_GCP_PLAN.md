@@ -101,7 +101,7 @@ databricks-globalmart/
     │   ├── profiles.yml                   ← method: oauth (local login / Cloud Run service account)
     │   ├── Dockerfile
     │   ├── macros/rules/                  ← each Silver rule written ONCE
-    │   ├── models/{bronze,silver,gold,metrics,genai}/   ← bronze = sources only; silver/staging = harmonise + cast views
+    │   ├── models/{bronze,silver,gold,metrics,genai}/   ← bronze = sources only; silver/{staging,clean,quarantine,audit} mirrors the Databricks silver/ folders
     │   ├── snapshots/customers_snapshot.yml
     │   └── models/exposures.yml           ← Looker Studio report + Cloud Run app
     ├── workflows/globalmart_e2e.yaml
