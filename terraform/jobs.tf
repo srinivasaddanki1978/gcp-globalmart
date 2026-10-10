@@ -72,3 +72,53 @@ resource "google_cloud_run_v2_job" "dbt" {
 
   depends_on = [google_project_service.apis]
 }
+
+# --- App: Cloud Run service (React + Express) ---------------------------------
+# Requires authentication (no allUsers): open it with
+#   gcloud run services proxy globalmart-app --region=us-central1
+# IAP needs an OAuth consent screen on a personal project (plan Risk 4), so the
+# fallback is Cloud Run IAM; grant more users roles/run.invoker via var.app_users.
+resource "google_cloud_run_v2_service" "app" {
+  name                = "globalmart-app"
+  location            = var.region
+  deletion_protection = false
+  ingress             = "INGRESS_TRAFFIC_ALL"
+
+  # New image revisions are rolled out with `gcloud run deploy` (Phase 8: Cloud Build).
+  lifecycle {
+    ignore_changes = [client, client_version]
+  }
+
+  template {
+    service_account = google_service_account.sa["app"].email
+    scaling {
+      min_instance_count = 0 # bills only while serving
+      max_instance_count = 2
+    }
+    containers {
+      image = "${local.image_repo}/app:latest"
+      env {
+        name  = "GCP_PROJECT"
+        value = var.project_id
+      }
+      env {
+        name  = "AGENT_ID"
+        value = "globalmart-agent"
+      }
+      resources {
+        limits   = { cpu = "1", memory = "512Mi" }
+        cpu_idle = true
+      }
+    }
+  }
+
+  depends_on = [google_project_service.apis]
+}
+
+resource "google_cloud_run_v2_service_iam_member" "app_invokers" {
+  for_each = toset(var.app_users)
+  name     = google_cloud_run_v2_service.app.name
+  location = var.region
+  role     = "roles/run.invoker"
+  member   = each.value
+}

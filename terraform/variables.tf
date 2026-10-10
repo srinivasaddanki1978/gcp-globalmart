@@ -20,3 +20,9 @@ variable "datasets" {
     ops     = "Pipeline operations: ingest_log and run history"
   }
 }
+
+variable "app_users" {
+  description = "Principals allowed to open the app (roles/run.invoker), e.g. user:me@gmail.com. Project owners can already."
+  type        = list(string)
+  default     = []
+}

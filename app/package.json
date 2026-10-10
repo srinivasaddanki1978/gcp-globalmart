@@ -1,0 +1,41 @@
+{
+  "name": "globalmart-gcp-app",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "GlobalMart dashboard on Cloud Run: React + Express over BigQuery gold, Ask page on the Conversational Analytics data agent",
+  "scripts": {
+    "dev": "concurrently -n server,client \"tsx watch server/index.ts\" \"vite --config client/vite.config.ts\"",
+    "build": "tsc -p tsconfig.server.json && tsc -p tsconfig.client.json --noEmit && vite build --config client/vite.config.ts",
+    "start": "NODE_ENV=production node dist/server/index.js",
+    "typecheck": "tsc -p tsconfig.server.json --noEmit && tsc -p tsconfig.client.json --noEmit",
+    "test": "vitest run",
+    "check:queries": "tsx scripts/check-queries.ts"
+  },
+  "dependencies": {
+    "@google-cloud/bigquery": "^8.3.1",
+    "express": "^5.3.0",
+    "google-auth-library": "^10.9.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/express": "^5.0.6",
+    "@types/node": "^24.19.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^5.2.0",
+    "clsx": "^2.1.1",
+    "concurrently": "^9.2.5",
+    "lucide-react": "^1.55.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "react-router": "^7.18.4",
+    "recharts": "^3.10.1",
+    "tailwind-merge": "^3.7.0",
+    "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.15",
+    "typescript": "5.9",
+    "vite": "^7.3.7",
+    "vitest": "^4.1.11"
+  }
+}

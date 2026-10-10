@@ -19,3 +19,8 @@ output "run_pipeline" {
   description = "Run the whole pipeline end to end."
   value       = "gcloud workflows run ${google_workflows_workflow.e2e.name} --location=${var.region}"
 }
+
+output "open_app" {
+  description = "Open the app locally through an authenticated proxy (http://localhost:8080)."
+  value       = "gcloud run services proxy ${google_cloud_run_v2_service.app.name} --region=${var.region} --port=8080"
+}

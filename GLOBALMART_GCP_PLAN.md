@@ -203,13 +203,15 @@ Each session is about 3 hours. The core build (Phases 0–8) is about **14–16 
 
 ### Phase 7: Cloud Run app (sessions 11–13)
 
-- [ ] Express server with an allowlist of `.sql` files and BigQuery named parameters (`@min_orders`).
-- [ ] Reuse the 27 query files (adjusting table names and parameter syntax), and port the 10 React pages to Recharts and shadcn/ui.
-- [ ] Ask page using the Conversational Analytics API as the **signed-in user**.
-- [ ] `sa-app` has read-only access to `gold`. Sign-in through IAP (see the fallback in Risk 4).
-- [ ] CI check: dry-run every app query, so a breaking Gold change fails the build. Together with the dbt contracts, this protects the app from both directions.
+- [x] Express server with an allowlist of `.sql` files and BigQuery named parameters (`@min_orders`).
+- [x] Reuse the 27 query files (adjusting table names and parameter syntax), and port the 10 React pages to Recharts and shadcn/ui.
+- [x] Ask page using the Conversational Analytics API. (Runs as `sa-app`, not as the signed-in user: per-user identity needs IAP or an OAuth client, see Risk 4. The signed-in email is shown and logged with each question.)
+- [x] `sa-app` has read-only access to `gold` (plus `metrics` for the agent). Sign-in uses the Risk 4 fallback: Cloud Run requires authentication, opened via `gcloud run services proxy`.
+- [x] CI check: dry-run every app query, so a breaking Gold change fails the build. Together with the dbt contracts, this protects the app from both directions.
 
 **Done when:** the app is deployed, all pages work, and a renamed column fails CI.
+
+**Result (10 Oct 2026):** `globalmart-app` is on Cloud Run (min 0 instances, authenticated only: no credentials gets 403). It has 9 pages ported almost unchanged: a small compatibility layer (`client/src/lib`) gives the AppKit names and props on Recharts and Tailwind. The 3 governance queries and the Governance page weren't ported. All 27 queries return data through the API, and headless-Chrome screenshots confirmed the pages render. The Ask page keeps a conversation, so follow-up questions work. Renaming `return_rate_pct` was caught twice: the dbt contract refused the model, and `npm run check:queries` failed (exit 1) on the app query. Fixed while porting: `flagged_customers` now joins only the current SCD2 customer row.
 
 ### Phase 8: CI/CD, documentation and comparison (sessions 14–16)
 

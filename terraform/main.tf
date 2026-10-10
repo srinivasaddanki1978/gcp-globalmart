@@ -27,6 +27,7 @@ locals {
     dbt_gold      = { sa = "dbt", dataset = "gold", role = "roles/bigquery.dataEditor" }
     dbt_metrics   = { sa = "dbt", dataset = "metrics", role = "roles/bigquery.dataEditor" }
     app_gold      = { sa = "app", dataset = "gold", role = "roles/bigquery.dataViewer" }
+    app_metrics   = { sa = "app", dataset = "metrics", role = "roles/bigquery.dataViewer" } # data agent tables
   }
 }
 
@@ -133,4 +134,12 @@ resource "google_storage_bucket_iam_member" "dbt_write" {
   bucket = google_storage_bucket.raw.name
   role   = "roles/storage.objectCreator"
   member = google_service_account.sa["dbt"].member
+}
+
+# The app's Ask page calls the data agent as sa-app.
+resource "google_project_iam_member" "app_agent" {
+  for_each = toset(["roles/geminidataanalytics.dataAgentUser", "roles/cloudaicompanion.user"])
+  project  = var.project_id
+  role     = each.value
+  member   = google_service_account.sa["app"].member
 }
