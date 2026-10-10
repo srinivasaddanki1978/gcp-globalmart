@@ -124,7 +124,7 @@ resource "google_bigquery_connection_iam_member" "dbt_connection_user" {
   member        = google_service_account.sa["dbt"].member
 }
 
-# Loader reads source files; dbt writes run_results.json history.
+# Loader reads source files; dbt writes run history and replaces the prod manifest.
 resource "google_storage_bucket_iam_member" "loader_read" {
   bucket = google_storage_bucket.raw.name
   role   = "roles/storage.objectViewer"
@@ -133,7 +133,7 @@ resource "google_storage_bucket_iam_member" "loader_read" {
 
 resource "google_storage_bucket_iam_member" "dbt_write" {
   bucket = google_storage_bucket.raw.name
-  role   = "roles/storage.objectCreator"
+  role   = "roles/storage.objectUser" # create + overwrite (the prod manifest is replaced each run)
   member = google_service_account.sa["dbt"].member
 }
 

@@ -46,32 +46,19 @@ source_data/ ──► GCS ──► Cloud Run job: Bronze loader (Python) ─�
 
 ## Set up
 
-**Learn it by hand (recommended for a first build):**
-[`docs/MANUAL_SETUP_GUIDE.md`](docs/MANUAL_SETUP_GUIDE.md). It goes from creating a Google Cloud
-account and billing account to a running pipeline, data agent, web app, dashboards and CI/CD. Every
-step explains the service, then gives the console clicks, the CLI commands and a check.
+Two ways, same result:
 
-**Set up with Terraform (quick, once you know the pieces).** `terraform/` declares the same resources
-as code. In a fresh project (needs `gcloud`, `terraform` ≥ 1.6 and Python 3.12; project IDs are global,
-so pick your own):
+| | Guide | For |
+|---|---|---|
+| **Automated** | [`docs/AUTOMATED_DEPLOYMENT.md`](docs/AUTOMATED_DEPLOYMENT.md) | Clone, sign in, run one script: infrastructure, images, data, pipeline, data agent and optional CI/CD (~25 min) |
+| **By hand** | [`docs/MANUAL_SETUP_GUIDE.md`](docs/MANUAL_SETUP_GUIDE.md) | Learning Google Cloud: build every resource yourself, with each service explained (console + CLI) |
+
+The automated path in short (needs `gcloud`, `terraform` ≥ 1.6 and Python 3.12):
 
 ```bash
-export PROJECT_ID=<your-project-id> REGION=us-central1 GCP_PROJECT=<your-project-id>
-gcloud auth login && gcloud auth application-default login && gcloud config set project $PROJECT_ID
-
-cd terraform && cp terraform.tfvars.example terraform.tfvars        # set project_id
-terraform init && terraform apply -target=google_artifact_registry_repository.images && cd ..
-for img in loader dbt app; do                                        # images must exist before the jobs
-  gcloud builds submit $img --region=$REGION --tag $REGION-docker.pkg.dev/$PROJECT_ID/globalmart/$img:latest
-done
-cd terraform && terraform apply && cd ..                             # everything else
-
-gcloud storage rsync -r source_data gs://$PROJECT_ID-globalmart-raw/source_data
-gcloud workflows run globalmart-e2e --location=$REGION              # Bronze → … → GenAI (~8 min)
-
-python3.12 -m venv .venv && .venv/bin/pip install -r loader/requirements.txt -r dbt/requirements.txt
-.venv/bin/python tests/check_expected_results.py                     # all 10 checks should be OK
-.venv/bin/python agent/data_agent.py deploy && .venv/bin/python agent/data_agent.py test
+gcloud auth login && gcloud auth application-default login
+git clone https://github.com/srinivasaddanki1978/gcp-globalmart.git && cd gcp-globalmart
+PROJECT_ID=<new-unique-id> BILLING_ACCOUNT=<XXXXXX-XXXXXX-XXXXXX> BUDGET=10USD scripts/deploy.sh
 ```
 
 ## Daily use
@@ -102,8 +89,9 @@ each · Gemini called only for bounded rows (~120 calls per full run) · RAG emb
 
 ## Teardown
 
-Removes everything this project created. Steps 1–4 keep the project; step 5 deletes it entirely,
-which on its own also covers steps 1–4.
+**Scripted:** `PROJECT_ID=<id> scripts/teardown.sh` removes every GlobalMart resource and its data
+(keeps the project); `DELETE_PROJECT=1` deletes the project instead. **By hand**, the same steps:
+steps 1–4 keep the project; step 5 deletes it entirely, which on its own also covers steps 1–4.
 
 ```bash
 # 1. Data agent (Conversational Analytics; not managed by Terraform)

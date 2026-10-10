@@ -397,14 +397,14 @@ for ds in silver_ci gold_ci metrics_ci; do G $(SA cloudbuild) $ds roles/bigquery
 | Principal | Role | Why |
 |---|---|---|
 | sa-loader | Storage Object Viewer | read source files |
-| sa-dbt | Storage Object Creator | save run history and the build manifest |
+| sa-dbt | Storage Object User | save run history and replace the build manifest (overwrite needs more than *Creator*) |
 | sa-cloudbuild | Storage Object Viewer | read the build manifest in CI |
 
 **CLI**
 ```bash
 B() { gcloud storage buckets add-iam-policy-binding gs://$1 --member="serviceAccount:$2" --role=$3 >/dev/null && echo "$1: $3 to $2"; }
 B $BUCKET $(SA loader)     roles/storage.objectViewer
-B $BUCKET $(SA dbt)        roles/storage.objectCreator
+B $BUCKET $(SA dbt)        roles/storage.objectUser
 B $BUCKET $(SA cloudbuild) roles/storage.objectViewer
 ```
 

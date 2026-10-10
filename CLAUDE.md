@@ -17,7 +17,10 @@ data agent answers ≥ 9/10 test questions. Any change that moves these numbers 
 **Docs:** `docs/MANUAL_SETUP_GUIDE.md` is the learning guide that rebuilds everything by hand (console + CLI,
 module by module). It mirrors `terraform/` resource for resource and IAM binding for IAM binding, so **when
 you change infrastructure, update the guide's modules and appendix too.** `README.md` has the Terraform
-quick start and teardown; `docs/looker_studio.md` the dashboard build.
+overview; `docs/AUTOMATED_DEPLOYMENT.md` documents `scripts/deploy.sh` (one idempotent script: project,
+billing, budget, Terraform bootstrap, images, data, pipeline, checks, data agent, optional GitHub CI/CD) and
+`scripts/teardown.sh`; `docs/looker_studio.md` the dashboard build. Keep `deploy.sh` re-runnable: each step
+must check before it creates.
 
 **Open items:** Looker Studio pages are built by hand (then put the report URL in `dbt/models/exposures.yml`).
 The Cloud Build trigger `globalmart-main` waits on the `globalmart-github` connection (us-central1) finishing
