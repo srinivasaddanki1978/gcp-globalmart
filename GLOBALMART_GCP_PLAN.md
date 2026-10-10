@@ -167,13 +167,15 @@ Each session is about 3 hours. The core build (Phases 0–8) is about **14–16 
 
 ### Phase 4: Metrics and orchestration (session 7)
 
-- [ ] The 6 metrics models.
-- [ ] dbt Cloud Run job (`globalmart-dbt`): the image runs `dbt build --target prod`.
-- [ ] Cloud Workflows `globalmart-e2e`: run the loader job, then the dbt job, then report the result. A failing dbt test fails the job and stops the workflow.
-- [ ] Optional: a Cloud Scheduler daily trigger. For the lab we'll usually run it by hand.
-- [ ] Save `target/run_results.json` to the bucket after each run, to keep a run history.
+- [x] The 6 metrics models.
+- [x] dbt Cloud Run job (`globalmart-dbt`): the image runs `dbt build --target prod`.
+- [x] Cloud Workflows `globalmart-e2e`: run the loader job, then the dbt job, then report the result. A failing dbt test fails the job and stops the workflow.
+- [ ] Optional: a Cloud Scheduler daily trigger. For the lab we'll usually run it by hand. (Not added; easy to add later.)
+- [x] Save `target/run_results.json` to the bucket after each run, to keep a run history.
 
 **Done when:** `gcloud workflows run globalmart-e2e` runs Bronze to Metrics with no manual steps.
+
+**Result (10 Oct 2026):** `gcloud workflows run globalmart-e2e --location=us-central1` succeeded in 6.7 minutes (the loader, then dbt: 109 of 109 models, snapshot and tests). `run_results.json` is saved to `gs://…-raw/dbt_runs/<UTC>_<status>/`. A failing dbt command fails the job (exit code 2), and a failed step fails the workflow. All 6 metrics tables match Databricks row by row (`parity/compare_gold.py`); the only differences are one-cent rounding in 163 aggregate rows, because BigQuery adds money exactly. The workflow runs as `sa-workflows`, which may only run the two jobs.
 
 ### Phase 5: GenAI layer (sessions 8–9)
 

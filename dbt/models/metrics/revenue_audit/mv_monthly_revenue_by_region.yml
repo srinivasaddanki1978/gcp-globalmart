@@ -1,0 +1,8 @@
+version: 2
+
+models:
+  - name: mv_monthly_revenue_by_region
+    description: "Monthly revenue by customer region (Revenue Audit). Region is the customer's region at the time of the order. avg_order_value is the average line sales."
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments: { combination_of_columns: [year, month, region] }

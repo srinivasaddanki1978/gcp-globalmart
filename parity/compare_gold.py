@@ -1,4 +1,4 @@
-"""Gold parity: Databricks vs BigQuery, row by row on business columns.
+"""Gold and metrics parity: Databricks vs BigQuery, row by row on business columns.
 
 Surrogate keys differ by design (FARM_FINGERPRINT vs monotonically_increasing_id),
 so rows are compared as multisets of their business columns. BigQuery's Unknown
@@ -9,6 +9,7 @@ Databricks' NULL keys. Numbers are compared exactly (as parsed doubles).
 """
 
 import argparse
+import re
 import sys
 from collections import Counter
 from datetime import date, datetime
@@ -37,6 +38,29 @@ TABLES = {
                                 "order_count, total_profit, is_slow_moving", None),
 }
 
+# Metrics tables: same comparison. return_reasons comes from Spark's collect_set,
+# whose order varies, so it is compared as a sorted list ({sorted} is replaced
+# per engine).
+METRICS = {
+    "mv_monthly_revenue_by_region": "year, month, month_name, region, order_count, total_revenue, total_profit, "
+                                    "total_quantity, unique_customers, avg_order_value",
+    "mv_segment_profitability": "segment, region, order_count, customer_count, total_revenue, total_profit, "
+                                "profit_margin_pct, avg_discount",
+    "mv_customer_return_history": "customer_id, customer_name, segment, region, total_returns, total_refund_value, "
+                                  "avg_refund_per_return, distinct_reason_count, {sorted}, approved_count, "
+                                  "approval_rate_pct, first_return_date, last_return_date",
+    "mv_return_reason_analysis": "return_reason, region, return_count, total_refunded, avg_refund, unique_customers, "
+                                 "approved_count, rejected_count",
+    "mv_product_return_impact": "product_id, product_name, brand, region, return_line_count, total_return_cost, "
+                                "avg_return_cost, total_allocation_weight",
+    "mv_vendor_product_performance": "vendor_id, vendor_name, product_id, product_name, brand, region, order_count, "
+                                     "total_sales, total_quantity, total_profit, return_count, total_allocated_refund",
+}
+SORTED_REASONS = {
+    "bq": "ARRAY_TO_STRING(ARRAY(SELECT x FROM UNNEST(SPLIT(return_reasons, ', ')) x ORDER BY x), ', ')",
+    "db": "array_join(array_sort(split(return_reasons, ', ')), ', ')",
+}
+
 # BigQuery -1 keys must line up with Databricks NULL keys.
 UNKNOWN_KEYS = {
     "fact_sales": ["customer_sk", "product_sk", "vendor_sk", "order_date_sk"],
@@ -57,6 +81,9 @@ def norm(v) -> str:
     s = str(v)
     if s in ("true", "false"):
         return s
+    m = re.fullmatch(r"(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}:\d{2})(\.\d+)?Z?", s)  # Databricks ISO timestamps
+    if m:
+        return f"{m[1]} {m[2]}"
     try:
         return repr(float(s))
     except ValueError:
@@ -110,13 +137,17 @@ def main() -> None:
     def db_rows(sql):
         return [tuple(norm(v) for v in r) for r in run_statement(args.profile, args.warehouse_id, sql)[1]]
 
+    checks = [(t, "gold", cols, cols, f) for t, (cols, f) in TABLES.items()]
+    checks += [(t, "metrics", c.replace("{sorted}", SORTED_REASONS["bq"]), c.replace("{sorted}", SORTED_REASONS["db"]), None)
+               for t, c in METRICS.items()]
+
     failed = False
-    for table, (cols, bq_filter) in TABLES.items():
+    for table, schema, bq_cols, db_cols, bq_filter in checks:
         if args.only and table not in args.only:
             continue
         where = f" WHERE {bq_filter}" if bq_filter else ""
-        b = Counter(bq_rows(f"SELECT {cols} FROM `{args.project}.gold.{table}`{where}"))
-        d = Counter(db_rows(f"SELECT {cols} FROM globalmart.gold.{table}"))
+        b = Counter(bq_rows(f"SELECT {bq_cols} FROM `{args.project}.{schema}.{table}`{where}"))
+        d = Counter(db_rows(f"SELECT {db_cols} FROM globalmart.{schema}.{table}"))
         only_b, only_d = b - d, d - b
         paired, max_diff, only_b, only_d = pair_rounding(only_b, only_d)
         ok = not only_b and not only_d

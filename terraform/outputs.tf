@@ -14,3 +14,8 @@ output "artifact_registry" {
 output "service_accounts" {
   value = { for k, sa in google_service_account.sa : k => sa.email }
 }
+
+output "run_pipeline" {
+  description = "Run the whole pipeline end to end."
+  value       = "gcloud workflows run ${google_workflows_workflow.e2e.name} --location=${var.region}"
+}

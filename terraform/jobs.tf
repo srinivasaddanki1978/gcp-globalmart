@@ -40,3 +40,35 @@ resource "google_cloud_run_v2_job" "loader" {
 
   depends_on = [google_project_service.apis]
 }
+
+resource "google_cloud_run_v2_job" "dbt" {
+  name                = "globalmart-dbt"
+  location            = var.region
+  deletion_protection = false
+
+  template {
+    task_count = 1
+    template {
+      service_account = google_service_account.sa["dbt"].email
+      timeout         = "3600s"
+      max_retries     = 0 # a failed test must stop the pipeline, not be retried
+
+      containers {
+        image = "${local.image_repo}/dbt:latest"
+        env {
+          name  = "GCP_PROJECT"
+          value = var.project_id
+        }
+        env {
+          name  = "RAW_BUCKET"
+          value = google_storage_bucket.raw.name
+        }
+        resources {
+          limits = { cpu = "2", memory = "2Gi" }
+        }
+      }
+    }
+  }
+
+  depends_on = [google_project_service.apis]
+}

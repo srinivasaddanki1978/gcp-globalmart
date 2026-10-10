@@ -31,8 +31,10 @@ def api(profile: str, method: str, path: str, body: dict | None = None) -> dict:
     cmd = ["databricks", "-p", profile, "api", method, path]
     if body is not None:
         cmd += ["--json", json.dumps(body)]
-    out = subprocess.run(cmd, check=True, capture_output=True, text=True).stdout
-    return json.loads(out)
+    proc = subprocess.run(cmd, capture_output=True, text=True)
+    if proc.returncode != 0:
+        raise RuntimeError(f"databricks api {method} {path} failed: {proc.stderr.strip() or proc.stdout.strip()}")
+    return json.loads(proc.stdout)
 
 
 def run_statement(profile: str, warehouse_id: str, sql: str) -> tuple[list[str], list[list]]:

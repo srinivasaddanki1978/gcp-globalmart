@@ -1,0 +1,8 @@
+version: 2
+
+models:
+  - name: mv_return_reason_analysis
+    description: "Returns by reason and customer region (Returns Fraud)."
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments: { combination_of_columns: [return_reason, region] }

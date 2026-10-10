@@ -141,3 +141,24 @@ select
 {% macro bigquery__exact_sum(expr) -%}
     cast(sum(cast(cast({{ expr }} as string) as bignumeric)) as float64)
 {%- endmacro %}
+
+
+{#- Exact decimal average of doubles (see exact_sum). -#}
+{% macro exact_avg(expr) -%}
+    {{ return(adapter.dispatch('exact_avg', 'globalmart')(expr)) }}
+{%- endmacro %}
+
+{% macro bigquery__exact_avg(expr) -%}
+    cast(avg(cast(cast({{ expr }} as string) as bignumeric)) as float64)
+{%- endmacro %}
+
+
+{#- Distinct values joined with ', ', sorted so the result is deterministic
+    (Spark's concat_ws(collect_set(...)) order varies between runs). -#}
+{% macro sorted_distinct_list(expr) -%}
+    {{ return(adapter.dispatch('sorted_distinct_list', 'globalmart')(expr)) }}
+{%- endmacro %}
+
+{% macro bigquery__sorted_distinct_list(expr) -%}
+    string_agg(distinct {{ expr }}, ', ' order by {{ expr }})
+{%- endmacro %}

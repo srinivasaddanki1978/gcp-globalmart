@@ -1,0 +1,25 @@
+# GlobalMart end to end: Bronze loader -> dbt build. Each step waits for the
+# previous one; a failure (e.g. a failing dbt test) stops the workflow and fails it.
+# Rendered by Terraform (templatefile): $${...} is a Workflows expression.
+main:
+  steps:
+    - init:
+        assign:
+          - started: $${sys.now()}
+    - run_loader:
+        call: googleapis.run.v2.projects.locations.jobs.run
+        args:
+          name: projects/${project}/locations/${region}/jobs/${loader}
+        result: loader_execution
+    - run_dbt:
+        call: googleapis.run.v2.projects.locations.jobs.run
+        args:
+          name: projects/${project}/locations/${region}/jobs/${dbt}
+        result: dbt_execution
+    - report:
+        return:
+          status: succeeded
+          duration_seconds: $${sys.now() - started}
+          loader_execution: $${loader_execution.metadata.name}
+          dbt_execution: $${dbt_execution.metadata.name}
+          run_history: gs://${project}-globalmart-raw/dbt_runs/

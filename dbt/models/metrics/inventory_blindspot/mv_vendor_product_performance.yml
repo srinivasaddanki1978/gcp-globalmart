@@ -1,0 +1,8 @@
+version: 2
+
+models:
+  - name: mv_vendor_product_performance
+    description: "Sales per vendor x product x region with returns (Inventory Blindspot). Return columns are per vendor x product and repeat on every region row: don't sum them across regions."
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments: { combination_of_columns: [vendor_id, product_id, region] }

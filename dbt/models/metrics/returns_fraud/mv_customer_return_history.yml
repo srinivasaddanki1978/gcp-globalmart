@@ -1,0 +1,8 @@
+version: 2
+
+models:
+  - name: mv_customer_return_history
+    description: "Lifetime return profile per customer (Returns Fraud). Returns without a known customer are excluded. return_reasons is the sorted list of distinct reasons. Contains customer_name (PII)."
+    columns:
+      - name: customer_id
+        data_tests: [unique, not_null]

@@ -25,11 +25,11 @@ A rebuild of the GlobalMart Data Intelligence Platform (originally on Databricks
 GCS bucket (source_data/) → Cloud Run job: Python Bronze loader → BigQuery `bronze` (all STRING)
   → Cloud Run job: dbt build → `silver` → `gold` → `metrics` → genai models (in `gold`)
   → Looker Studio / Conversational Analytics data agent / Cloud Run app (React + Express)
-Orchestration: Cloud Workflows `globalmart-e2e` runs the loader job, then the dbt job (Cloud Scheduler is optional)
+Orchestration: Cloud Workflows `globalmart-e2e` (workflows/globalmart_e2e.yaml, rendered by Terraform) runs Cloud Run job `globalmart-loader`, then `globalmart-dbt` (dbt/run_dbt.py: `dbt build --target prod`, uploads run_results.json, exits with dbt's code)
 ```
 
 - Project `globalmart-gcp-lab`, region `us-central1`. BigQuery datasets: `bronze`, `silver`, `gold`, `metrics`, `ops`.
-- Service accounts: `sa-loader` and `sa-dbt` can write to their own datasets. `sa-app` has read-only access to `gold`.
+- Service accounts: `sa-loader` and `sa-dbt` can write to their own datasets. `sa-app` has read-only access to `gold`. `sa-workflows` may only run the two jobs.
 - All infrastructure is defined in Terraform. CI/CD runs on Cloud Build.
 
 ## Key design rules (these span several components)
@@ -86,7 +86,18 @@ gcloud storage rsync -r source_data gs://globalmart-gcp-lab-globalmart-raw/sourc
 python3.12 parity/run_databricks_baseline.py --profile free --warehouse-id 244af7e3ec6e128d
 ```
 
-Later phases add `gcloud workflows run globalmart-e2e` (end to end) and `dbt build --select state:modified+` (CI).
+```bash
+# End to end: Cloud Workflows runs the loader job, then the dbt job (about 7 min)
+gcloud workflows run globalmart-e2e --location=us-central1
+
+# dbt image (rebuild after any dbt change, or the Cloud Run job keeps running the old code)
+gcloud builds submit dbt --region=us-central1 \
+  --tag us-central1-docker.pkg.dev/globalmart-gcp-lab/globalmart/dbt:latest
+gcloud run jobs execute globalmart-dbt --region=us-central1 --wait [--args="build,--select,metrics"]
+gcloud storage ls gs://globalmart-gcp-lab-globalmart-raw/dbt_runs/     # run history (run_results.json per run)
+```
+
+Phase 8 adds `dbt build --select state:modified+` (CI).
 
 ## Parity answer key
 
