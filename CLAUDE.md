@@ -38,7 +38,8 @@ Orchestration: Cloud Workflows `globalmart-e2e` runs the loader job, then the db
 
 - **Bronze is all STRING.** The source JSON files are JSON *arrays*, so the loader converts them to NDJSON. Regional files use different names for the same column (for example `customer_id`, `CustomerID`, `cust_id`, `customer_identifier`). Staging models harmonise them with `COALESCE` and cast every type explicitly. This is the most likely cause of parity differences.
 - **The loader is idempotent.** It skips files already recorded in `ops.ingest_log`, so a second run must load nothing. It adds `_source_file` (the full GCS path, which the Region 4 city/state fix relies on) and `_load_timestamp`.
-- **Each Silver rule is written once** in `dbt/macros/rules/`, as a list of name, field, issue type and `fail_if` condition. The same macros generate both `silver.clean_<entity>` and `silver.rejected_records`. Wrap every condition in `coalesce(..., false)`. The invariant *Bronze = Silver + rejected* is tested through `pipeline_audit_log.reconciliation_diff = 0`.
+- **Each Silver rule is written once**, in `dbt/macros/rules/silver_rules.sql`. One definition per entity lists its rules (name, field, issue_type, `fail_if`), its record key and its `record_data` fields. `rule_columns(entity)` turns them into the `_fail_*` columns, `_has_any_failure` and `record_data` in each `silver/staging/stg_<entity>` view. `clean_<entity>` keeps rows `where not _has_any_failure`, and `rejected_records` loops over the same definitions. To add or change a rule, edit only that macro. `pipeline_audit_log` counts rejected rows as distinct `(record_data, _source_file)`, and the `reconciliation_diff = 0` test enforces *Bronze = Silver + rejected*.
+- **Copy Spark's behaviour, not BigQuery's defaults.** The goal is matching Databricks results, so follow Spark's non-ANSI semantics: failed casts and parses return NULL (`try_cast`, `try_parse_timestamp` with a list of formats, first match wins). A double-to-long cast truncates (`truncate_to_int`). In `record_data`, doubles keep a trailing `.0` and timestamps print as `yyyy-MM-dd HH:mm:ss` (`spark_string`). All platform-specific SQL lives in `dbt/macros/dialect.sql` behind `adapter.dispatch`. Databricks `_source_file` is URL-encoded (`Region%201/...`) and GCS paths keep the space; `is_region_4()` accepts both.
 - **Surrogate keys** come from a `FARM_FINGERPRINT(business_key)` macro. Every dimension has an Unknown member row (`-1`). Parity checks compare business keys, never hash keys.
 - **Gold tables use enforced dbt contracts** with `primary_key`/`foreign_key` constraints, grain tests and `relationships` tests. Turn on `persist_docs` so the data agent can read the descriptions. Customers use SCD Type 1 for parity, plus SCD Type 2 (a backfill model and a dbt snapshot).
 - **GenAI runs in SQL inside dbt models** (`AI.GENERATE`, `ML.GENERATE_EMBEDDING`, `VECTOR_SEARCH` through a Vertex AI connection), tagged `genai`. To control cost, only send aggregates or flagged customers to Gemini.
@@ -59,6 +60,7 @@ cd terraform && terraform plan && terraform apply
 cd dbt
 ../.venv/bin/dbt debug --profiles-dir .
 ../.venv/bin/dbt build --profiles-dir . --select <model>         # build and test one model
+../.venv/bin/dbt build --profiles-dir . --select source:bronze+   # everything downstream of Bronze
 ../.venv/bin/dbt build --profiles-dir . --select tag:genai       # GenAI layer only
 ../.venv/bin/dbt build --profiles-dir . --target prod            # full build (Cloud Run job)
 
@@ -69,8 +71,9 @@ gcloud builds submit loader --region=us-central1 \
   --tag us-central1-docker.pkg.dev/globalmart-gcp-lab/globalmart/loader:latest   # no local Docker
 gcloud run jobs execute globalmart-loader --region=us-central1 --wait
 
-# Bronze parity: per-column profile of every raw_* table vs Databricks
-../.venv/bin/python parity/compare_bronze.py --warehouse-id 244af7e3ec6e128d
+# Parity vs Databricks (exit 1 on any difference)
+.venv/bin/python parity/compare_bronze.py --warehouse-id 244af7e3ec6e128d   # per-column profile of raw_*
+.venv/bin/python parity/compare_silver.py --warehouse-id 244af7e3ec6e128d   # audit log, rejected rows, clean profiles
 
 # Re-upload source files (idempotent)
 gcloud storage rsync -r source_data gs://globalmart-gcp-lab-globalmart-raw/source_data

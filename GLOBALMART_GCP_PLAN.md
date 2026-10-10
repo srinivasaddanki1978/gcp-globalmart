@@ -140,14 +140,16 @@ Each session is about 3 hours. The core build (Phases 0–8) is about **14–16 
 
 ### Phase 2: Silver quality layer (sessions 3–4)
 
-- [ ] Port the 23 rules from `silver/clean/*.py` into `macros/rules/` as lists of name, field, issue type and `fail_if` condition.
-- [ ] `silver/staging` models (`stg_<entity>` views): harmonise column variants, parse dates in several formats (`SAFE.PARSE_TIMESTAMP`), and clean `$`, `%`, `'NULL'` values and abbreviations.
-- [ ] `silver.clean_<entity>`: rows where no rule fails. Wrap each condition in `coalesce(..., false)` so a NULL result doesn't drop a row silently.
-- [ ] `silver.rejected_records`: one row per failure, generated from the same macros. Same columns as Databricks.
-- [ ] `silver.pipeline_audit_log`: reconciliation per entity.
-- [ ] Tests: `not_null` and `accepted_values` on the clean tables, plus a test that `reconciliation_diff = 0`.
+- [x] Port the 23 rules from `silver/clean/*.py` into `macros/rules/` as lists of name, field, issue type and `fail_if` condition.
+- [x] `silver/staging` models (`stg_<entity>` views): harmonise column variants, parse dates in several formats (`SAFE.PARSE_TIMESTAMP`), and clean `$`, `%`, `'NULL'` values and abbreviations.
+- [x] `silver.clean_<entity>`: rows where no rule fails. Wrap each condition in `coalesce(..., false)` so a NULL result doesn't drop a row silently.
+- [x] `silver.rejected_records`: one row per failure, generated from the same macros. Same columns as Databricks.
+- [x] `silver.pipeline_audit_log`: reconciliation per entity.
+- [x] Tests: `not_null` and `accepted_values` on the clean tables, plus a test that `reconciliation_diff = 0`.
 
 **Done when:** the reconciliation difference is 0 for all entities, and failures per rule match the baseline.
+
+**Result (10 Oct 2026):** Silver matches Databricks exactly (`parity/compare_silver.py`). The audit log is identical. All 6,027 rejected rows match field for field, including the `record_data` JSON text. The profiles of all 6 clean tables match (sums, distinct counts, date ranges, Region 4 city/state, UPCs). 49 dbt models and tests pass. Notes: Databricks `_source_file` is URL-encoded (`Region%201`) while GCS keeps the space. The 23 rules live in `macros/rules/silver_rules.sql`, and platform-specific SQL is in `macros/dialect.sql`.
 
 ### Phase 3: Gold dimensional model (sessions 5–6)
 
