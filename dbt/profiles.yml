@@ -1,0 +1,23 @@
+# Auth is OAuth everywhere: locally `gcloud auth application-default login`,
+# on Cloud Run the job's service account (sa-dbt). No key files.
+globalmart:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: oauth
+      project: "{{ env_var('GCP_PROJECT', 'globalmart-gcp-lab') }}"
+      dataset: silver # default only; every folder sets +schema
+      location: us-central1
+      threads: 8
+      job_execution_timeout_seconds: 600
+      priority: interactive
+    prod:
+      type: bigquery
+      method: oauth
+      project: "{{ env_var('GCP_PROJECT', 'globalmart-gcp-lab') }}"
+      dataset: silver
+      location: us-central1
+      threads: 8
+      job_execution_timeout_seconds: 900
+      priority: interactive

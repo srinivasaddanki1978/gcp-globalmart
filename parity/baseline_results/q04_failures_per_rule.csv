@@ -1,0 +1,6 @@
+source_table,affected_field,issue_type,failure_count
+clean_orders,ship_mode,invalid_value,2539
+clean_returns,refund_amount,out_of_range,213
+clean_returns,return_date,parse_failure,232
+clean_returns,return_reason,invalid_value,254
+clean_transactions,quantity,out_of_range,2789

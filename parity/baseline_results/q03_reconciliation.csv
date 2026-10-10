@@ -1,0 +1,7 @@
+entity,bronze_count,silver_count,rejected_count,reconciliation_diff
+customers,1180,1180,0,0
+orders,53750,51211,2539,0
+products,1774,1774,0,0
+returns,8506,7868,638,0
+transactions,101624,98835,2789,0
+vendors,7,7,0,0

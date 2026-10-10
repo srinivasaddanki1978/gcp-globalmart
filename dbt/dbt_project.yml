@@ -1,0 +1,40 @@
+name: globalmart
+version: "1.0.0"
+config-version: 2
+profile: globalmart
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+target-path: target
+clean-targets: [target, dbt_packages]
+
+# Datasets map 1:1 to the Databricks schemas. macros/generate_schema_name.sql
+# makes `+schema` the literal dataset name (no `<target>_` prefix).
+models:
+  globalmart:
+    +persist_docs:
+      relation: true
+      columns: true
+    staging:
+      +schema: silver
+      +materialized: view
+    silver:
+      +schema: silver
+      +materialized: table
+    gold:
+      +schema: gold
+      +materialized: table
+    metrics:
+      +schema: metrics
+      +materialized: table
+    genai:
+      +schema: gold
+      +materialized: table
+      +tags: [genai]
+
+snapshots:
+  globalmart:
+    +schema: gold

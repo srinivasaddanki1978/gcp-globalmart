@@ -1,0 +1,8 @@
+table_name,row_count
+bridge_return_products,13997
+dim_customers,590
+dim_dates,4383
+dim_products,1774
+dim_vendors,7
+fact_returns,7868
+fact_sales,94153

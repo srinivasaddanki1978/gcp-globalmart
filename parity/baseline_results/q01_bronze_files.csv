@@ -1,0 +1,7 @@
+entity,file_count,row_count
+customers,60,1180
+orders,48,53750
+products,1,1774
+returns,47,8506
+transactions,48,101624
+vendors,1,7

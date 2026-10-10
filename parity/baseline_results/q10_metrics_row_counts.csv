@@ -1,0 +1,7 @@
+table_name,row_count
+mv_customer_return_history,578
+mv_monthly_revenue_by_region,569
+mv_product_return_impact,6088
+mv_return_reason_analysis,50
+mv_segment_profitability,15
+mv_vendor_product_performance,25435
