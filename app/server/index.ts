@@ -44,9 +44,12 @@ app.post('/api/ask', async (req, res, next) => {
 
 app.use('/api', (_req, res) => res.status(404).json({ error: 'not found' }));
 
+// dbt docs (static site generated in CI), behind the same Cloud Run sign-in.
+app.use('/dbt-docs', express.static(path.join(ROOT, 'dbt-docs')));
+
 const clientDist = path.join(ROOT, 'client', 'dist');
 app.use(express.static(clientDist, { index: false, maxAge: '1h' }));
-app.get(/^\/(?!api\/).*/, (_req, res) => res.sendFile(path.join(clientDist, 'index.html')));
+app.get(/^\/(?!api\/|dbt-docs).*/, (_req, res) => res.sendFile(path.join(clientDist, 'index.html')));
 
 app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
   if (err instanceof QueryError) return res.status(err.status).json({ error: err.message });

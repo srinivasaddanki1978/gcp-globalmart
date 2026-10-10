@@ -14,6 +14,7 @@ COPY --from=build /app/dist ./dist
 COPY --from=build /app/client/dist ./client/dist
 COPY --from=build /app/package.json ./
 COPY queries ./queries
+COPY dbt-docs ./dbt-docs
 USER node
 EXPOSE 8080
 CMD ["node", "dist/server/index.js"]

@@ -1,3 +1,4 @@
 node_modules/
 dist/
 client/dist/
+dbt-docs/index.html

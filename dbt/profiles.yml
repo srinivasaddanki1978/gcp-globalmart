@@ -21,3 +21,14 @@ globalmart:
       threads: 8
       job_execution_timeout_seconds: 900
       priority: interactive
+    ci:
+      # Cloud Build: changed models build into <dataset>_ci (see generate_schema_name),
+      # reading unchanged upstream models from production via --defer.
+      type: bigquery
+      method: oauth
+      project: "{{ env_var('GCP_PROJECT', 'globalmart-gcp-lab') }}"
+      dataset: silver
+      location: us-central1
+      threads: 8
+      job_execution_timeout_seconds: 900
+      priority: interactive

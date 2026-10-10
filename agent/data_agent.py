@@ -3,6 +3,7 @@
     python agent/data_agent.py deploy            # create or update from agent_context.yaml
     python agent/data_agent.py ask "question"    # one question: answer, SQL, rows
     python agent/data_agent.py test [--only id]  # run test_questions.yaml and score it
+    python agent/data_agent.py delete            # remove the agent (teardown)
 
 Auth: Application Default Credentials (gcloud auth application-default login).
 The agent queries BigQuery as the signed-in user.
@@ -178,12 +179,16 @@ def main() -> None:
     a.add_argument("question")
     t = sub.add_parser("test")
     t.add_argument("--only", nargs="*")
+    sub.add_parser("delete")
     args = parser.parse_args()
 
     cfg = yaml.safe_load((HERE / "agent_context.yaml").read_text())
     s = session()
     if args.cmd == "deploy":
         deploy(s, cfg)
+    elif args.cmd == "delete":
+        wait(s, call(s, "DELETE", f"{API}/{PARENT}/dataAgents/{cfg['agent_id']}"))
+        print(f"deleted {cfg['agent_id']}")
     elif args.cmd == "ask":
         res = ask(s, cfg["agent_id"], args.question)
         print(res["text"] or "(no text)", "\n\nSQL:\n", res["sql"], "\n\nRows:", json.dumps(res["rows"][:10], indent=1))

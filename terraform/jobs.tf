@@ -10,6 +10,10 @@ resource "google_cloud_run_v2_job" "loader" {
   location            = var.region
   deletion_protection = false
 
+  lifecycle {
+    ignore_changes = [client, client_version, template[0].template[0].containers[0].image] # image: set by CI
+  }
+
   template {
     task_count = 1
     template {
@@ -45,6 +49,10 @@ resource "google_cloud_run_v2_job" "dbt" {
   name                = "globalmart-dbt"
   location            = var.region
   deletion_protection = false
+
+  lifecycle {
+    ignore_changes = [client, client_version, template[0].template[0].containers[0].image] # image: set by CI
+  }
 
   template {
     task_count = 1
@@ -86,7 +94,7 @@ resource "google_cloud_run_v2_service" "app" {
 
   # New image revisions are rolled out with `gcloud run deploy` (Phase 8: Cloud Build).
   lifecycle {
-    ignore_changes = [client, client_version]
+    ignore_changes = [client, client_version, template[0].containers[0].image] # image: set by CI
   }
 
   template {

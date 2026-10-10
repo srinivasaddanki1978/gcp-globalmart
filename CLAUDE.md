@@ -45,6 +45,7 @@ Orchestration: Cloud Workflows `globalmart-e2e` (workflows/globalmart_e2e.yaml, 
 - **Gold tables use enforced dbt contracts**, with PK/FK constraints marked `warn_unenforced: false`; BigQuery records them but doesn't enforce them, and the `unique`/`relationships` tests do. Data types must match exactly (int64, float64, string, date, timestamp, bool). `fact_sales` grain is `(order_id, product_id, line_seq)`, because the source repeats order/product pairs; the bridge grain is `(return_sk, sales_sk)`. Money totals use `exact_sum()` (BIGNUMERIC, order-independent) and `spark_round()` (half-up on decimal text, as in Spark), which is why some `mv_*` rows differ from Databricks by one cent: Databricks rounds inexact float sums.
 - **Consumers:** the data agent (`agent/`) reads 20 gold/metrics tables using BigQuery column descriptions plus the instructions in `agent_context.yaml`. Keep its join rules in sync when changing Gold, and rerun `test`. Looker Studio charts each read one `gold.rpt_*` view (`models/reporting/`, built by hand in the UI per `docs/looker_studio.md`). Both are declared in `dbt/models/exposures.yml`.
 - **App (`app/`)**: the server runs only files in `app/queries/*.sql`. Each declares `-- @param name INT64` and uses BigQuery `@name` parameters; requests with unknown or mistyped parameters get 400. Pages were ported from the Databricks AppKit app almost unchanged: `client/src/lib/appkit.ts` gives the AppKit names and props (`useAnalyticsQuery`, `BarChart`/`LineChart`/`AreaChart`/`DonutChart`, Card, Select…) on Recharts and Tailwind. Extend that layer rather than editing pages. Chart animations are off (headless screenshots need it). Cloud Run requires authentication. The Ask page and queries run as `sa-app`, and the caller's email comes from the signature-stripped ID token (`server/identity.ts`). After changing Gold columns, run `npm run check:queries`. When joining `dim_customers` on `customer_id`, add `AND is_current`.
+- **dbt targets:** `dev`/`prod` write the real datasets. `ci` appends `_ci` (`generate_schema_name`) and is only for `state:modified+ --defer` builds. The prod manifest in `gs://…-raw/dbt_state/prod/manifest.json` is refreshed by the dbt job after each successful `--target prod` build (`dbt/run_dbt.py`).
 - **One YAML file per model,** next to its `.sql`, holding descriptions, contract, tests and any unit tests. Descriptions are persisted to BigQuery for the data agent.
 - **GenAI runs in SQL inside dbt models** (`models/genai`, tag `genai`, written to `gold`). Every call goes through `macros/genai.sql`: `gemini(prompt, system=...)` wraps `AI.GENERATE`, with the fixed rules in the system instruction and the row data in the prompt. `embed()` wraps `AI.EMBED`. Model, connection and embedding endpoint are dbt vars in `dbt_project.yml`; confirm the names at each phase. Ranking and KPIs are computed in SQL and only passed to the model. Gemini is called only for bounded rows (UC2: flagged customers only). Each AI model keeps an `ai_status` column, and NULL AI text is a dbt *warning*. UC3: `rag_documents` → `rag_document_embeddings` (**incremental**, keyed by the hash of the embedded text; `--full-refresh` it after changing the embedding endpoint) → `rag_index` (VECTOR_SEARCH needs a plain table, not a join) → `rag_query_history` (questions come from `seeds/rag_test_questions.csv`).
 - **Keep dialect-specific SQL in a few `adapter.dispatch` macros** from the start, so the same dbt project can target Databricks later (Phase 10).
@@ -115,7 +116,17 @@ gcloud run jobs execute globalmart-dbt --region=us-central1 --wait [--args="buil
 gcloud storage ls gs://globalmart-gcp-lab-globalmart-raw/dbt_runs/     # run history (run_results.json per run)
 ```
 
-Phase 8 adds `dbt build --select state:modified+` (CI).
+CI/CD (`cloudbuild.yaml`, Cloud Build trigger `globalmart-main` on push to main, runs as `sa-cloudbuild`):
+tests in parallel (loader pytest; app vitest, typecheck and check:queries; dbt CI), then images tagged with the
+commit SHA, then deploy. The deploy step rolls out the app and points both jobs at the new images, so
+don't hand-build `:latest` for production anymore; push to main. Manual run:
+`gcloud builds submit --config=cloudbuild.yaml --region=us-central1 --service-account=projects/globalmart-gcp-lab/serviceAccounts/sa-cloudbuild@globalmart-gcp-lab.iam.gserviceaccount.com`.
+
+```bash
+# dbt CI locally: changed models + downstream into *_ci datasets, unchanged upstream read from prod
+gcloud storage cp gs://globalmart-gcp-lab-globalmart-raw/dbt_state/prod/manifest.json /tmp/prod-state/
+cd dbt && ../.venv/bin/dbt build --profiles-dir . --target ci --select state:modified+ --defer --state /tmp/prod-state
+```
 
 ## Parity answer key
 

@@ -20,12 +20,19 @@ def main() -> int:
     code = subprocess.run(["dbt", *args]).returncode
 
     results = Path("target/run_results.json")
-    bucket = os.environ.get("RAW_BUCKET")
-    if bucket and results.exists():
+    bucket_name = os.environ.get("RAW_BUCKET")
+    if bucket_name and results.exists():
+        bucket = storage.Client().bucket(bucket_name)
         status = "success" if code == 0 else "failed"
         blob_name = f"dbt_runs/{started}_{status}/run_results.json"
-        storage.Client().bucket(bucket).blob(blob_name).upload_from_filename(str(results))
-        print(f"run history: gs://{bucket}/{blob_name}", flush=True)
+        bucket.blob(blob_name).upload_from_filename(str(results))
+        print(f"run history: gs://{bucket_name}/{blob_name}", flush=True)
+        # The manifest of the last successful production build is the state CI compares
+        # against (dbt build --select state:modified+ --defer --state ...).
+        manifest = Path("target/manifest.json")
+        if code == 0 and "--target" in args and args[args.index("--target") + 1] == "prod" and manifest.exists():
+            bucket.blob("dbt_state/prod/manifest.json").upload_from_filename(str(manifest))
+            print(f"prod state: gs://{bucket_name}/dbt_state/prod/manifest.json", flush=True)
     return code
 
 

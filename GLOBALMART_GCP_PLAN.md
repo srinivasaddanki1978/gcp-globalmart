@@ -19,7 +19,7 @@ Rebuild the GlobalMart Data Intelligence Platform on **native Google Cloud servi
 | Streaming | **Dataflow** (optional Phase 9) | The right tool when data arrives as events and must be validated or windowed in flight | **Pub/Sub → BigQuery subscription**: fine for plain landing, but no in-flight logic |
 | Storage and compute | BigQuery (on-demand) + Cloud Storage | Free tier covers this data size | — |
 | AI | Gemini on Vertex AI, called from SQL (`AI.GENERATE`, `ML.GENERATE_EMBEDDING`, `VECTOR_SEARCH`) | Keeps all AI steps inside dbt models | Separate notebooks: not needed |
-| Data quality monitoring | dbt tests + Dataplex data quality scans | dbt blocks bad builds; Dataplex monitors over time | — |
+| Data quality monitoring | dbt tests (23 rules, rejected_records, reconciliation test, contracts, source freshness) | dbt blocks bad builds; run history in `dbt_runs/` | **Dataplex DQ scans**: dropped 10 Oct 2026. They would repeat the dbt tests, since every table is built by dbt. A scorecard history (`ops` table or the `elementary` package) can be added if needed |
 | BI | Looker Studio | Free | Looker: a paid licence |
 | Natural-language Q&A | Conversational Analytics data agent | GCP equivalent of Genie | — |
 | App | Cloud Run service (React + Express) + Conversational Analytics API | GCP equivalent of the AppKit app | — |
@@ -51,7 +51,7 @@ Source files ──► Cloud Storage bucket
                      │
         ┌────────────┼──────────────────┬───────────────────────┐
         ▼            ▼                  ▼                       ▼
-  Looker Studio   Data agent       Cloud Run app          Dataplex DQ scans
+  Looker Studio   Data agent       Cloud Run app          dbt docs (/dbt-docs)
                 (Conv. Analytics)  (React + Express)
 
   Cloud Scheduler (optional) ─► Cloud Workflows: run loader ─► run dbt ─► report status
@@ -65,7 +65,7 @@ Source files ──► Cloud Storage bucket
 | Auto Loader | Python loader as a Cloud Run job + `ops.ingest_log` |
 | Catalog `globalmart` + schemas | Project + BigQuery datasets `bronze`, `silver`, `gold`, `metrics`, `ops` |
 | Lakeflow Declarative Pipelines | dbt models, with dependencies from `ref()` |
-| Expectations | dbt tests + the `_fail_*` rule columns + Dataplex scans |
+| Expectations | dbt tests + the `_fail_*` rule columns |
 | `monotonically_increasing_id()` | `FARM_FINGERPRINT(business_key)` macro: stable keys **(improvement)** |
 | SCD Type 1 customers | SCD Type 1 for parity + SCD Type 2 (backfill model + dbt snapshot) **(improvement)** |
 | Informational PK/FK | dbt contracts with `primary_key` / `foreign_key` constraints (not enforced in BigQuery) **(improvement)** |
@@ -215,13 +215,13 @@ Each session is about 3 hours. The core build (Phases 0–8) is about **14–16 
 
 ### Phase 8: CI/CD, documentation and comparison (sessions 14–16)
 
-- [ ] Cloud Build on every push:
-  - `dbt build --select state:modified+` (build and test only what changed);
+- [x] Cloud Build on every push (`cloudbuild.yaml`, runs as `sa-cloudbuild`):
+  - `dbt build --target ci --select state:modified+ --defer` (only what changed, into `*_ci` datasets with 3-day expiry; production is untouched);
   - query contract check;
-  - build and deploy the app.
-- [ ] `dbt docs generate`, with the docs site published as a static site.
-- [ ] `gcp/README.md`, including a **teardown** section.
-- [ ] Parity report: numbers, effort, cost, and what was easier or harder on each platform. This is the outline for article 2.
+  - build and deploy the app (and the loader and dbt images), only after every test passes.
+- [x] `dbt docs generate`, with the docs site published as a static site. (Generated in CI and served by the app at `/dbt-docs`, behind the same sign-in, not as a public site.)
+- [x] `README.md`, including a **teardown** section.
+- [x] Parity report: numbers, effort, cost, and what was easier or harder on each platform. This is the outline for article 2. (`docs/parity_report.md`)
 
 ### Phase 9 (optional): Real-time orders with Pub/Sub and Dataflow (sessions 17–18)
 

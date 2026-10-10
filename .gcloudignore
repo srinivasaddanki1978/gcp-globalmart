@@ -1,0 +1,13 @@
+# Upload for `gcloud builds submit` (trigger builds clone from GitHub instead).
+.git/
+.venv/
+**/node_modules/
+**/__pycache__/
+app/dist/
+app/client/dist/
+dbt/target/
+dbt/dbt_packages/
+dbt/logs/
+terraform/
+parity/
+docs/
