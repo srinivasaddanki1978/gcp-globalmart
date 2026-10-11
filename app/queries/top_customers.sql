@@ -7,6 +7,7 @@
 -- @param payment_type STRING
 -- @param brand STRING
 -- Top 10 customers by revenue (label carries the ID so names stay distinct), current vs prior period.
+-- Names and emails are masked in gold (XXXXX@domain); real values only in silver.customer_pii.
 -- YoY % compares only months with data in both years (gold.rpt_period_months), and is NULL
 -- when fewer than half the period's months can be compared.
 WITH p AS (  -- months of the selected period; `comparable` = data in this and the prior year (like-for-like)
@@ -20,7 +21,7 @@ f AS (
     AND (@payment_type = 'All' OR payment_type = @payment_type) AND (@brand = 'All' OR brand = @brand)
 ),
 cur AS (
-  SELECT CONCAT(f.customer_name, ' · ', f.customer_id) AS customer, SUM(f.sales) AS revenue, SUM(IF(p.comparable, f.sales, 0)) AS revenue_cmp, ANY_VALUE(f.segment) AS segment, COUNT(DISTINCT f.order_id) AS orders
+  SELECT CONCAT(f.customer_name, ' · ', f.customer_id) AS customer, SUM(f.sales) AS revenue, SUM(IF(p.comparable, f.sales, 0)) AS revenue_cmp, ANY_VALUE(f.segment) AS segment, ANY_VALUE(f.customer_email) AS customer_email, COUNT(DISTINCT f.order_id) AS orders
   FROM f JOIN p ON f.month = p.month
   WHERE f.year = @target_year
   GROUP BY 1
@@ -37,6 +38,7 @@ SELECT
   ROUND(pri.revenue_prior, 2) AS revenue_prior,
   IF((SELECT COUNTIF(comparable) * 2 >= COUNTIF(has_data) FROM p), ROUND(100 * SAFE_DIVIDE(cur.revenue_cmp - pri.revenue_prior, pri.revenue_prior), 1), NULL) AS yoy_pct,
   cur.segment,
+  cur.customer_email,
   cur.orders
 FROM cur
 LEFT JOIN pri USING (customer)

@@ -62,7 +62,7 @@ export function FraudPage() {
       <p className="text-sm text-muted-foreground">
         Scored on each customer's last 12 months of returns against data-driven thresholds; {MIN_ANOMALY}+ flags them for
         review. Region and segment filters apply here; the year and period don't. Briefs are written by the UC2 fraud
-        investigator (Gemini). Names and emails are personal data.
+        investigator (Gemini). Names and emails are masked (personal data).
       </p>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Kpi label="Flagged Customers" value={flagged !== undefined ? count(flagged) : undefined} loading={rl} />

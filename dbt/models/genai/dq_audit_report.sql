@@ -22,7 +22,7 @@ enriched as (
         g.rejected_count,
         coalesce(a.bronze_count, 0) as total_entity_records,
         if(coalesce(a.bronze_count, 0) > 0, g.rejected_count / a.bronze_count * 100, 0.0) as rejection_rate,
-        to_json_string(g.samples) as sample_records
+        {{ mask_json_names('to_json_string(g.samples)') }} as sample_records  -- names masked: gold holds no PII
     from grouped as g
     left join {{ ref('pipeline_audit_log') }} as a on g.entity = a.entity
 ),

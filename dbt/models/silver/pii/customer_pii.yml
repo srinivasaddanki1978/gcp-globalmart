@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: customer_pii
+    description: "RESTRICTED. Real customer names and emails (current version) for authorised lookups by customer_id. Access is limited to principals with read access to the silver dataset (dbt, CI, project owners); consumers see masked values in gold."
+    config:
+      materialized: view
+    columns:
+      - name: customer_id
+        data_tests: [unique, not_null]

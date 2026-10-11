@@ -92,6 +92,13 @@ CI/CD: cloudbuild.yaml (trigger on push to main, sa-cloudbuild): tests ‖ dbt C
   never drop or full-refresh it.** `customer_sk` is a version key; facts join on `customer_id` and the event
   date between `valid_from`/`valid_to`, so `mv_*` views join on `customer_sk` (region as of the order). Use
   `is_current` for today's attributes. Unit tests (in `dim_customers.yml`, `fact_sales.yml`) cover it.
+- **PII is masked at the Gold boundary** (`dbt/macros/pii.sql`). Silver keeps real customer names and emails
+  (`clean_customers`, `customers_snapshot`, `silver.customer_pii` for authorised lookups); the app, dashboards and data
+  agent have no access to the `silver` dataset. `gold.dim_customers` masks them (`BrenXXXXX`, `XXXXX@gmail.com`), so
+  everything downstream inherits masked values; model-level tests on `dim_customers` and `flagged_return_customers`
+  fail the build if a real name or email reaches Gold. `rejected_records.record_data` carries no emails, data-quality
+  samples copied to Gold have names masked, and the fraud-brief prompt uses the customer ID, never the name. (BigQuery's
+  built-in dynamic masking needs the project in an organization, which this one isn't.)
 - **Gold contracts:** every Gold table has an enforced dbt contract with PK/FK constraints
   (`warn_unenforced: false`: BigQuery records but doesn't enforce them; `unique`/`relationships` tests do).
   Types must match exactly. `fact_sales` grain is `(order_id, product_id, line_seq)` (the source repeats

@@ -1,5 +1,6 @@
 -- Customer dimension, SCD Type 2: one row per customer version, built from the
--- customers_snapshot history. Facts point at the version in effect on the event
+-- customers_snapshot history. Names and emails are masked here (macros/pii.sql): gold
+-- and everything downstream never hold real PII; silver.customer_pii has the real values. Facts point at the version in effect on the event
 -- date; filter is_current for today's attributes (one row per customer_id).
 -- The first version of each customer is open from 1900-01-01, so every historical
 -- order finds a version even though tracking started with the first snapshot run.
@@ -13,8 +14,8 @@ with versions as (
 select
     {{ hash_key(['customer_id', 'dbt_valid_from']) }} as customer_sk,
     customer_id,
-    customer_name,
-    customer_email,
+    {{ mask_name('customer_name') }} as customer_name,
+    {{ mask_email('customer_email') }} as customer_email,
     segment,
     city,
     state,

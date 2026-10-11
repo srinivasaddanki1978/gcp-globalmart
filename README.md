@@ -24,7 +24,7 @@ source_data/ ──► GCS ──► Cloud Run job: Bronze loader (Python) ─�
 | Layer | Service |
 |---|---|
 | Ingestion (Bronze) | Python loader, Cloud Run job `globalmart-loader`, `ops.ingest_log` (each file loaded once) |
-| Transformations | dbt Core (`dbt-bigquery`), Cloud Run job `globalmart-dbt`: 23 quality rules defined once, enforced Gold contracts, SCD Type 2 via snapshot |
+| Transformations | dbt Core (`dbt-bigquery`), Cloud Run job `globalmart-dbt`: 23 quality rules defined once, enforced Gold contracts, SCD Type 2 via snapshot, PII masked at the Gold boundary |
 | Orchestration | Cloud Workflows `globalmart-e2e` |
 | GenAI | `AI.GENERATE` (Gemini) and `AI.EMBED` + `VECTOR_SEARCH`, inside dbt models |
 | BI / Q&A / App | Looker Studio, Conversational Analytics data agent, Cloud Run app `globalmart-app` |

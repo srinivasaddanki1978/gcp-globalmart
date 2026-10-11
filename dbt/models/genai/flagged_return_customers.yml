@@ -2,10 +2,15 @@ version: 2
 
 models:
   - name: flagged_return_customers
-    description: "UC2 fraud investigator: customers whose last 12 months of returns score >= 40 on 5 weighted rules (P85 thresholds across customers), each with a Gemini investigation brief. About 22% of scored customers are flagged. A score is a reason to review, not proof of fraud. Contains customer_name (PII)."
+    data_tests:
+      - dbt_utils.expression_is_true:   # PII guard
+          arguments: { expression: "customer_name is null or ends_with(customer_name, 'XXXXX')" }
+    description: "UC2 fraud investigator: customers whose last 12 months of returns score >= 40 on 5 weighted rules (P85 thresholds across customers), each with a Gemini investigation brief. About 22% of scored customers are flagged. A score is a reason to review, not proof of fraud. customer_name is masked."
     columns:
       - name: customer_id
         data_tests: [unique, not_null]
+      - name: customer_name
+        description: "Masked (first four characters); from gold.dim_customers."
       - name: anomaly_score
         description: "0-100: high_return_count 20, high_total_refund 25, high_avg_refund 20, high_approval_rate 15, multiple_reasons 20."
         data_tests:

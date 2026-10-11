@@ -6,7 +6,8 @@
   23 rules. `fail_if` is evaluated on the harmonised stg_ columns and
   wrapped in coalesce(..., false), so a NULL result never drops a row silently.
 
-  record_data lists the fields serialised into rejected_records.record_data,
+  record_data lists the fields serialised into rejected_records.record_data (no emails:
+  record_data samples are copied into gold.dq_audit_report, which must hold no PII),
   in order; the type controls how each value is written as text (decimal_text).
 -#}
 {% macro silver_rules() %}
@@ -20,7 +21,7 @@
             {'name': 'invalid_region',     'field': 'region',        'issue_type': 'invalid_value', 'fail_if': "region is null or region not in ('East', 'West', 'South', 'Central', 'North')"},
         ],
         'record_data': [
-            ('customer_id', 'string'), ('customer_name', 'string'), ('customer_email', 'string'),
+            ('customer_id', 'string'), ('customer_name', 'string'),
             ('segment', 'string'), ('region', 'string'), ('_raw_segment', 'string'), ('_raw_region', 'string'),
         ],
     },

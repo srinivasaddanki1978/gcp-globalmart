@@ -16,6 +16,7 @@ export function CustomersPage() {
   return (
     <div className="space-y-6 w-full max-w-7xl mx-auto">
       <DashboardHeader title="Customers" source="gold.rpt_sales_lines (customer as of the order)" />
+      <p className="text-sm text-muted-foreground">Customer names and emails are masked (personal data); authorised staff can look up real values in BigQuery.</p>
       <FilterBar />
       {error && <div className="text-destructive bg-destructive/10 p-3 rounded-md">Error: {error}</div>}
 
@@ -47,6 +48,7 @@ export function CustomersPage() {
         <ChartCard title="Top 10 Customers">
           <YoyTable queryKey="top_customers" parameters={filters} columns={[
             { key: 'customer', header: 'Customer' },
+            { key: 'customer_email', header: 'Email' },
             { key: 'segment', header: 'Segment' },
             { key: 'revenue', header: String(year), format: currency },
             { key: 'revenue_prior', header: String(year - 1), format: currency },

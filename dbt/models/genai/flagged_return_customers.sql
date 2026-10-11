@@ -1,6 +1,7 @@
 -- UC2 fraud investigator: score each customer's last 12 months of returns with 5
 -- weighted rules (thresholds = P85 across customers), flag score >= 40, and write a
--- Gemini investigation brief only for flagged customers (bounded cost).
+-- Gemini investigation brief only for flagged customers (bounded cost). The prompt uses the
+-- customer ID, never the name, so the generated text contains no PII.
 {%- set lookback_months = 12 %}
 {%- set threshold_pct = 0.85 %}
 
@@ -76,7 +77,7 @@ briefs as (
         *,
         {{ gemini(
             "concat(
-                'Customer: ', customer_name, ' (ID: ', customer_id, ')\\n',
+                'Customer ID: ', customer_id, '\\n',
                 'Segment: ', segment, ', Region: ', region, '\\n',
                 '(All figures cover the last " ~ lookback_months ~ " months of returns.)\\n\\n',
                 'Total Returns: ', cast(total_returns as string), '\\n',

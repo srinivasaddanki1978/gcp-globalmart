@@ -529,6 +529,11 @@ Look at `bronze.raw_customers`: the same customer ID sits in four different colu
 >   refund-allocation bridge. **Contracts** lock every column's name and type.
 > - `metrics/`: business aggregates. `genai/`: Gemini models. `reporting/`: one view per dashboard chart.
 >
+> **Personal data:** Silver keeps real customer names and emails, which only dbt and project owners can read.
+> Gold masks them (`BrenXXXXX`, `XXXXX@gmail.com`, `dbt/macros/pii.sql`), so the app, dashboards and data agent never
+> see the real values, and dbt tests fail the build if a real email ever reaches Gold. Authorised users look up a
+> customer in `silver.customer_pii`.
+>
 > The job runs `dbt build --target prod` (models + tests + snapshot), saves `run_results.json` to
 > `gs://<bucket>/dbt_runs/` and exits with dbt's code, so a failed test fails the job.
 
@@ -549,7 +554,8 @@ SELECT entity, bronze_count, silver_count, rejected_count, reconciliation_diff
 FROM silver.pipeline_audit_log ORDER BY entity;                          -- every diff = 0
 SELECT COUNT(*) FROM gold.dim_customers WHERE is_current AND customer_sk != -1;   -- 590
 SELECT customer_name, anomaly_score, investigation_brief
-FROM gold.flagged_return_customers ORDER BY anomaly_score DESC LIMIT 3;  -- Gemini-written briefs
+FROM gold.flagged_return_customers ORDER BY anomaly_score DESC LIMIT 3;  -- Gemini briefs; names masked
+SELECT * FROM silver.customer_pii LIMIT 3;                               -- real values (restricted)
 ```
 **Try (optional, locally):** dbt runs from your computer too, using your ADC sign-in:
 ```bash

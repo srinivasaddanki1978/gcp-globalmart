@@ -12,6 +12,11 @@ models:
     data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments: { combination_of_columns: [customer_id, valid_from] }
+      # PII guard: gold must never hold a real name or email.
+      - dbt_utils.expression_is_true:
+          arguments: { expression: "customer_email is null or starts_with(customer_email, 'XXXXX@')" }
+      - dbt_utils.expression_is_true:
+          arguments: { expression: "customer_name is null or customer_sk = -1 or ends_with(customer_name, 'XXXXX')" }
     columns:
       - name: customer_sk
         description: "Surrogate key of the customer version: FARM_FINGERPRINT(customer_id, snapshot valid-from); -1 = Unknown."
@@ -26,10 +31,10 @@ models:
           - unique:
               config: { where: "is_current" }
       - name: customer_name
-        description: "Customer full name (PII)."
+        description: "Customer name, masked to its first four characters (BrenXXXXX). Real names: silver.customer_pii (restricted)."
         data_type: string
       - name: customer_email
-        description: "Customer email (PII); NULL when no source row had one."
+        description: "Customer email with the user part masked (XXXXX@gmail.com); NULL when no source row had one. Real emails: silver.customer_pii (restricted)."
         data_type: string
       - name: segment
         description: "Consumer, Corporate or Home Office."

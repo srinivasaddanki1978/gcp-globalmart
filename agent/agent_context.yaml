@@ -37,6 +37,10 @@ system_instruction: |
     never on order_id alone (that multiplies rows). For return cost per product, SUM(allocated_refund);
     refund_amount repeats the whole refund on every line, so never sum it from the bridge.
 
+  PERSONAL DATA
+  - customer_name and customer_email are masked (e.g. AlleXXXXX, XXXXX@verizon.net). Identify customers by
+    customer_id, and say names/emails are masked if asked for them; never try to guess the real values.
+
   MEASURES
   - Revenue = SUM(fact_sales.sales). Profit = SUM(fact_sales.profit).
   - Profit margin = SUM(profit) / SUM(sales) * 100; never average per-row or per-region margins.

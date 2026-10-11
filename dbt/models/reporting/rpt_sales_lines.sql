@@ -1,5 +1,6 @@
 -- One row per sales line with every attribute the app and dashboards filter or group on.
 -- Region and segment are the customer's as of the order (SCD Type 2 version on the fact).
+-- customer_name and customer_email are masked (from gold.dim_customers).
 select
     s.sales_sk,
     s.order_id,
@@ -9,6 +10,7 @@ select
     d.month_name,
     c.customer_id,
     c.customer_name,
+    c.customer_email,
     c.region,
     c.segment,
     c.state,
