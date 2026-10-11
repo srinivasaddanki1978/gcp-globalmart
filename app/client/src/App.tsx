@@ -1,4 +1,4 @@
-import { createBrowserRouter, Link, NavLink, Outlet, RouterProvider } from 'react-router';
+import { createBrowserRouter, Link, NavLink, Outlet, RouterProvider, useRouteError } from 'react-router';
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './lib/ui';
 import { AnalyticsPage } from './pages/analytics/AnalyticsPage';
@@ -89,9 +89,24 @@ function HomePage() {
   );
 }
 
+/** Shown instead of the router's developer screen if a page crashes. */
+function ErrorPage() {
+  const error = useRouteError() as Error | undefined;
+  return (
+    <div className="max-w-2xl mx-auto mt-16 space-y-4 p-6">
+      <h2 className="text-2xl font-bold">Something went wrong on this page</h2>
+      <p className="text-muted-foreground">
+        The rest of the app still works. Go back <Link to="/" className="underline">home</Link> or reload the page.
+      </p>
+      {error?.message && <pre className="rounded bg-muted p-3 text-xs overflow-x-auto">{error.message}</pre>}
+    </div>
+  );
+}
+
 const router = createBrowserRouter([
   {
     element: <Layout />,
+    errorElement: <ErrorPage />,
     children: [
       { path: '/', element: <HomePage /> },
       { path: '/trends', element: <TrendsPage /> },

@@ -25,7 +25,11 @@ export function AskPage() {
   const conversationId = useRef<string | undefined>(undefined);
   const end = useRef<HTMLDivElement>(null);
 
-  useEffect(() => end.current?.scrollIntoView({ behavior: 'smooth' }), [turns]);
+  // Braces matter: an effect must return nothing or a cleanup function. scrollIntoView
+  // returns a Promise in recent browsers, which React would try to call on unmount.
+  useEffect(() => {
+    end.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [turns]);
 
   async function ask(question: string) {
     if (!question.trim() || busy) return;
