@@ -1,6 +1,7 @@
 // Query allowlist: only files in queries/*.sql can run. Each declares its parameters
-// in a header (`-- @param name INT64`), and requests are validated against it before
-// the SQL runs as a BigQuery named-parameter query (@name).
+// in a header (`-- @param name INT64`, or `-- @param period STRING FY|Q1|Q2|Q3|Q4|YTD` to
+// restrict the allowed values), and requests are validated against it before the SQL
+// runs as a BigQuery named-parameter query (@name).
 import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { BigQuery, type Query } from '@google-cloud/bigquery';
@@ -10,7 +11,15 @@ export interface QueryDef {
   key: string;
   sql: string;
   params: Record<string, ParamType>;
+  allowed: Record<string, string[]>; // enumerated values, when declared
 }
+
+/** Dashboard filters the client sends with every query. A query that doesn't declare one
+ *  simply ignores it; any other undeclared parameter is rejected. */
+export const FILTER_PARAMS = new Set([
+  'target_year', 'period', 'region', 'segment', 'vendor', 'ship_mode', 'payment_type', 'brand',
+  'return_reason', 'return_status', 'min_anomaly', 'min_orders', 'min_quantity',
+]);
 
 export class QueryError extends Error {
   constructor(
@@ -21,12 +30,16 @@ export class QueryError extends Error {
   }
 }
 
-const PARAM_HEADER = /^--\s*@param\s+(\w+)\s+(INT64|FLOAT64|STRING|BOOL)\s*$/gm;
+const PARAM_HEADER = /^--\s*@param\s+(\w+)\s+(INT64|FLOAT64|STRING|BOOL)(?:\s+([\w|]+))?\s*$/gm;
 
 export function parseQuery(key: string, sql: string): QueryDef {
   const params: Record<string, ParamType> = {};
-  for (const m of sql.matchAll(PARAM_HEADER)) params[m[1]] = m[2] as ParamType;
-  return { key, sql, params };
+  const allowed: Record<string, string[]> = {};
+  for (const m of sql.matchAll(PARAM_HEADER)) {
+    params[m[1]] = m[2] as ParamType;
+    if (m[3]) allowed[m[1]] = m[3].split('|');
+  }
+  return { key, sql, params, allowed };
 }
 
 export function loadQueries(dir: string): Map<string, QueryDef> {
@@ -42,7 +55,7 @@ export function loadQueries(dir: string): Map<string, QueryDef> {
 export function validateParams(def: QueryDef, input: unknown): Record<string, number | string | boolean> {
   const given = (input ?? {}) as Record<string, unknown>;
   if (typeof given !== 'object' || Array.isArray(given)) throw new QueryError('parameters must be an object');
-  const unknown = Object.keys(given).filter((k) => !(k in def.params));
+  const unknown = Object.keys(given).filter((k) => !(k in def.params) && !FILTER_PARAMS.has(k));
   if (unknown.length) throw new QueryError(`unknown parameter(s): ${unknown.join(', ')}`);
 
   const out: Record<string, number | string | boolean> = {};
@@ -55,6 +68,8 @@ export function validateParams(def: QueryDef, input: unknown): Record<string, nu
       (type === 'STRING' && typeof v === 'string' && v.length <= 200) ||
       (type === 'BOOL' && typeof v === 'boolean');
     if (!ok) throw new QueryError(`parameter ${name} must be ${type}`);
+    if (def.allowed[name] && !def.allowed[name].includes(String(v)))
+      throw new QueryError(`parameter ${name} must be one of ${def.allowed[name].join(', ')}`);
     out[name] = v as number | string | boolean;
   }
   return out;

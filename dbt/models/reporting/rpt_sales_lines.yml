@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: rpt_sales_lines
+    description: "One row per sales line with date, customer region/segment/state (as of the order), vendor, product, brand, ship mode, payment type and whether the order had a return. Base for app queries and dashboard filters."
+    columns:
+      - name: sales_sk
+        data_tests: [unique, not_null]
+      - name: order_has_return
+        description: "True if the order has a return (order cohort; used for vendor return rates)."

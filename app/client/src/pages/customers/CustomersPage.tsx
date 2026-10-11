@@ -1,125 +1,56 @@
-import { useAnalyticsQuery, BarChart, DonutChart, Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, sql } from '../../lib/components';
-import { useState } from 'react';
-
+import { BarChart, useAnalyticsQuery } from '../../lib/components';
+import { FilterBar } from '../../components/FilterBar';
+import { YoyTable } from '../../components/YoyTable';
+import { comparisonNote, useFilters, yoyDelta } from '../../lib/filters';
 import { ChartCard, DashboardHeader, Kpi, count, currency } from '../shared/dashboard-ui';
-import { YEARS, DEFAULT_YEAR } from '../shared/years';
 
-
-/** flagged_return_customers scores run 0-100; 1 keeps every flagged row. */
-const MIN_ANOMALY = 1;
-
+/** Active customers by region, segment and state, with year-over-year changes. */
 export function CustomersPage() {
-  const [year, setYear] = useState<number>(DEFAULT_YEAR);
-  const parameters = { target_year: sql.number(year) };
-  const flaggedParams = { min_anomaly: sql.number(MIN_ANOMALY) };
-
-  const { data: summary, loading, error } = useAnalyticsQuery('customer_summary', parameters);
-  const { data: flagged } = useAnalyticsQuery('flagged_by_region', flaggedParams);
-  const totals = summary?.[0];
-  const flaggedCount = flagged?.reduce((sum, r) => sum + Number(r.flagged_customers), 0);
+  const { filters } = useFilters();
+  const year = filters.target_year;
+  const { data, loading, error } = useAnalyticsQuery('kpi_yoy', filters);
+  const k = data?.[0];
+  const note = comparisonNote(k);
+  const perCustomer = k && k.customers ? k.revenue / k.customers : undefined;
 
   return (
     <div className="space-y-6 w-full max-w-7xl mx-auto">
-      <DashboardHeader
-        title="Customers"
-        source="gold.dim_customers + fact_sales + flagged_return_customers"
-      >
-        <div className="space-y-2 w-48">
-          <Label htmlFor="customer-year">Year</Label>
-          <Select value={year.toString()} onValueChange={(value) => setYear(parseInt(value))}>
-            <SelectTrigger id="customer-year">
-              <SelectValue placeholder="Select year" />
-            </SelectTrigger>
-            <SelectContent>
-              {YEARS.map((y) => (
-                <SelectItem key={y} value={y.toString()}>
-                  {y}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </DashboardHeader>
+      <DashboardHeader title="Customers" source="gold.rpt_sales_lines (customer as of the order)" />
+      <FilterBar />
+      {error && <div className="text-destructive bg-destructive/10 p-3 rounded-md">Error: {error}</div>}
 
-      {error && (
-        <div className="text-destructive bg-destructive/10 p-3 rounded-md">Error: {error}</div>
-      )}
-
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Kpi label="Active Customers" value={totals && count(totals.customers)} loading={loading} />
-        <Kpi label="Total Sales" value={totals && currency(totals.total_sales)} loading={loading} />
-        <Kpi
-          label="Avg Order Value"
-          value={totals && currency(totals.avg_order_value)}
-          loading={loading}
-        />
-        <Kpi
-          label="Flagged for Returns"
-          value={flaggedCount !== undefined ? count(flaggedCount) : undefined}
-          loading={loading}
-        />
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <Kpi label="Active Customers" value={k && count(k.customers)} delta={yoyDelta(k, k?.customers_yoy)} note={note} loading={loading} />
+        <Kpi label="Revenue" value={k && currency(k.revenue)} delta={yoyDelta(k, k?.revenue_yoy)} note={note} loading={loading} />
+        <Kpi label="Revenue per Customer" value={perCustomer !== undefined ? currency(perCustomer) : undefined} loading={loading} />
+        <Kpi label="Avg Order Value" value={k && currency(k.aov)} delta={yoyDelta(k, k?.aov_yoy)} note={note} loading={loading} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <ChartCard title="Customers by Region">
-          <BarChart
-            queryKey="customers_by_region"
-            parameters={parameters}
-            xKey="region"
-            yKey="customers"
-            valueFormatter={count}
-          />
+        <ChartCard title={`Active Customers by Region: ${year} vs ${year - 1}`}>
+          <BarChart queryKey="customers_by_region" parameters={filters} xKey="region" yKey={['customers', 'customers_prior']}
+            labels={{ customers: String(year), customers_prior: String(year - 1) }} dashed={['customers_prior']} valueFormatter={count} showLegend />
         </ChartCard>
-
-        <ChartCard title="Sales by Customer Segment">
-          <DonutChart
-            queryKey="customers_by_segment"
-            parameters={parameters}
-            xKey="segment"
-            yKey="total_sales"
-            valueFormatter={currency}
-            showLegend
-          />
+        <ChartCard title="Segments">
+          <YoyTable queryKey="customers_by_segment" parameters={filters} columns={[
+            { key: 'segment', header: 'Segment' },
+            { key: 'customers', header: 'Customers', format: count },
+            { key: 'yoy_pct', header: 'YoY', change: {} },
+            { key: 'revenue', header: 'Revenue', format: currency },
+            { key: 'avg_order_value', header: 'Avg order', format: currency },
+          ]} />
         </ChartCard>
-
-        <ChartCard title="Avg Order Value by Segment">
-          <BarChart
-            queryKey="customers_by_segment"
-            parameters={parameters}
-            xKey="segment"
-            yKey="avg_order_value"
-            valueFormatter={currency}
-          />
+        <ChartCard title={`Top 10 States: ${year} vs ${year - 1}`}>
+          <BarChart queryKey="top_states" parameters={filters} xKey="state" yKey={['revenue', 'revenue_prior']}
+            labels={{ revenue: String(year), revenue_prior: String(year - 1) }} dashed={['revenue_prior']} valueFormatter={currency} showLegend />
         </ChartCard>
-
-        <ChartCard title="Flagged Return Customers by Region">
-          <BarChart
-            queryKey="flagged_by_region"
-            parameters={flaggedParams}
-            xKey="region"
-            yKey="flagged_customers"
-            valueFormatter={count}
-          />
-        </ChartCard>
-
-        <ChartCard title="Top 10 States by Sales" wide>
-          <BarChart
-            queryKey="top_states"
-            parameters={parameters}
-            xKey="state"
-            yKey="total_sales"
-            valueFormatter={currency}
-          />
-        </ChartCard>
-
-        <ChartCard title="Top 10 Customers by Spend" wide>
-          <BarChart
-            queryKey="top_customers"
-            parameters={parameters}
-            xKey="customer_name"
-            yKey="total_sales"
-            valueFormatter={currency}
-          />
+        <ChartCard title="Top 10 Customers">
+          <YoyTable queryKey="top_customers" parameters={filters} columns={[
+            { key: 'customer', header: 'Customer' },
+            { key: 'segment', header: 'Segment' },
+            { key: 'revenue', header: String(year), format: currency },
+            { key: 'revenue_prior', header: String(year - 1), format: currency },
+          ]} />
         </ChartCard>
       </div>
     </div>

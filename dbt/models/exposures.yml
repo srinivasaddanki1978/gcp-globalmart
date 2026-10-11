@@ -54,16 +54,18 @@ exposures:
     type: application
     maturity: medium
     url: https://globalmart-app-jqr6ihpqca-uc.a.run.app  # authenticated; open via `gcloud run services proxy globalmart-app --region=us-central1`
-    description: "React + Express dashboard (9 pages over 27 allowlisted queries in app/queries) plus the Ask page on the data agent. app/scripts/check-queries.ts dry-runs every query so a Gold change that breaks the app fails CI."
+    description: "React + Express dashboard (9 pages with global filters and year-over-year comparisons over allowlisted queries in app/queries) plus the Ask page on the data agent. app/scripts/check-queries.ts dry-runs every query so a Gold change that breaks the app fails CI."
     owner: { name: Srinivas Addanki }
     depends_on:
       - ref('ai_business_insights')
-      - ref('bridge_return_products')
       - ref('dim_customers')
       - ref('dim_products')
+      - ref('dim_vendors')
       - ref('dq_audit_report')
-      - ref('fact_sales')
+      - ref('fact_returns')
       - ref('flagged_return_customers')
-      - ref('mv_return_rate_by_vendor')
-      - ref('mv_revenue_by_region')
       - ref('mv_slow_moving_products')
+      - ref('rpt_period_months')
+      - ref('rpt_return_lines')
+      - ref('rpt_return_product_lines')
+      - ref('rpt_sales_lines')

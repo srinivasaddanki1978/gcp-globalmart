@@ -692,6 +692,11 @@ signed in):
    > where nothing is listening, so the browser shows **"127.0.0.1 refused to connect"**. Web
    > Preview is what routes your browser into Cloud Shell.
 4. Press **Ctrl+C** in Cloud Shell to stop. Run step 2 again whenever you want to reopen the app.
+**Try the filters:** the bar at the top of each page sets the year, period (full year, a quarter or
+year to date), region, segment and vendor, plus page filters such as ship mode or brand. KPI cards show
+▲/▼ against the **same months of the previous year**, and charts draw last year in grey. The filters are
+kept in the address bar, so you can bookmark or share a filtered view.
+
 **Check:** the dashboard pages load, your email shows in the top-right corner, and the **Ask** page
 answers questions. Opening the service URL directly without signing in returns **403**: that's
 authentication working. To let a friend in:

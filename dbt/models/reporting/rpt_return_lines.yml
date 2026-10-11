@@ -1,0 +1,8 @@
+version: 2
+
+models:
+  - name: rpt_return_lines
+    description: "One row per return, dated by the return date, with customer region/segment, vendor, reason, status and refund. Base for return KPIs and year-over-year comparisons."
+    columns:
+      - name: return_sk
+        data_tests: [unique, not_null]

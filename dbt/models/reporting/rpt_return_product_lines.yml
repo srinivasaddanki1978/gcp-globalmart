@@ -1,0 +1,8 @@
+version: 2
+
+models:
+  - name: rpt_return_product_lines
+    description: "Each return's refund allocated to its order lines (bridge), with the sale's product, brand, region, segment and vendor; dated by the return date. Sum allocated_refund for return cost."
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments: { combination_of_columns: [return_sk, sales_sk] }

@@ -45,6 +45,14 @@ report-wide (*Make report-level*).
 
 The year filter only affects charts whose data source has a `year` field (the Revenue page).
 
+## Year-over-year in Looker Studio (optional)
+
+For filters and YoY like the web app, add `gold.rpt_sales_lines` (one row per sales line with year, month,
+region, segment, vendor, brand, ship mode, payment type) as a data source. Use Looker Studio's
+**comparison date range** with a date built from `year` and `month`, or blend with
+`gold.rpt_period_months`, which marks for each year and period which months are comparable with the
+previous year. 2016 has only October and 2026 runs to September, so compare like for like.
+
 ## 3. Record it
 
 Share the report as needed, then paste its URL into `dbt/models/exposures.yml`

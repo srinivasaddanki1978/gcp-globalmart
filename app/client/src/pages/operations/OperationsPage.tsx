@@ -1,118 +1,62 @@
-import { useAnalyticsQuery, BarChart, DonutChart, sql } from '../../lib/components';
-
+import { BarChart, useAnalyticsQuery } from '../../lib/components';
+import { FilterBar, FilterSelect, useFilterOptions } from '../../components/FilterBar';
+import { YoyTable } from '../../components/YoyTable';
+import { useFilters } from '../../lib/filters';
 import { ChartCard, DashboardHeader, Kpi, count, currency, percent } from '../shared/dashboard-ui';
 
-/** Vendors below this order count are too small to judge on return rate. */
-const MIN_ORDERS = 100;
 /** Slow movers that never shipped a unit aren't actionable. */
 const MIN_QUANTITY = 1;
 
+/** Vendor return rates (with YoY change) and inventory tied up in slow movers. */
 export function OperationsPage() {
-  const vendorParams = { min_orders: sql.number(MIN_ORDERS) };
-  const slowParams = { min_quantity: sql.number(MIN_QUANTITY) };
-
-  const { data: vendors, loading: vendorsLoading, error: vendorsError } = useAnalyticsQuery(
-    'vendor_returns',
-    vendorParams,
-  );
-  const { data: regions, loading: regionsLoading, error: regionsError } = useAnalyticsQuery(
-    'slow_moving_by_region',
-    slowParams,
-  );
-
-  const worstVendor = vendors?.[0];
-  const totalRefunded = vendors?.reduce((sum, v) => sum + Number(v.total_refunded), 0);
-  const slowCount = regions?.reduce((sum, r) => sum + Number(r.product_count), 0);
-  const slowValue = regions?.reduce((sum, r) => sum + Number(r.total_sales), 0);
-
-  const error = vendorsError || regionsError;
-  const loading = vendorsLoading || regionsLoading;
+  const { filters } = useFilters();
+  const options = useFilterOptions();
+  const year = filters.target_year;
+  const params = { ...filters, min_quantity: MIN_QUANTITY };
+  const { data: vendors, loading: vl, error: ve } = useAnalyticsQuery('vendor_return_yoy', params);
+  const { data: regions, loading: rl, error: re } = useAnalyticsQuery('slow_moving_by_region', params);
+  const worst = vendors?.[0];
+  const returned = vendors?.reduce((s, v) => s + Number(v.returned_orders), 0);
+  const slowCount = regions?.reduce((s, r) => s + Number(r.product_count), 0);
+  const slowValue = regions?.reduce((s, r) => s + Number(r.total_sales), 0);
+  const error = ve || re;
 
   return (
     <div className="space-y-6 w-full max-w-7xl mx-auto">
-      <DashboardHeader
-        title="Operations"
-        source="gold.mv_return_rate_by_vendor + mv_slow_moving_products"
-      />
+      <DashboardHeader title="Operations" source="gold.rpt_sales_lines + mv_slow_moving_products" />
+      <FilterBar>
+        <FilterSelect name="brand" label="Brand" options={options('brand')} />
+      </FilterBar>
+      {error && <div className="text-destructive bg-destructive/10 p-3 rounded-md">Error: {error}</div>}
 
-      {error && (
-        <div className="text-destructive bg-destructive/10 p-3 rounded-md">Error: {error}</div>
-      )}
-
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Kpi
-          label="Worst Return Rate"
-          value={worstVendor && percent(worstVendor.return_rate_pct)}
-          loading={loading}
-        />
-        <Kpi
-          label="Total Refunded"
-          value={totalRefunded !== undefined ? currency(totalRefunded) : undefined}
-          loading={loading}
-        />
-        <Kpi
-          label="Slow-Moving Products"
-          value={slowCount !== undefined ? count(slowCount) : undefined}
-          loading={loading}
-        />
-        <Kpi
-          label="Value Tied Up"
-          value={slowValue !== undefined ? currency(slowValue) : undefined}
-          loading={loading}
-        />
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <Kpi label={`Highest Return Rate${worst ? ` · ${worst.vendor_name}` : ''}`} value={worst && percent(worst.return_rate_pct)}
+          delta={worst?.change_pts} deltaSuffix=" pts" invert note={`vs ${year - 1}`} loading={vl} />
+        <Kpi label="Orders Returned" value={returned !== undefined ? count(returned) : undefined} note={`orders placed in ${year}`} loading={vl} />
+        <Kpi label="Slow-Moving Products" value={slowCount !== undefined ? count(slowCount) : undefined} note="all history" loading={rl} />
+        <Kpi label="Value Tied Up" value={slowValue !== undefined ? currency(slowValue) : undefined} note="all history" loading={rl} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <ChartCard title="Return Rate by Vendor">
-          <BarChart
-            queryKey="vendor_returns"
-            parameters={vendorParams}
-            xKey="vendor_name"
-            yKey="return_rate_pct"
-            valueFormatter={percent}
-          />
+        <ChartCard title={`Vendor Return Rate: ${year} vs ${year - 1}`}>
+          <BarChart queryKey="vendor_return_yoy" parameters={params} xKey="vendor_name" yKey={['return_rate_pct', 'return_rate_pct_prior']}
+            labels={{ return_rate_pct: String(year), return_rate_pct_prior: String(year - 1) }} dashed={['return_rate_pct_prior']}
+            valueFormatter={percent} showLegend />
         </ChartCard>
-
-        <ChartCard title="Sales vs Refunded by Vendor">
-          <BarChart
-            queryKey="vendor_returns"
-            parameters={vendorParams}
-            xKey="vendor_name"
-            yKey={['total_sales', 'total_refunded']}
-            valueFormatter={currency}
-            showLegend
-          />
+        <ChartCard title="Vendors: Is Anyone Getting Worse?">
+          <YoyTable queryKey="vendor_return_yoy" parameters={params} columns={[
+            { key: 'vendor_name', header: 'Vendor' },
+            { key: 'orders', header: 'Orders', format: count },
+            { key: 'return_rate_pct', header: String(year), format: percent },
+            { key: 'return_rate_pct_prior', header: String(year - 1), format: percent },
+            { key: 'change_pts', header: 'Change', change: { suffix: ' pts', invert: true } },
+          ]} />
         </ChartCard>
-
-        <ChartCard title="Slow-Moving Products by Region">
-          <BarChart
-            queryKey="slow_moving_by_region"
-            parameters={slowParams}
-            xKey="region"
-            yKey="product_count"
-            valueFormatter={count}
-          />
+        <ChartCard title="Slow-Moving Products by Region (all history)">
+          <BarChart queryKey="slow_moving_by_region" parameters={params} xKey="region" yKey="product_count" valueFormatter={count} />
         </ChartCard>
-
-        <ChartCard title="Tied-Up Value by Region">
-          <DonutChart
-            queryKey="slow_moving_by_region"
-            parameters={slowParams}
-            xKey="region"
-            yKey="total_sales"
-            valueFormatter={currency}
-            showLegend
-          />
-        </ChartCard>
-
-        <ChartCard title="Top 10 Brands by Slow-Moving Count" wide>
-          <BarChart
-            queryKey="slow_moving_by_brand"
-            parameters={slowParams}
-            xKey="brand"
-            yKey="product_count"
-            valueFormatter={count}
-          />
+        <ChartCard title="Brands with Most Slow Movers (all history)">
+          <BarChart queryKey="slow_moving_by_brand" parameters={params} xKey="brand" yKey="product_count" valueFormatter={count} />
         </ChartCard>
       </div>
     </div>

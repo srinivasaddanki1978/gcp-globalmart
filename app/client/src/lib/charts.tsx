@@ -34,11 +34,22 @@ interface ChartProps {
   showLegend?: boolean;
   /** Line charts: draw a marker at each point. */
   showSymbol?: boolean;
+  /** Display names for series, e.g. { revenue: '2025', revenue_prior: '2024' }. */
+  labels?: Record<string, string>;
+  /** Series drawn dashed (lines) or faded (bars/areas), e.g. the prior year. */
+  dashed?: string[];
   height?: number;
 }
 
 const label = (k: string) => k.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+const seriesName = (p: ChartProps, k: string) => p.labels?.[k] ?? label(k);
 const compact = (v: number) => Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 }).format(v);
+
+/** Comparison series (the prior year) are grey, so "this year vs last year" reads at a glance. */
+const PRIOR = '#94a3b8';
+function color(p: ChartProps, k: string, i: number) {
+  return p.dashed?.includes(k) ? PRIOR : PALETTE[i % PALETTE.length];
+}
 
 function useChartData({ queryKey, parameters }: ChartProps) {
   const { data, loading, error } = useAnalyticsQuery(queryKey, parameters);
@@ -68,8 +79,8 @@ function cartesian(kind: 'bar' | 'line' | 'area', props: ChartProps) {
       <CartesianGrid strokeDasharray="3 3" vertical={false} />
       <XAxis dataKey={props.xKey} tick={{ fontSize: 12 }} interval="preserveStartEnd" />
       <YAxis tickFormatter={compact} tick={{ fontSize: 12 }} width={56} />
-      <Tooltip formatter={(v) => fmt(Number(v))} />
-      {props.showLegend && <Legend formatter={label} />}
+      <Tooltip formatter={(v) => (v === null || v === undefined ? '—' : fmt(Number(v)))} />
+      {props.showLegend && <Legend itemSorter={() => 0} />}  {/* keep series order, not alphabetical */}
     </>
   );
   const Chart = kind === 'bar' ? RBar : kind === 'line' ? RLine : RArea;
@@ -79,11 +90,11 @@ function cartesian(kind: 'bar' | 'line' | 'area', props: ChartProps) {
         {common}
         {keys.map((k, i) =>
           kind === 'bar' ? (
-            <Bar key={k} dataKey={k} name={k} fill={PALETTE[i % PALETTE.length]} radius={[3, 3, 0, 0]} isAnimationActive={false} />
+            <Bar key={k} dataKey={k} name={seriesName(props, k)} fill={color(props, k, i)} fillOpacity={props.dashed?.includes(k) ? 0.7 : 1} radius={[3, 3, 0, 0]} isAnimationActive={false} />
           ) : kind === 'line' ? (
-            <Line key={k} dataKey={k} name={k} stroke={PALETTE[i % PALETTE.length]} strokeWidth={2} dot={props.showSymbol ? { r: 3 } : false} isAnimationActive={false} />
+            <Line key={k} dataKey={k} name={seriesName(props, k)} stroke={color(props, k, i)} strokeWidth={2} strokeDasharray={props.dashed?.includes(k) ? '6 4' : undefined} dot={props.showSymbol ? { r: 3 } : false} connectNulls={false} isAnimationActive={false} />
           ) : (
-            <Area key={k} dataKey={k} name={k} stroke={PALETTE[i % PALETTE.length]} fill={PALETTE[i % PALETTE.length]} fillOpacity={0.15} isAnimationActive={false} />
+            <Area key={k} dataKey={k} name={seriesName(props, k)} stroke={color(props, k, i)} strokeDasharray={props.dashed?.includes(k) ? '6 4' : undefined} fill={color(props, k, i)} fillOpacity={props.dashed?.includes(k) ? 0.05 : 0.15} isAnimationActive={false} />
           ),
         )}
       </Chart>

@@ -1,73 +1,46 @@
-import { useAnalyticsQuery, BarChart, LineChart } from '../../lib/components';
+import { BarChart, LineChart } from '../../lib/components';
+import { FilterBar } from '../../components/FilterBar';
+import { YoyTable } from '../../components/YoyTable';
+import { useFilters } from '../../lib/filters';
+import { ChartCard, DashboardHeader, count, currency, percent } from '../shared/dashboard-ui';
 
-import { ChartCard, DashboardHeader, Kpi, count, currency, percent } from '../shared/dashboard-ui';
-import { DEFAULT_YEAR } from '../shared/years';
+const pct = (v: number) => `${v > 0 ? '+' : ''}${v.toFixed(1)}%`;
 
-const NO_PARAMS: Record<string, never> = {};
-
+/** Ten years at a glance, with like-for-like year-over-year growth. */
 export function TrendsPage() {
-  const { data: years, loading, error } = useAnalyticsQuery('revenue_trend', NO_PARAMS);
-
-  const total = years?.reduce((sum, y) => sum + Number(y.total_sales), 0);
-  const latest = years?.find((y) => Number(y.year) === DEFAULT_YEAR);
-  const previous = years?.find((y) => Number(y.year) === DEFAULT_YEAR - 1);
-  const growth =
-    latest && previous
-      ? ((Number(latest.total_sales) - Number(previous.total_sales)) / Number(previous.total_sales)) * 100
-      : undefined;
-  const ytd = years?.find((y) => Number(y.year) === DEFAULT_YEAR + 1);
-
+  const { filters } = useFilters();
   return (
     <div className="space-y-6 w-full max-w-7xl mx-auto">
-      <DashboardHeader title="Trends 2016 – 2026" source="gold.mv_revenue_by_region" />
-
-      {error && (
-        <div className="text-destructive bg-destructive/10 p-3 rounded-md">Error: {error}</div>
-      )}
-
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Kpi label="Revenue, all years" value={total !== undefined ? currency(total) : undefined} loading={loading} />
-        <Kpi label={`Revenue ${DEFAULT_YEAR}`} value={latest && currency(latest.total_sales)} loading={loading} />
-        <Kpi
-          label={`Growth vs ${DEFAULT_YEAR - 1}`}
-          value={growth !== undefined ? percent(growth) : undefined}
-          loading={loading}
-        />
-        <Kpi label={`${DEFAULT_YEAR + 1} to date (Jan–Sep)`} value={ytd && currency(ytd.total_sales)} loading={loading} />
-      </div>
-
+      <DashboardHeader title="Trends 2016 – 2026" source="gold.rpt_sales_lines" />
+      <FilterBar show={['region', 'segment', 'vendor']} />
+      <p className="text-sm text-muted-foreground">
+        Growth compares each year with the previous one over the months both have data. 2016 has only October, so 2017
+        has no annual growth figure; 2026 runs to September and is compared with January–September 2025.
+      </p>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <ChartCard title="Revenue and Profit by Year" wide>
-          <LineChart
-            queryKey="revenue_trend"
-            parameters={NO_PARAMS}
-            xKey="year"
-            yKey={['total_sales', 'total_profit']}
-            valueFormatter={currency}
-            showLegend
-            showSymbol
-          />
+          <LineChart queryKey="revenue_trend" parameters={filters} xKey="year" yKey={['total_sales', 'total_profit']}
+            labels={{ total_sales: 'Revenue', total_profit: 'Profit' }} valueFormatter={currency} showLegend showSymbol />
         </ChartCard>
-
+        <ChartCard title="Year-over-Year Revenue Growth (like-for-like)">
+          <BarChart queryKey="revenue_trend" parameters={filters} xKey="year" yKey="yoy_pct" labels={{ yoy_pct: 'YoY growth' }} valueFormatter={pct} />
+        </ChartCard>
+        <ChartCard title="Margin by Year">
+          <LineChart queryKey="revenue_trend" parameters={filters} xKey="year" yKey="margin_pct" labels={{ margin_pct: 'Margin' }} valueFormatter={percent} showSymbol />
+        </ChartCard>
         <ChartCard title="Revenue by Region and Year" wide>
-          <LineChart
-            queryKey="revenue_trend_by_region"
-            parameters={NO_PARAMS}
-            xKey="year"
-            yKey={['west', 'east', 'central', 'south', 'north']}
-            valueFormatter={currency}
-            showLegend
-          />
+          <LineChart queryKey="revenue_trend_by_region" parameters={filters} xKey="year" yKey={['east', 'west', 'south', 'central', 'north']}
+            valueFormatter={currency} showLegend showSymbol />
         </ChartCard>
-
-        <ChartCard title="Orders by Year" wide>
-          <BarChart
-            queryKey="revenue_trend"
-            parameters={NO_PARAMS}
-            xKey="year"
-            yKey="order_count"
-            valueFormatter={count}
-          />
+        <ChartCard title="Yearly Summary" wide>
+          <YoyTable queryKey="revenue_trend" parameters={filters} columns={[
+            { key: 'year', header: 'Year' },
+            { key: 'total_sales', header: 'Revenue', format: currency },
+            { key: 'total_profit', header: 'Profit', format: currency },
+            { key: 'margin_pct', header: 'Margin', format: percent },
+            { key: 'order_count', header: 'Orders', format: count },
+            { key: 'yoy_pct', header: 'YoY growth', change: {} },
+          ]} />
         </ChartCard>
       </div>
     </div>

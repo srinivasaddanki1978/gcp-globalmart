@@ -1,4 +1,5 @@
-import { createBrowserRouter, Link, NavLink, Outlet, RouterProvider, useRouteError } from 'react-router';
+import { createBrowserRouter, Link, NavLink, Outlet, RouterProvider, useLocation, useRouteError } from 'react-router';
+import { globalSearch } from './lib/filters';
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './lib/ui';
 import { AnalyticsPage } from './pages/analytics/AnalyticsPage';
@@ -12,13 +13,13 @@ import { SalesPage } from './pages/sales/SalesPage';
 import { TrendsPage } from './pages/trends/TrendsPage';
 
 const SECTIONS = [
-  { to: '/trends', nav: 'Trends', title: 'Trends 2016 – 2026', text: 'Ten years of revenue, profit and orders, overall and by region.' },
-  { to: '/analytics', nav: 'Revenue', title: 'Revenue', text: 'Revenue audit for a single year: totals, regions and months.' },
+  { to: '/trends', nav: 'Trends', title: 'Trends 2016 – 2026', text: 'Ten years of revenue, profit and margin with like-for-like year-over-year growth.' },
+  { to: '/analytics', nav: 'Revenue', title: 'Revenue', text: 'Any year or quarter vs the year before: KPIs, months, regions and segments.' },
   { to: '/sales', nav: 'Sales', title: 'Sales', text: 'Brands, segments, ship modes and payment methods.' },
   { to: '/products', nav: 'Products', title: 'Products', text: 'Catalogue breadth vs revenue, top sellers, slow movers.' },
   { to: '/customers', nav: 'Customers', title: 'Customers', text: 'Deduplicated customer base by region and segment.' },
   { to: '/operations', nav: 'Operations', title: 'Operations', text: 'Vendor return rates and inventory tied up in slow movers.' },
-  { to: '/fraud', nav: 'Fraud', title: 'Returns Fraud', text: 'Customers flagged for review, with AI investigation briefs.' },
+  { to: '/fraud', nav: 'Returns', title: 'Returns & Fraud', text: 'Returns vs last year, and customers flagged for review with AI briefs.' },
   { to: '/insights', nav: 'AI Insights', title: 'AI Insights', text: 'Gemini executive summaries and data-quality explanations.' },
   { to: '/ask', nav: 'Ask', title: 'Ask GlobalMart', text: 'Ask questions about the data in plain English.' },
 ];
@@ -30,6 +31,8 @@ const linkClass = ({ isActive }: { isActive: boolean }) =>
 
 function Layout() {
   const [email, setEmail] = useState<string | null>(null);
+  // Global filters (year, period, region, segment, vendor) follow you between pages.
+  const search = globalSearch(new URLSearchParams(useLocation().search));
   useEffect(() => {
     fetch('/api/me')
       .then((r) => r.json())
@@ -43,11 +46,11 @@ function Layout() {
           GlobalMart
         </Link>
         <nav className="flex flex-wrap gap-1">
-          <NavLink to="/" end className={linkClass}>
+          <NavLink to={{ pathname: '/', search }} end className={linkClass}>
             Home
           </NavLink>
           {SECTIONS.map((s) => (
-            <NavLink key={s.to} to={s.to} className={linkClass}>
+            <NavLink key={s.to} to={{ pathname: s.to, search }} className={linkClass}>
               {s.nav}
             </NavLink>
           ))}

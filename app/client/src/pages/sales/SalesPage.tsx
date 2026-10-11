@@ -1,102 +1,65 @@
-import { useAnalyticsQuery, BarChart, DonutChart, Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, sql } from '../../lib/components';
-import { useState } from 'react';
-
+import { BarChart, DonutChart, useAnalyticsQuery } from '../../lib/components';
+import { FilterBar, FilterSelect, useFilterOptions } from '../../components/FilterBar';
+import { YoyTable } from '../../components/YoyTable';
+import { comparisonNote, useFilters, yoyDelta } from '../../lib/filters';
 import { ChartCard, DashboardHeader, Kpi, count, currency, percent } from '../shared/dashboard-ui';
-import { YEARS, DEFAULT_YEAR } from '../shared/years';
 
-
+/** Sales mix (segments, shipping, payment, brands) with year-over-year changes. */
 export function SalesPage() {
-  const [year, setYear] = useState<number>(DEFAULT_YEAR);
-  const parameters = { target_year: sql.number(year) };
-
-  const { data: summary, loading, error } = useAnalyticsQuery('sales_summary', parameters);
-  const totals = summary?.[0];
+  const { filters } = useFilters();
+  const options = useFilterOptions();
+  const year = filters.target_year;
+  const labels = { revenue: String(year), revenue_prior: String(year - 1) };
+  const { data, loading, error } = useAnalyticsQuery('kpi_yoy', filters);
+  const k = data?.[0];
+  const note = comparisonNote(k);
 
   return (
     <div className="space-y-6 w-full max-w-7xl mx-auto">
-      <DashboardHeader title="Sales" source="gold.fact_sales + dim_products + dim_customers">
-        <div className="space-y-2 w-48">
-          <Label htmlFor="sales-year">Year</Label>
-          <Select value={year.toString()} onValueChange={(value) => setYear(parseInt(value))}>
-            <SelectTrigger id="sales-year">
-              <SelectValue placeholder="Select year" />
-            </SelectTrigger>
-            <SelectContent>
-              {YEARS.map((y) => (
-                <SelectItem key={y} value={y.toString()}>
-                  {y}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </DashboardHeader>
+      <DashboardHeader title="Sales" source="gold.rpt_sales_lines" />
+      <FilterBar>
+        <FilterSelect name="ship_mode" label="Ship mode" options={options('ship_mode')} />
+        <FilterSelect name="payment_type" label="Payment" options={options('payment_type')} />
+        <FilterSelect name="brand" label="Brand" options={options('brand')} />
+      </FilterBar>
+      {error && <div className="text-destructive bg-destructive/10 p-3 rounded-md">Error: {error}</div>}
 
-      {error && (
-        <div className="text-destructive bg-destructive/10 p-3 rounded-md">Error: {error}</div>
-      )}
-
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Kpi label="Total Sales" value={totals && currency(totals.total_sales)} loading={loading} />
-        <Kpi label="Units Sold" value={totals && count(totals.total_quantity)} loading={loading} />
-        <Kpi label="Orders" value={totals && count(totals.order_count)} loading={loading} />
-        <Kpi
-          label="Avg Discount"
-          value={totals && percent(Number(totals.avg_discount) * 100)}
-          loading={loading}
-        />
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <Kpi label="Revenue" value={k && currency(k.revenue)} delta={yoyDelta(k, k?.revenue_yoy)} note={note} loading={loading} />
+        <Kpi label="Units Sold" value={k && count(k.units)} delta={yoyDelta(k, k?.units_yoy)} note={note} loading={loading} />
+        <Kpi label="Orders" value={k && count(k.orders)} delta={yoyDelta(k, k?.orders_yoy)} note={note} loading={loading} />
+        <Kpi label="Avg Order Value" value={k && currency(k.aov)} delta={yoyDelta(k, k?.aov_yoy)} note={note} loading={loading} />
+        <Kpi label="Margin" value={k && percent(k.margin_pct)} delta={yoyDelta(k, k?.margin_change_pts)} deltaSuffix=" pts" note={note} loading={loading} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <ChartCard title="Sales by Customer Segment">
-          <DonutChart
-            queryKey="sales_by_segment"
-            parameters={parameters}
-            xKey="segment"
-            yKey="total_sales"
-            valueFormatter={currency}
-            showLegend
-          />
+        <ChartCard title="Revenue by Customer Segment">
+          <DonutChart queryKey="segment_yoy" parameters={filters} xKey="segment" yKey="revenue" valueFormatter={currency} />
         </ChartCard>
-
-        <ChartCard title="Sales by Ship Mode">
-          <BarChart
-            queryKey="sales_by_ship_mode"
-            parameters={parameters}
-            xKey="ship_mode"
-            yKey="total_sales"
-            valueFormatter={currency}
-          />
+        <ChartCard title={`Revenue by Ship Mode: ${year} vs ${year - 1}`}>
+          <BarChart queryKey="sales_by_ship_mode" parameters={filters} xKey="ship_mode" yKey={['revenue', 'revenue_prior']}
+            labels={labels} dashed={['revenue_prior']} valueFormatter={currency} showLegend />
         </ChartCard>
-
-        <ChartCard title="Sales by Payment Method">
-          <BarChart
-            queryKey="sales_by_payment"
-            parameters={parameters}
-            xKey="payment_type"
-            yKey="total_sales"
-            valueFormatter={currency}
-          />
+        <ChartCard title={`Revenue by Payment Method: ${year} vs ${year - 1}`}>
+          <BarChart queryKey="sales_by_payment" parameters={filters} xKey="payment_type" yKey={['revenue', 'revenue_prior']}
+            labels={labels} dashed={['revenue_prior']} valueFormatter={currency} showLegend />
         </ChartCard>
-
-        <ChartCard title="Orders by Ship Mode">
-          <BarChart
-            queryKey="sales_by_ship_mode"
-            parameters={parameters}
-            xKey="ship_mode"
-            yKey="order_count"
-            valueFormatter={count}
-          />
+        <ChartCard title="Segments: Growth and Margin">
+          <YoyTable queryKey="segment_yoy" parameters={filters} columns={[
+            { key: 'segment', header: 'Segment' },
+            { key: 'revenue', header: String(year), format: currency },
+            { key: 'yoy_pct', header: 'YoY', change: {} },
+            { key: 'margin_pct', header: 'Margin', format: percent },
+          ]} />
         </ChartCard>
-
-        <ChartCard title="Top 10 Brands by Sales" wide>
-          <BarChart
-            queryKey="sales_by_brand"
-            parameters={parameters}
-            xKey="brand"
-            yKey={['total_sales']}
-            valueFormatter={currency}
-          />
+        <ChartCard title="Brands: Who's Rising, Who's Falling" wide>
+          <YoyTable queryKey="brand_yoy" parameters={filters} columns={[
+            { key: 'brand', header: 'Brand' },
+            { key: 'revenue', header: String(year), format: currency },
+            { key: 'revenue_prior', header: String(year - 1), format: currency },
+            { key: 'yoy_pct', header: 'YoY', change: {} },
+            { key: 'units', header: 'Units', format: count },
+          ]} />
         </ChartCard>
       </div>
     </div>

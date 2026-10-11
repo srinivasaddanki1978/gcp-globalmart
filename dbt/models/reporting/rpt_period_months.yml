@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: rpt_period_months
+    description: "Like-for-like rule for YoY: per year, period (FY, Q1-Q4, YTD) and month, whether the month is in the period, has data, and is comparable (data in this and the previous year)."
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments: { combination_of_columns: [year, period, month] }
+    columns:
+      - name: period
+        data_tests:
+          - accepted_values:
+              arguments: { values: ["FY", "Q1", "Q2", "Q3", "Q4", "YTD"] }

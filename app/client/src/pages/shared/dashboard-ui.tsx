@@ -8,8 +8,38 @@ export const count = (value: string | number) => Number(value).toLocaleString('e
 
 export const percent = (value: string | number) => `${Number(value).toFixed(1)}%`;
 
-/** Single headline number with a loading skeleton. */
-export function Kpi({ label, value, loading }: { label: string; value?: string; loading: boolean }) {
+/** Year-over-year change: ▲ green / ▼ red (inverted for "lower is better" measures). */
+export function Delta({ value, suffix = '%', invert = false }: { value?: number | null; suffix?: string; invert?: boolean }) {
+  if (value === null || value === undefined || Number.isNaN(Number(value))) return null;
+  const v = Number(value);
+  const good = invert ? v < 0 : v > 0;
+  const color = v === 0 ? 'text-muted-foreground' : good ? 'text-green-600' : 'text-red-600';
+  return (
+    <span className={`font-semibold ${color}`}>
+      {v > 0 ? '▲' : v < 0 ? '▼' : '■'} {Math.abs(v).toFixed(1)}
+      {suffix}
+    </span>
+  );
+}
+
+/** Headline number with a loading skeleton and an optional year-over-year change. */
+export function Kpi({
+  label,
+  value,
+  loading,
+  delta,
+  deltaSuffix,
+  invert,
+  note,
+}: {
+  label: string;
+  value?: string;
+  loading: boolean;
+  delta?: number | null;
+  deltaSuffix?: string;
+  invert?: boolean;
+  note?: string;
+}) {
   return (
     <Card className="shadow-lg">
       <CardHeader>
@@ -19,7 +49,14 @@ export function Kpi({ label, value, loading }: { label: string; value?: string; 
         {loading ? (
           <Skeleton className="h-8 w-28" />
         ) : (
-          <div className="text-2xl font-bold text-primary">{value ?? '—'}</div>
+          <>
+            <div className="text-2xl font-bold text-primary">{value ?? '—'}</div>
+            {(note || (delta !== undefined && delta !== null)) && (
+              <div className="mt-1 text-xs text-muted-foreground">
+                <Delta value={delta} suffix={deltaSuffix} invert={invert} /> {note}
+              </div>
+            )}
+          </>
         )}
       </CardContent>
     </Card>

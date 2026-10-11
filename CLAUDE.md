@@ -113,9 +113,20 @@ CI/CD: cloudbuild.yaml (trigger on push to main, sa-cloudbuild): tests ‖ dbt C
 - **Consumers:** the data agent (`agent/agent_context.yaml`) reads 20 gold/metrics tables using BigQuery column
   descriptions plus its instructions; keep its join rules in sync with Gold and rerun its `test`. Looker Studio
   charts each read one `gold.rpt_*` view (`models/reporting/`). Both, and the app, are in `dbt/models/exposures.yml`.
-- **App (`app/`):** the server runs only `app/queries/*.sql` (allowlist). Each declares `-- @param name INT64`
-  and uses BigQuery `@name` parameters; unknown or mistyped parameters get 400; 1 GiB cap per query; 5-minute
-  cache. Pages import from `client/src/lib/components.ts` (data hook `useAnalyticsQuery`, Recharts charts with
+- **Filters and YoY (app + dashboards):** `gold.rpt_sales_lines`, `rpt_return_lines` and `rpt_return_product_lines`
+  are wide views carrying every filterable attribute; `gold.rpt_period_months` encodes the like-for-like rule once
+  (per year × period FY/Q1–Q4/YTD × month: `in_period`, `has_data`, `comparable` = data in this and the prior
+  year). Every YoY query sums current values over in-period months, compares only `comparable` months, and returns
+  NULL YoY when fewer than half the months compare (2017 vs 2016 overlaps in October only; 2026 runs Jan–Sep). The
+  test `tests/assert_yoy_regions_add_up.sql` checks regional revenue sums to the total.
+- **App (`app/`):** the server runs only `app/queries/*.sql` (allowlist). Each declares `-- @param name INT64` (or
+  `-- @param period STRING FY|Q1|Q2|Q3|Q4|YTD` for an enumeration) and uses BigQuery `@name` parameters. Filters
+  use `'All'` for no filter. The client sends one filter object (kept in the URL by `client/src/lib/filters.ts`)
+  to every query; the server ignores filter names a query doesn't declare (`FILTER_PARAMS`) and rejects any other
+  unknown or mistyped parameter (400); 1 GiB cap per query; 5-minute
+  cache. Pages render `components/FilterBar` (global filters + page filters) and
+  `Kpi` cards with `yoyDelta()`; comparison charts pass `labels`/`dashed` so the prior year is grey. Pages import
+  from `client/src/lib/components.ts` (data hook `useAnalyticsQuery`, Recharts charts with
   `queryKey`/`xKey`/`yKey` props, Tailwind UI); extend that layer rather than editing every page. Chart
   animations are off (headless screenshots need it). Cloud Run requires authentication; queries and the Ask page
   run as `sa-app`; the caller's email comes from the signature-stripped ID token (`server/identity.ts`). After

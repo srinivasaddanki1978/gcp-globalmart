@@ -1,13 +1,18 @@
 -- @param min_quantity INT64
--- Top brands by count of slow-moving products.
--- Source: gold.mv_slow_moving_products
+-- @param region STRING
+-- @param brand STRING
+-- Top brands by count of slow-moving product-regions (all history).
 SELECT
   brand,
-  COUNT(*)         AS product_count,
-  SUM(total_sales) AS total_sales
+  COUNT(*) AS product_count,
+  ROUND(SUM(total_sales), 2) AS total_sales,
+  SUM(total_quantity) AS total_quantity,
+  ROUND(SUM(total_profit), 2) AS total_profit
 FROM gold.mv_slow_moving_products
-WHERE is_slow_moving = true
+WHERE is_slow_moving
   AND total_quantity >= @min_quantity
+  AND (@region = 'All' OR region = @region)
+  AND (@brand = 'All' OR brand = @brand)
 GROUP BY brand
 ORDER BY product_count DESC
 LIMIT 10

@@ -17,6 +17,17 @@ describe('validateParams', () => {
   it('rejects missing parameters', () => expect(() => validateParams(def, { label: 'x' })).toThrow(/missing/));
 });
 
+describe('filters and enumerations', () => {
+  const q = parseQuery('k', '-- @param target_year INT64\n-- @param period STRING FY|Q1|Q2|Q3|Q4|YTD\nSELECT 1');
+  it('reads enumerated values', () => expect(q.allowed.period).toEqual(['FY', 'Q1', 'Q2', 'Q3', 'Q4', 'YTD']));
+  it('rejects values outside the enumeration', () =>
+    expect(() => validateParams(q, { target_year: 2025, period: 'H1' })).toThrow(/one of/));
+  it('ignores dashboard filters the query does not use', () =>
+    expect(validateParams(q, { target_year: 2025, period: 'YTD', region: 'East', brand: 'All' })).toEqual({ target_year: 2025, period: 'YTD' }));
+  it('still rejects other undeclared parameters', () =>
+    expect(() => validateParams(q, { target_year: 2025, period: 'FY', sql: 'x' })).toThrow(/unknown/));
+});
+
 describe('plain', () => {
   it('unwraps BigQuery value objects to numbers or strings', () => {
     expect(plain({ value: '42' })).toBe(42);
