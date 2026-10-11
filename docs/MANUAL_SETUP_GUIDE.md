@@ -663,10 +663,35 @@ gcloud run deploy globalmart-app --region=$REGION --image=$REPO/app:latest --ser
   --no-allow-unauthenticated --min-instances=0 --max-instances=2 --cpu=1 --memory=512Mi --cpu-throttling \
   --set-env-vars=GCP_PROJECT=$PROJECT_ID,AGENT_ID=globalmart-agent
 ```
-**Open it** through an authenticated local proxy, then browse to <http://localhost:8080>:
+**Open it.** The service only accepts signed-in requests, so you open it through `gcloud run services
+proxy`, which signs each request with your account. Two ways:
+
+**Option A: from your own computer** (needs the Google Cloud CLI installed, Module 0):
 ```bash
 gcloud run services proxy globalmart-app --region=$REGION --port=8080   # answer Y to install the proxy component
 ```
+Leave it running and browse to <http://localhost:8080> on the same computer.
+
+**Option B: from Cloud Shell** (nothing to install: a terminal in the browser with `gcloud` already
+signed in):
+1. In the console, click the **Activate Cloud Shell** icon (`>_`, top right). Check that the prompt
+   shows your project, e.g. `you@cloudshell:~ (globalmart-lab-4821)$`; if not, run
+   `gcloud config set project <PROJECT_ID>`.
+2. Start the proxy (type `gcloud` on its own: the `~/google-cloud-sdk/bin/` path only exists on
+   your own computer):
+   ```bash
+   gcloud run services proxy globalmart-app --region=us-central1 --port=8080
+   ```
+   Answer **Y** if asked to install a component. Wait for *"http://127.0.0.1:8080 proxies to
+   https://globalmart-app-…run.app"* and leave it running.
+3. Click the **Web Preview** icon in the Cloud Shell toolbar (a square with an eye; under **⋮** if
+   hidden) → **Preview on port 8080**. A new tab opens at `https://8080-cs-…cloudshell.dev/`: that's
+   the app.
+
+   > Don't click the `http://127.0.0.1:8080` link the proxy prints. That address is *your laptop*,
+   > where nothing is listening, so the browser shows **"127.0.0.1 refused to connect"**. Web
+   > Preview is what routes your browser into Cloud Shell.
+4. Press **Ctrl+C** in Cloud Shell to stop. Run step 2 again whenever you want to reopen the app.
 **Check:** the dashboard pages load, your email shows in the top-right corner, and the **Ask** page
 answers questions. Opening the service URL directly without signing in returns **403**: that's
 authentication working. To let a friend in:
@@ -766,6 +791,8 @@ allocated refunds ($2,478,124.40); the fraud flag rate (22.52 %, 109 customers);
 | Loader or dbt job fails | **Cloud Run → Jobs → job → Executions → Logs**; for dbt the failing test's name points at the rule or contract |
 | `AI.GENERATE`: unknown endpoint | Model names change: check the current Gemini models in the BigQuery `AI.GENERATE` docs and set `genai_endpoint` in `dbt/dbt_project.yml` |
 | App returns 403 | Expected without sign-in: use the proxy, or grant *Cloud Run Invoker* |
+| "127.0.0.1 refused to connect" when opening the app from Cloud Shell | Use **Web Preview → Preview on port 8080** instead of clicking the `127.0.0.1` link (Module 14, Option B) |
+| `~/google-cloud-sdk/bin/gcloud: No such file or directory` in Cloud Shell | Cloud Shell has `gcloud` built in: type just `gcloud …` |
 | GitHub connection stuck at `PENDING_USER_OAUTH` | Reopen the link from `gcloud builds connections describe globalmart-github --region=$REGION` and finish both screens |
 | CI step `dbt-ci` can't find the manifest | Run the pipeline once first; the dbt job saves it |
 

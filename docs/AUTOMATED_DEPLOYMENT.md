@@ -105,12 +105,16 @@ The script already ran the two automatic checks:
 - **expected results:** 10 lines ending in `OK`;
 - **data agent:** `10/10 correct`.
 
-Then look for yourself:
-```bash
-gcloud run services proxy globalmart-app --region=us-central1 --port=8080
-```
-Open <http://localhost:8080>: nine dashboard pages, plus an **Ask** page where you chat with the data
-agent. Without the proxy (or another signed-in request) the app returns 403. That's intended: it
+Then look for yourself: open the web app. It has nine dashboard pages, plus an **Ask** page where you
+chat with the data agent.
+- **From your computer:** run
+  `gcloud run services proxy globalmart-app --region=us-central1 --port=8080` and open
+  <http://localhost:8080>.
+- **From Cloud Shell** (the `>_` icon in the console): run
+  `gcloud run services proxy globalmart-app --region=us-central1 --port=8080`, then click
+  **Web Preview → Preview on port 8080**. Don't click the `127.0.0.1` link it prints: that points at
+  your laptop and gives "refused to connect". Step-by-step in
+  [`MANUAL_SETUP_GUIDE.md` Module 14](MANUAL_SETUP_GUIDE.md#module-14-the-web-app-on-cloud-run). Without the proxy (or another signed-in request) the app returns 403. That's intended: it
 requires authentication. To let someone else open it, add them to `app_users` in
 `terraform/terraform.tfvars` (e.g. `app_users = ["user:friend@gmail.com"]`) and run
 `cd terraform && terraform apply`.
@@ -164,6 +168,7 @@ To test and deploy automatically on every push to `main`:
 | `billing isn't enabled` | Link a billing account to the project, or pass `BILLING_ACCOUNT` |
 | Project ID already taken (`gcloud projects create` fails) | IDs are global: choose another, e.g. add digits |
 | `budget not created` | Use the billing account's currency, e.g. `BUDGET=900INR` |
+| "127.0.0.1 refused to connect" opening the app from Cloud Shell | Use **Web Preview → Preview on port 8080**, not the printed `127.0.0.1` link |
 | `retrying in 30s` | Normal right after APIs are enabled or permissions granted; it retries by itself |
 | Terraform errors mentioning `http2: client connection` or timeouts to `*.googleapis.com` | A network problem between your computer and Google's APIs (Wi-Fi, VPN, proxy). The script retries; if it still fails, check your connection and run the same command again: completed steps are skipped |
 | Image build fails | Open **Cloud Build → History** for the log. Re-run with `REBUILD=1` once fixed |
